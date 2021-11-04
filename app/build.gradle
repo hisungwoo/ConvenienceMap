@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.ilsamil.conveniencemap"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -48,5 +48,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')
+
+    implementation("androidx.activity:activity-ktx:1.4.0")
 
 }

@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="af6338b823f9b236c800995b151bc25b"/>
+        <meta-data android:name="com.kakao.sdk.AppKey" android:value="93d02eb8094f4fc2df4c7017573bd1fc"/>
 
     </application>
 
