@@ -1,11 +1,13 @@
 package com.ilsamil.conveniencemap
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,6 +39,15 @@ class MainActivity : AppCompatActivity() {
         val mapView = MapView(this)
         binding.clKakaoMapView.addView(mapView)
 
+
+
+        binding.button.setOnClickListener {
+            Toast.makeText(this, "클릭", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+
+
+        }
 
 
     }
