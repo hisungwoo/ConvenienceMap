@@ -63,16 +63,14 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val aapi = instance.create(RetrofitService::class.java)
-        val ttest : Call<FacInfoList> =aapi.getList(1)
+        val ttest : Call<FacInfoList> =aapi.getList(2)
 
         ttest.enqueue(object : Callback<FacInfoList> {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
                 if(response.isSuccessful()) { // <--> response.code == 200
                     Log.d("tttest" , "dd = " + response.body()!!.totalCount)
-                    Log.d("tttest" , "dd = " + response.body()!!.servList.faclNm)
-
-
-
+                    Log.d("tttest" , "dd = " + response.body()!!.servList[0].faclNm)
+                    Log.d("tttest" , "dd = " + response.body()!!.servList[1].faclNm)
 
                 } else { // code == 400
                     // 실패 처리
@@ -82,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
                 Log.d("tttest" , "dd = 인터넷 실패")
-                Log.d("tttest" , "dd = " + t.printStackTrace())
+                t.printStackTrace()
             }
 
         })
