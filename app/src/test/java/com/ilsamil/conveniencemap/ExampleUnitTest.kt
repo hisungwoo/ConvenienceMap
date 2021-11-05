@@ -1,8 +1,14 @@
 package com.ilsamil.conveniencemap
 
+import com.ilsamil.conveniencemap.model.FacInfoList
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import org.junit.Test
 
 import org.junit.Assert.*
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +18,20 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+//        var instance: Retrofit? = null
+//
+//        instance = Retrofit.Builder()
+//            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+//            .build()
+//
+//        val aapi = instance.create(RetrofitService::class.java)
+//
+//
+//        val ttest : Call<FacInfoList> =aapi.getList(1)
+//        var ss =  ttest.execute().body().totalCount
+
     }
+
 }

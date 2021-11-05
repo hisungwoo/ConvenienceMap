@@ -12,7 +12,15 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
+import com.ilsamil.conveniencemap.model.FacInfoList
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, "성공", Toast.LENGTH_SHORT ).show()
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +48,44 @@ class MainActivity : AppCompatActivity() {
         val mapView = MapView(this)
         binding.clKakaoMapView.addView(mapView)
 
-
-
         binding.button.setOnClickListener {
             Toast.makeText(this, "클릭", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
-
-
         }
 
+        var instance: Retrofit? = null
+
+        instance = Retrofit.Builder()
+            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+            .build()
+
+        val aapi = instance.create(RetrofitService::class.java)
+        val ttest : Call<FacInfoList> =aapi.getList(1)
+
+        ttest.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) { // <--> response.code == 200
+                    Log.d("tttest" , "dd = " + response.body()!!.totalCount)
+                    Log.d("tttest" , "dd = " + response.body()!!.servList.faclNm)
+
+
+
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "dd = 인터넷 실패")
+                Log.d("tttest" , "dd = " + t.printStackTrace())
+            }
+
+        })
 
     }
 
