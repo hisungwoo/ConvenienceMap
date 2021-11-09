@@ -61,6 +61,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     kapt 'com.tickaroo.tikxml:processor:0.8.13'
 
+    // 메테리얼 디자인
+    implementation 'com.google.android.material:material:1.1.0'
+
 
 
 }

@@ -43,47 +43,43 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        getAppKeyHash()
+
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         val mapView = MapView(this)
         binding.clKakaoMapView.addView(mapView)
 
-        binding.button.setOnClickListener {
-            Toast.makeText(this, "클릭", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-        }
-
         var instance: Retrofit? = null
 
-        instance = Retrofit.Builder()
-            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
-            .build()
-
-        val aapi = instance.create(RetrofitService::class.java)
-        val ttest : Call<FacInfoList> =aapi.getList(2)
-
-        ttest.enqueue(object : Callback<FacInfoList> {
-            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-                if(response.isSuccessful()) { // <--> response.code == 200
-                    Log.d("tttest" , "dd = " + response.body()!!.totalCount)
-                    Log.d("tttest" , "dd = " + response.body()!!.servList[0].faclNm)
-                    Log.d("tttest" , "dd = " + response.body()!!.servList[1].faclNm)
-
-                } else { // code == 400
-                    // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
-                }
-            }
-
-            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "dd = 인터넷 실패")
-                t.printStackTrace()
-            }
-
-        })
+//        instance = Retrofit.Builder()
+//            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+//            .build()
+//
+//        val aapi = instance.create(RetrofitService::class.java)
+//        val ttest : Call<FacInfoList> =aapi.getList(2)
+//
+//        ttest.enqueue(object : Callback<FacInfoList> {
+//            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+//                if(response.isSuccessful()) { // <--> response.code == 200
+//                    Log.d("tttest" , "dd = " + response.body()!!.totalCount)
+//                    Log.d("tttest" , "dd = " + response.body()!!.servList[0].faclNm)
+//                    Log.d("tttest" , "dd = " + response.body()!!.servList[1].faclNm)
+//
+//                } else { // code == 400
+//                    // 실패 처리
+//                    Log.d("tttest" , "dd = 실패")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+//                Log.d("tttest" , "dd = 인터넷 실패")
+//                t.printStackTrace()
+//            }
+//
+//        })
 
     }
 
