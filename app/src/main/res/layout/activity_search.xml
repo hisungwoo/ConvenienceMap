@@ -7,32 +7,32 @@
     tools:context=".SearchActivity">
 
 
-    <EditText
-        android:id="@+id/search_et"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        android:paddingStart="25dp"
-        android:paddingEnd="15dp"
-        android:hint="시설명⸰주소⸰건물명 검색"
-        android:inputType="textPersonName"
-        android:background="@drawable/edittext_shadow"
-        android:elevation="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <EditText-->
+<!--        android:id="@+id/search_et"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:paddingStart="25dp"-->
+<!--        android:paddingEnd="15dp"-->
+<!--        android:hint="시설명⸰주소⸰건물명 검색"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:background="@drawable/edittext_shadow"-->
+<!--        android:elevation="8dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line"
-        android:layout_marginTop="17dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_et"
-        />
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/line"-->
+<!--        android:layout_marginTop="17dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/search_et"-->
+<!--        />-->
 
 
 

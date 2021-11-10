@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clKakaoMapView"
+        android:id="@+id/fragment_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,35 +17,22 @@
         tools:visibility="gone" />
 
 
-    <EditText
-        android:id="@+id/main_search_et"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        android:paddingStart="25dp"
-        android:paddingEnd="15dp"
-        android:hint="시설명⸰주소⸰건물명 검색"
-        android:inputType="textPersonName"
-        android:background="@drawable/edittext_shadow"
-        android:elevation="9dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nev_menu"
-        android:background="@color/white"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_shadow"
         app:itemTextColor="@color/teal_700"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
 
 
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nev_menu" />
 
 
 
