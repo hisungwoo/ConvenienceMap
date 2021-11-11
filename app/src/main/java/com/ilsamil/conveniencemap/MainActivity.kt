@@ -80,19 +80,19 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.menu_category -> {
-                    supportFragmentManager.popBackStack("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, categoryFragment, "category").addToBackStack("category").commit()
                 }
                 R.id.menu_bookmark -> {
-                    supportFragmentManager.popBackStack("bookmark", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStackImmediate("bookmark", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, bookmarkFragment, "bookmark").addToBackStack("bookmark").commit()
                 }
                 R.id.menu_map -> {
-                    supportFragmentManager.popBackStack("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, mapFragment, "map").addToBackStack("map").commit()
                 }
                 R.id.menu_info -> {
-                    supportFragmentManager.popBackStack("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, infoFragment, "info").addToBackStack("info").commit()
                 }
             }

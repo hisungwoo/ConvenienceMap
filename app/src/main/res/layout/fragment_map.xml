@@ -7,7 +7,7 @@
     tools:context=".Fragments.MapFragment">
 
     <Button
-        android:id="@+id/main_search_et"
+        android:id="@+id/search_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -19,6 +19,7 @@
         android:textSize="15sp"
         android:textAlignment="textStart"
         android:background="@drawable/edittext_shadow"
+        tools:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

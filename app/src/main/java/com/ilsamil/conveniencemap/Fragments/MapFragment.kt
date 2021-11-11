@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.fragment.app.FragmentManager
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
@@ -25,9 +26,6 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
     }
 
     override fun onCreateView(
@@ -39,9 +37,9 @@ class MapFragment : Fragment() {
         binding.clKakaoMapView.addView(mapView)
 
 
-        binding.mainSearchEt.setOnClickListener{
+        binding.searchBtn.setOnClickListener{
             searchFragment = SearchFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, searchFragment)?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
         }
 
 

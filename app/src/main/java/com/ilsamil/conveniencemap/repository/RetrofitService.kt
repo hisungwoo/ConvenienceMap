@@ -1,4 +1,4 @@
-package com.ilsamil.conveniencemap
+package com.ilsamil.conveniencemap.repository
 
 import com.ilsamil.conveniencemap.model.FacInfoList
 import retrofit2.Call
