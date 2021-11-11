@@ -19,27 +19,27 @@ data class FacInfoList(
 @Xml(name="servList")
 data class ServList(
     @PropertyElement
-    val estbDate: String,
+    val estbDate: String,   //설립일자
     @PropertyElement
-    val faclInfId: String,
+    val faclInfId: String,  // 순번
     @PropertyElement
-    val faclLat: Double,
+    val faclLat: Double,    // 시설위도
     @PropertyElement
-    val faclLng: Double,
+    val faclLng: Double,    // 시설경도
     @PropertyElement
-    val faclNm: String,
+    val faclNm: String,     // 시설명
     @PropertyElement
-    val faclRprnNm: String,
+    val faclRprnNm: String, // 시설대표자성명
     @PropertyElement
-    val faclTyCd: String,
+    val faclTyCd: String,   // 시설유형코드
     @PropertyElement
-    val lcMnad: String,
+    val lcMnad: String,     // 시설 기본주소
     @PropertyElement
-    val salStaDivCd: String,
+    val salStaDivCd: String,    // 영어상태구분코드 Y:영업, N:폐업
     @PropertyElement
-    val salStaNm: String,
+    val salStaNm: String,   //  영업상태구분명
     @PropertyElement
-    val wfcltDivCd: String,
+    val wfcltDivCd: String, //  시설구분
     @PropertyElement
-    val wfcltId: String,
+    val wfcltId: String,    // 시설 ID
 )
