@@ -1,13 +1,18 @@
 package com.ilsamil.conveniencemap.Fragments
 
+import android.app.Activity
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
@@ -33,9 +38,9 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
+
         mapView = MapView(activity)
         binding.clKakaoMapView.addView(mapView)
-
 
         binding.searchBtn.setOnClickListener{
             searchFragment = SearchFragment.newInstance()

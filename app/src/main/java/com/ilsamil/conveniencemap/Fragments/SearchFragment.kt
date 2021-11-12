@@ -57,33 +57,14 @@ class SearchFragment : Fragment() {
         val adapter = FacInfoAdapter()
         binding.recyclerView.adapter = adapter
 
-//        val items = listOf(
-//            ServList("111", "111", 1.2, 1.2, "인크커피", "대표자", "카페", "서울 금천구 가산디지털2로 127-20 (가산동)"
-//                , "Y", "영업", "구분", "ID"
-//            ),
-//            ServList("111", "111", 1.2, 1.2, "투썸플레이스", "대표자", "카페", "서울 가산동 20-1 오류 243-1"
-//                , "Y", "영업", "구분", "ID"
-//            ),
-//            ServList("111", "111", 1.2, 1.2, "스타벅스 구로점", "대표자", "카페", "서울 구로구 35-230 오리오피스텔"
-//                , "Y", "영업", "구분", "ID"
-//            ),
-//            ServList("111", "111", 1.2, 1.2, "인크커피", "대표자", "카페", "서울 금천구 가산디지털2로 127-20 (가산동)"
-//                , "Y", "영업", "구분", "ID"
-//            )
-//        )
-
-//        adapter.updateItems(items)
-
-
         binding.searchEt.setOnKeyListener { view, i, keyEvent ->
             if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
                 val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.hideSoftInputFromWindow(binding.searchEt.windowToken, 0)
 
                 val searchText = binding.searchEt.text.toString()
-                Log.d("ttest", "검색 텍스트 = " + searchText)
-
                 var instance: Retrofit? = null
+
                 instance = Retrofit.Builder()
                     .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -91,20 +72,13 @@ class SearchFragment : Fragment() {
                     .build()
 
                 val aapi = instance.create(RetrofitService::class.java)
-                val ttest : Call<FacInfoList> = aapi.getList(2, searchText)
+                val ttest : Call<FacInfoList> = aapi.getList(30, searchText)
 
                 ttest.enqueue(object : Callback<FacInfoList> {
                     override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
                         if(response.isSuccessful()) {
-                            val items =
-//                            for (i in response.body()?.servList!!) {
-//
-//                            }
-
-
-                            Log.d("tttest" , "dd = " + response.body()!!.totalCount)
-                            Log.d("tttest" , "dd = " + response.body()!!.servList[0].faclNm)
-                            Log.d("tttest" , "dd = " + response.body()!!.servList[1].faclNm)
+                            val items = response.body()?.servList!!
+                            adapter.updateItems(items)
 
                         } else { // code == 400
                             // 실패 처리
@@ -118,13 +92,6 @@ class SearchFragment : Fragment() {
                     }
 
                 })
-
-
-
-
-
-
-
 
                 true
             } else {

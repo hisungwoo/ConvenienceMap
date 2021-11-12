@@ -27,7 +27,7 @@ class ExampleUnitTest {
             .build()
 
         val aapi = instance.create(RetrofitService::class.java)
-        val ttest : Call<FacInfoList> =aapi.getList(1, "스타벅스")
+        val ttest : Call<FacInfoList> =aapi.getList(1000, "")
         var st = ttest.execute().body()?.servList?.get(0)?.faclNm
 
         System.out.println("st = " + st)

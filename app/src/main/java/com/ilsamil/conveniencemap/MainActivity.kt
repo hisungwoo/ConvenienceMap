@@ -1,10 +1,14 @@
 package com.ilsamil.conveniencemap
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,6 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
     private var backButtonTime = 0L
@@ -51,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(binding)
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-
-
     }
 
     private fun replaceFragment(binding: ActivityMainBinding) {
@@ -108,28 +111,6 @@ class MainActivity : AppCompatActivity() {
         updateBottomMenu()
 
     }
-
-
-
-
-
-//    private fun getAppKeyHash() {
-//        try {
-//            val info =
-//                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-//            for (signature in info.signatures) {
-//                var md: MessageDigest
-//                md = MessageDigest.getInstance("SHA")
-//                md.update(signature.toByteArray())
-//                val something = String(Base64.encode(md.digest(), 0))
-//                Log.e("Hash key", "#################################################" + something + "#################################################")
-//            }
-//        } catch (e: Exception) {
-//
-//            Log.e("name not found", e.toString())
-//        }
-//    }
-
 
 
 }
