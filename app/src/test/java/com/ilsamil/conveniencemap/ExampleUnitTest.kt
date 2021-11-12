@@ -1,6 +1,7 @@
 package com.ilsamil.conveniencemap
 
 import com.ilsamil.conveniencemap.model.FacInfoList
+import com.ilsamil.conveniencemap.repository.RetrofitService
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import org.junit.Test
@@ -18,19 +19,18 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-//        var instance: Retrofit? = null
-//
-//        instance = Retrofit.Builder()
-//            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
-//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
-//            .build()
-//
-//        val aapi = instance.create(RetrofitService::class.java)
-//
-//
-//        val ttest : Call<FacInfoList> =aapi.getList(1)
-//        var ss =  ttest.execute().body().totalCount
+        var instance: Retrofit? = null
+        instance = Retrofit.Builder()
+            .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+            .build()
+
+        val aapi = instance.create(RetrofitService::class.java)
+        val ttest : Call<FacInfoList> =aapi.getList(1, "스타벅스")
+        var st = ttest.execute().body()?.servList?.get(0)?.faclNm
+
+        System.out.println("st = " + st)
 
     }
 

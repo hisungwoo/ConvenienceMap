@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ConvenienceMap"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SearchActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

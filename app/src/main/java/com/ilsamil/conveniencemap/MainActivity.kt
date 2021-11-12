@@ -13,7 +13,15 @@ import com.ilsamil.conveniencemap.Fragments.CategoryFragment
 import com.ilsamil.conveniencemap.Fragments.InfoFragment
 import com.ilsamil.conveniencemap.Fragments.MapFragment
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
+import com.ilsamil.conveniencemap.model.FacInfoList
+import com.ilsamil.conveniencemap.repository.RetrofitService
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class MainActivity : AppCompatActivity() {
     private var backButtonTime = 0L
@@ -43,36 +51,7 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(binding)
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        var instance: Retrofit? = null
 
-//        instance = Retrofit.Builder()
-//            .baseUrl("http://api.visitkorea.or.kr/openapi/service/rest/KorService/")
-//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
-//            .build()
-//
-//        val aapi = instance.create(RetrofitService::class.java)
-//        val ttest : Call<FacInfoList> =aapi.getList(2)
-//
-//        ttest.enqueue(object : Callback<FacInfoList> {
-//            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-//                if(response.isSuccessful()) { // <--> response.code == 200
-//                    Log.d("tttest" , "dd = " + response.body()!!.totalCount)
-//                    Log.d("tttest" , "dd = " + response.body()!!.servList[0].faclNm)
-//                    Log.d("tttest" , "dd = " + response.body()!!.servList[1].faclNm)
-//
-//                } else { // code == 400
-//                    // 실패 처리
-//                    Log.d("tttest" , "dd = 실패")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-//                Log.d("tttest" , "dd = 인터넷 실패")
-//                t.printStackTrace()
-//            }
-//
-//        })
 
     }
 
