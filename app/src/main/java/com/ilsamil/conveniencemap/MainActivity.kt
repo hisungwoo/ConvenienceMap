@@ -56,6 +56,10 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(binding)
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+
+
+
+
     }
 
     private fun replaceFragment(binding: ActivityMainBinding) {

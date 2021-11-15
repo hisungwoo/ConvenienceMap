@@ -19,10 +19,19 @@
         android:textSize="15sp"
         android:textAlignment="textStart"
         android:background="@drawable/edittext_shadow"
-        tools:visibility="gone"
+        tools:visibility="vi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/aatest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        app:layout_constraintTop_toBottomOf="@+id/search_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

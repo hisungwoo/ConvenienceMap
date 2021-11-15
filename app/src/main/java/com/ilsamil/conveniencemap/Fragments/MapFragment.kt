@@ -1,21 +1,14 @@
 package com.ilsamil.conveniencemap.Fragments
 
-import android.app.Activity
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
-import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.R
-import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
 class MapFragment : Fragment() {
@@ -40,6 +33,28 @@ class MapFragment : Fragment() {
         binding = FragmentMapBinding.inflate(inflater, container, false)
 
         mapView = MapView(activity)
+
+
+        binding.aatest.setOnClickListener {
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(37.48942886437432, 126.85835706507918), 2, true);
+
+            val customMarker = MapPOIItem()
+            customMarker.itemName = "테스트 마커"
+            customMarker.tag = 1
+            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(37.48942886437432, 126.85835706507918)
+            customMarker.markerType = MapPOIItem.MarkerType.CustomImage  // 기본으로 제공하는 BluePin 마커 모양.
+            customMarker.customImageResourceId = R.drawable.ic_location_pin
+            customMarker.isCustomImageAutoscale = false
+            customMarker.setCustomImageAnchor(0.5f, 1.0f)
+
+
+            mapView.addPOIItem(customMarker);
+
+
+        }
+
+
+
         binding.clKakaoMapView.addView(mapView)
 
         binding.searchBtn.setOnClickListener{
