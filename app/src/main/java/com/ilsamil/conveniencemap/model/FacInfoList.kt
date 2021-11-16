@@ -19,6 +19,14 @@ data class FacInfoList(
 @Xml(name="servList")
 data class ServList(
     @PropertyElement
+    val estbDate: String?,   //설립일자
+    @PropertyElement
+    val faclInfId: String?,  // 순번
+    @PropertyElement
+    val faclLat: Double?,    // 시설위도
+    @PropertyElement
+    val faclLng: Double?,    // 시설경도
+    @PropertyElement
     val faclNm: String?,     // 시설명
     @PropertyElement
     val faclRprnNm: String?, // 시설대표자성명

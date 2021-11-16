@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.R
@@ -72,7 +75,7 @@ class SearchFragment : Fragment() {
                     .build()
 
                 val aapi = instance.create(RetrofitService::class.java)
-                val ttest : Call<FacInfoList> = aapi.getList(30, searchText)
+                val ttest : Call<FacInfoList> = aapi.getList(15, searchText)
 
                 ttest.enqueue(object : Callback<FacInfoList> {
                     override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
@@ -99,10 +102,25 @@ class SearchFragment : Fragment() {
             }
         }
 
+        adapter.setOnItemClickListener(object : FacInfoAdapter.OnItemClickListener {
+            override fun onItemClick(v: View, data: ServList, pos: Int) {
+                val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
+
+                setFragmentResult(
+                    "movePin",
+                    bundleOf("faclLng" to data.faclLng,
+                                    "faclLat" to data.faclLat,
+                                    "faclNm" to data.faclNm
+                    )
+                )
 
 
+                activity?.supportFragmentManager?.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, mapFragment, "category")?.addToBackStack("category")?.commit()
 
 
+            }
+        })
 
         return binding.root
     }
