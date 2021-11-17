@@ -33,7 +33,6 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
-
         mapView = MapView(activity)
 
         setFragmentResultListener("movePin") { requestKey, bundle ->
@@ -45,13 +44,13 @@ class MapFragment : Fragment() {
             Log.d("ttest" , "faclLat " + faclLat)
             Log.d("ttest" , "faclNm " + faclNm)
 
-            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLng, faclLat), 2, true);
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLng, faclLat), 0, true);
 
             val customMarker = MapPOIItem()
             customMarker.itemName = "테스트 마커"
             customMarker.tag = 1
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLng, faclLat)
-            customMarker.markerType = MapPOIItem.MarkerType.CustomImage  // 기본으로 제공하는 BluePin 마커 모양.
+            customMarker.markerType = MapPOIItem.MarkerType.CustomImage
             customMarker.customImageResourceId = R.drawable.ic_location_pin_50_2
             customMarker.isCustomImageAutoscale = false
             customMarker.setCustomImageAnchor(0.5f, 1.0f)
