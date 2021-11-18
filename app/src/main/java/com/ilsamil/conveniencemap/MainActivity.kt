@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.ilsamil.conveniencemap.Fragments.BookmarkFragment
-import com.ilsamil.conveniencemap.Fragments.CategoryFragment
-import com.ilsamil.conveniencemap.Fragments.InfoFragment
-import com.ilsamil.conveniencemap.Fragments.MapFragment
+import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.repository.RetrofitService
@@ -38,6 +37,10 @@ class MainActivity : AppCompatActivity() {
     private val bookmarkFragment: BookmarkFragment by lazy { BookmarkFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
 
+    private lateinit var searchFragment: SearchFragment
+    lateinit var fadeOutAnim : Animation
+
+
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -58,8 +61,14 @@ class MainActivity : AppCompatActivity() {
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
 
+        binding.searchBtn.setOnClickListener{
+            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
+            binding.bottomNav.startAnimation(fadeOutAnim)
+            binding.bottomNav.visibility = View.GONE
 
-
+            searchFragment = SearchFragment.newInstance()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, searchFragment).addToBackStack(null).commit()
+        }
     }
 
     private fun replaceFragment(binding: ActivityMainBinding) {
@@ -87,6 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
         val tag2: Fragment? = supportFragmentManager.findFragmentByTag("bookmark")
@@ -106,6 +116,15 @@ class MainActivity : AppCompatActivity() {
             if(tag4 != null && tag4.isVisible) {
                 this.menu.findItem(R.id.menu_info).isChecked = true
             }
+
+
+            if (this.visibility == View.VISIBLE) {
+                Log.d("ttest" , "나타남")
+            } else if (this.visibility == View.GONE) {
+                Log.d("ttest", "gone 상태")
+            }
+
+
         }
     }
 

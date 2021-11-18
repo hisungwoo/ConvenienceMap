@@ -16,6 +16,24 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
+    <Button
+        android:id="@+id/search_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="15dp"
+        android:hint="시설명⸰주소⸰건물명 검색"
+        android:textSize="15sp"
+        android:textAlignment="textStart"
+        android:background="@drawable/edittext_shadow"
+        tools:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

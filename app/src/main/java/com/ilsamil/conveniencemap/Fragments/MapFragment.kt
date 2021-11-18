@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.setFragmentResultListener
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
@@ -15,7 +17,6 @@ import net.daum.mf.map.api.MapView
 
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
-    private lateinit var searchFragment: SearchFragment
     private lateinit var mapView: MapView
 
     companion object {
@@ -61,13 +62,6 @@ class MapFragment : Fragment() {
 
 
         binding.clKakaoMapView.addView(mapView)
-
-        binding.searchBtn.setOnClickListener{
-            searchFragment = SearchFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
-        }
-
-
         return binding.root
     }
 }
