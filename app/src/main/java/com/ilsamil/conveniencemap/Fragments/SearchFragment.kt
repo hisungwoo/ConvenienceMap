@@ -16,7 +16,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ilsamil.conveniencemap.R
+import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 import com.ilsamil.conveniencemap.model.FacInfoAdapter
@@ -43,6 +45,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(

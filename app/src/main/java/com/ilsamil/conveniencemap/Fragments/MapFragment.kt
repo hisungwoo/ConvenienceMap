@@ -17,6 +17,7 @@ import net.daum.mf.map.api.MapView
 
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
+    private lateinit var searchFragment : SearchFragment
     private lateinit var mapView: MapView
 
     companion object {
@@ -62,6 +63,13 @@ class MapFragment : Fragment() {
 
 
         binding.clKakaoMapView.addView(mapView)
+
+        binding.searchBtn.setOnClickListener{
+            searchFragment = SearchFragment.newInstance()
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
+        }
+
+
         return binding.root
     }
 }

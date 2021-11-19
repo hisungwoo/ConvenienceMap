@@ -60,15 +60,10 @@ class MainActivity : AppCompatActivity() {
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
+//            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
+//            binding.bottomNav.startAnimation(fadeOutAnim)
+//            binding.bottomNav.visibility = View.GONE
 
-        binding.searchBtn.setOnClickListener{
-            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
-            binding.bottomNav.startAnimation(fadeOutAnim)
-            binding.bottomNav.visibility = View.GONE
-
-            searchFragment = SearchFragment.newInstance()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, searchFragment).addToBackStack(null).commit()
-        }
     }
 
     private fun replaceFragment(binding: ActivityMainBinding) {
@@ -118,11 +113,11 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            if (this.visibility == View.VISIBLE) {
-                Log.d("ttest" , "나타남")
-            } else if (this.visibility == View.GONE) {
-                Log.d("ttest", "gone 상태")
-            }
+//            if (this.visibility == View.VISIBLE) {
+//                Log.d("ttest" , "나타남")
+//            } else if (this.visibility == View.GONE) {
+//                Log.d("ttest", "gone 상태")
+//            }
 
 
         }

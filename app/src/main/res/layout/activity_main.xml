@@ -16,42 +16,75 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
-    <Button
-        android:id="@+id/search_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        android:paddingStart="25dp"
-        android:paddingEnd="15dp"
-        android:hint="시설명⸰주소⸰건물명 검색"
-        android:textSize="15sp"
-        android:textAlignment="textStart"
-        android:background="@drawable/edittext_shadow"
-        tools:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="13dp"
         android:background="@drawable/edittext_shadow"
         app:itemTextColor="@color/teal_700"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nev_menu" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.73" />
+
+    <View
+        android:id="@+id/result_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_shadow"
+        app:layout_constraintTop_toBottomOf="@+id/gline"
+        app:layout_constraintStart_toStartOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="@+id/bottom_nav"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav" />
+
+
+    <TextView
+        android:id="@+id/result_nm_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="오류동 문화센터"
+        android:textColor="#333333"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="오류동 문화센터"
+        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintEnd_toEndOf="@+id/result_view"
+        app:layout_constraintStart_toStartOf="@+id/result_view"
+        app:layout_constraintTop_toTopOf="@+id/result_view" />
+
+    <TextView
+        android:id="@+id/result_type_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="교육시설"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@+id/result_nm_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/result_nm_tv"
+        app:layout_constraintStart_toEndOf="@+id/result_nm_tv"
+    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="서울특별시 구로구 고척로18길 86"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/result_nm_tv"
+        app:layout_constraintStart_toStartOf="@+id/result_nm_tv"
+
+    />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
