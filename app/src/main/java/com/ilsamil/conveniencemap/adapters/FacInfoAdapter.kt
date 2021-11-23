@@ -1,13 +1,12 @@
-package com.ilsamil.conveniencemap.model
+package com.ilsamil.conveniencemap.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.R
-
+import com.ilsamil.conveniencemap.model.ServList
 
 
 class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() {
@@ -44,7 +43,7 @@ class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() 
    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FacInfoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)
         return FacInfoViewHolder(view)
     }
 

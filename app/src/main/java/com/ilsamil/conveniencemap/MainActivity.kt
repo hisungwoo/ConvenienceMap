@@ -13,10 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ilsamil.conveniencemap.Fragments.*
+import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.model.FacInfoList
+import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.repository.RetrofitService
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -63,6 +67,25 @@ class MainActivity : AppCompatActivity() {
 //            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 //            binding.bottomNav.startAnimation(fadeOutAnim)
 //            binding.bottomNav.visibility = View.GONE
+
+
+        binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        val adapter = EvalinfoAdapter()
+        binding.resultRecyclerView.adapter = adapter
+
+        val items = arrayListOf<ServList>()
+        var item = ServList("","",1.2,1.2,"","","","","",
+                            "","","","계당","")
+        items.add(item)
+        items.add(item)
+        items.add(item)
+        items.add(item)
+
+        adapter.updateItems(items)
+
+
+
+
 
     }
 

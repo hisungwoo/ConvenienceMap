@@ -42,4 +42,15 @@ data class ServList(
     val wfcltDivCd: String?, //  시설구분
     @PropertyElement
     val wfcltId: String?,    // 시설 ID
+    
+    
+    @PropertyElement
+    val evalInfo: String?,    // 기구표 목록
+    @PropertyElement
+    val srvInstId: String?,    // 시설 id
+
+
+
+    
+
 )
