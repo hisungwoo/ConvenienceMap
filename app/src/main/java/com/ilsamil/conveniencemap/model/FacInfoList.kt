@@ -48,9 +48,9 @@ data class ServList(
     val evalInfo: String?,    // 기구표 목록
     @PropertyElement
     val srvInstId: String?,    // 시설 id
+)
 
 
-
-    
-
+class EvalInfoList(
+    val evalInfo: String?,
 )

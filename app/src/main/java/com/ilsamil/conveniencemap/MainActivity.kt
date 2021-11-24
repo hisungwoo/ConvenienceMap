@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
+import com.ilsamil.conveniencemap.model.EvalInfoList
 import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.repository.RetrofitService
@@ -64,24 +65,77 @@ class MainActivity : AppCompatActivity() {
 
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
+        binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        var instance: Retrofit? = null
+        instance = Retrofit.Builder()
+            .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+            .build()
+
+
+        val aapi = instance.create(RetrofitService::class.java)
+        val ttest : Call<FacInfoList> = aapi.getEvalInfoList("0000011722")
+
+        ttest.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    var evalinfo = items[0].evalInfo.toString()
+                    Log.d("ttest", evalinfo)
+
+                    val evalinfoList = arrayListOf<EvalInfoList>()
+                    var evalinfos = evalinfo.split(",")
+
+                    for (i in evalinfos) {
+                        evalinfoList.add(EvalInfoList(i))
+                    }
+
+                    val adapter = EvalinfoAdapter()
+                    binding.resultRecyclerView.adapter = adapter
+
+                    adapter.updateItems(evalinfoList)
+
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "onFailure = " + t)
+                t.printStackTrace()
+            }
+
+        })
+
+
+
+
+
 //            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 //            binding.bottomNav.startAnimation(fadeOutAnim)
 //            binding.bottomNav.visibility = View.GONE
 
 
-        binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        val adapter = EvalinfoAdapter()
-        binding.resultRecyclerView.adapter = adapter
 
-        val items = arrayListOf<ServList>()
-        var item = ServList("","",1.2,1.2,"","","","","",
-                            "","","","계당","")
-        items.add(item)
-        items.add(item)
-        items.add(item)
-        items.add(item)
 
-        adapter.updateItems(items)
+//        val items = arrayListOf<ServList>()
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","계당",""))
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","계단",""))
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","높낮이",""))
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","엘리베이터",""))
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","높낮이",""))
+//        items.add(ServList("","",1.2,1.2,"","","","","",
+//            "","","","계단",""))
+
+
 
 
 
