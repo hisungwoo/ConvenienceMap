@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.model.EvalInfoList
-import com.ilsamil.conveniencemap.model.ServList
 
 class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>(){
     private var eItems: List<EvalInfoList> = ArrayList<EvalInfoList>()
@@ -34,19 +33,19 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
             }
             "대변기" -> {
                 evalinfoText = "대변기"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_stairs)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_wc)
             }
             "복도" -> {
-                evalinfoText = "복도"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_stairs)
+                evalinfoText = "복도시설"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_theaters)
             }
             "소변기" -> {
                 evalinfoText = "소변기"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_stairs)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_wc)
             }
             "일반사항" -> {
                 evalinfoText = "일반사항"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_stairs)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_transfer_within_a_station)
             }
             "장애인전용주차구역" -> {
                 evalinfoText = "장애인주차"
@@ -54,7 +53,7 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
             }
             "주출입구 높이차이 제거" -> {
                 evalinfoText = "주출입구 높이"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_emoji_transportation)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_signal_cellular_bar)
             }
             "주출입구 접근로" -> {
                 evalinfoText = "접근로"
@@ -62,15 +61,15 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
             }
             "출입구(문)" -> {
                 evalinfoText = "출입구(문)"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_accessible)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_sensor_door)
             }
             "해당시설 층수" -> {
                 evalinfoText = "해당시설 층수"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_accessible)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_elevator)
             }
             else -> {
                 evalinfoText = "기타"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_accessible)
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_more)
             }
         }
 
