@@ -68,7 +68,7 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
                 holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_elevator)
             }
             else -> {
-                evalinfoText = "기타"
+                evalinfoText = serv.evalInfo
                 holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_more)
             }
         }

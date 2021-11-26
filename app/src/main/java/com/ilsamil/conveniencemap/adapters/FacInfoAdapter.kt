@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.model.ServList
+import com.ilsamil.conveniencemap.utils.ChangeType
 
 
 class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() {
@@ -51,7 +52,11 @@ class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() 
         val serv : ServList = mItems[position]
         holder.faclnmTextView.text = serv.faclNm
         holder.lcmnadTextView.text = serv.lcMnad
-        holder.facltycdTextView.text = serv.faclTyCd
+
+        val faclTyCdChange = serv.faclTyCd?.let { ChangeType().changeType(it) }
+
+
+        holder.facltycdTextView.text = faclTyCdChange
         holder.bind(mItems[position])
 
     }

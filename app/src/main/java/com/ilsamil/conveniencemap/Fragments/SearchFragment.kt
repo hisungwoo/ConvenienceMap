@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 import com.ilsamil.conveniencemap.adapters.FacInfoAdapter
@@ -31,6 +34,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm : InputMethodManager
+    private lateinit var bottomNav : BottomNavigationView
+    lateinit var fadeOutAnim : Animation
 
     companion object {
         fun newInstance() : SearchFragment {
@@ -52,6 +57,11 @@ class SearchFragment : Fragment() {
             RecyclerView.VERTICAL,
             false
         )
+
+        fadeOutAnim = AnimationUtils.loadAnimation(context, R.anim.bottom_down)
+        bottomNav = activity?.findViewById(R.id.bottom_nav)!!
+        bottomNav.startAnimation(fadeOutAnim)
+        bottomNav.visibility = View.GONE
 
 
 
@@ -108,15 +118,14 @@ class SearchFragment : Fragment() {
                     "movePin",
                     bundleOf("faclLng" to data.faclLng,
                                     "faclLat" to data.faclLat,
-                                    "faclNm" to data.faclNm
+                                    "faclNm" to data.faclNm,
+                                    "faclTyCd" to data.faclTyCd,
+                                    "lcMnad" to data.lcMnad,
+                                    "wfcltId" to data.wfcltId
                     )
                 )
-
-
-                activity?.supportFragmentManager?.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, mapFragment, "category")?.addToBackStack("category")?.commit()
-
-
+                activity?.supportFragmentManager?.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, mapFragment, "map")?.addToBackStack("map")?.commit()
             }
         })
 
