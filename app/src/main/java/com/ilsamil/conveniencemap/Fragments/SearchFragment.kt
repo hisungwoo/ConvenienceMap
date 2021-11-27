@@ -9,33 +9,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 import com.ilsamil.conveniencemap.adapters.FacInfoAdapter
-import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.model.ServList
-import com.ilsamil.conveniencemap.repository.RetrofitService
-import com.tickaroo.tikxml.TikXml
-import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm : InputMethodManager
-    private lateinit var bottomNav : BottomNavigationView
-    lateinit var fadeOutAnim : Animation
+
+    val mainViewModel by activityViewModels<MainViewModel>()
 
     companion object {
         fun newInstance() : SearchFragment {
@@ -52,21 +45,19 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainViewModel.bottomNavLiveData.value = false
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(container?.context,
             RecyclerView.VERTICAL,
             false
         )
 
-        fadeOutAnim = AnimationUtils.loadAnimation(context, R.anim.bottom_down)
-        bottomNav = activity?.findViewById(R.id.bottom_nav)!!
-        bottomNav.startAnimation(fadeOutAnim)
-        bottomNav.visibility = View.GONE
-
-
-
         val adapter = FacInfoAdapter()
         binding.recyclerView.adapter = adapter
+
+        mainViewModel.servLiveData.observe(this, Observer {
+            adapter.updateItems(it)
+        })
 
         binding.searchEt.setOnKeyListener { view, i, keyEvent ->
             if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
@@ -74,35 +65,35 @@ class SearchFragment : Fragment() {
                 inputMethodManager.hideSoftInputFromWindow(binding.searchEt.windowToken, 0)
 
                 val searchText = binding.searchEt.text.toString()
-                var instance: Retrofit? = null
+                mainViewModel.searchFacl(searchText)
 
-                instance = Retrofit.Builder()
-                    .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
-                    .build()
-
-                val aapi = instance.create(RetrofitService::class.java)
-                val ttest : Call<FacInfoList> = aapi.getList(15, searchText)
-
-                ttest.enqueue(object : Callback<FacInfoList> {
-                    override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-                        if(response.isSuccessful()) {
-                            val items = response.body()?.servList!!
-                            adapter.updateItems(items)
-
-                        } else { // code == 400
-                            // 실패 처리
-                            Log.d("tttest" , "dd = 실패")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                        Log.d("tttest" , "onFailure = " + t)
-                        t.printStackTrace()
-                    }
-
-                })
+//                var instance = Retrofit.Builder()
+//                    .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
+//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                    .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+//                    .build()
+//
+//                val aapi = instance.create(RetrofitService::class.java)
+//                val ttest : Call<FacInfoList> = aapi.getList(15, searchText)
+//
+//                ttest.enqueue(object : Callback<FacInfoList> {
+//                    override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+//                        if(response.isSuccessful()) {
+//                            val items = response.body()?.servList!!
+//                            adapter.updateItems(items)
+//
+//                        } else { // code == 400
+//                            // 실패 처리
+//                            Log.d("tttest" , "dd = 실패")
+//                        }
+//                    }
+//
+//                    override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+//                        Log.d("tttest" , "onFailure = " + t)
+//                        t.printStackTrace()
+//                    }
+//
+//                })
 
                 true
             } else {

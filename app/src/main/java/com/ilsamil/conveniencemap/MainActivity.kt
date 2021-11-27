@@ -9,10 +9,12 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,16 +35,16 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
-    private var backButtonTime = 0L
-    private var fragmentCount = 0
-
     private lateinit var binding: ActivityMainBinding
+    val mainViewModel : MainViewModel by viewModels()
+
     private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
     private val categoryFragment: CategoryFragment by lazy { CategoryFragment.newInstance() }
     private val bookmarkFragment: BookmarkFragment by lazy { BookmarkFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
 
     private lateinit var searchFragment: SearchFragment
+    lateinit var fadeInAnim : Animation
     lateinit var fadeOutAnim : Animation
 
 
@@ -59,6 +61,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
+        fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
+
+        mainViewModel.bottomNavLiveData.observe(this, Observer {
+            if(it) {
+                binding.bottomNav.startAnimation(fadeInAnim)
+                binding.bottomNav.visibility = View.VISIBLE
+            } else {
+//                binding.bottomNav.startAnimation(fadeOutAnim)
+                binding.bottomNav.visibility = View.GONE
+            }
+        })
 
         supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
         replaceFragment(binding)

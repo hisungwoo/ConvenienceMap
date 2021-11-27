@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
@@ -32,11 +34,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class MapFragment : Fragment() {
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentMapBinding
-
     private lateinit var searchFragment : SearchFragment
     private lateinit var mapView: MapView
     lateinit var fadeInAnim : Animation
+
 
 
     companion object {
@@ -55,8 +58,10 @@ class MapFragment : Fragment() {
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
         mapView = MapView(activity)
+        mainViewModel.bottomNavLiveData.value = true
 
         setFragmentResultListener("movePin") { requestKey, bundle ->
+            mainViewModel.bottomNavLiveData.value = false
             val faclLng = bundle.getDouble("faclLng")
             val faclLat = bundle.getDouble("faclLat")
             val faclNm = bundle.getString("faclNm")
@@ -106,7 +111,8 @@ class MapFragment : Fragment() {
                         var evalinfos = evalinfo.split(",")
 
                         for (i in evalinfos) {
-                            evalinfoList.add(EvalInfoList(i))
+                            Log.d("ttest", "i = " + i.trim())
+                            evalinfoList.add(EvalInfoList(i.trim()))
                         }
 
                         val adapter = EvalinfoAdapter()
@@ -136,14 +142,6 @@ class MapFragment : Fragment() {
                 }
 
             })
-
-
-
-
-
-
-
-
 
         }
 

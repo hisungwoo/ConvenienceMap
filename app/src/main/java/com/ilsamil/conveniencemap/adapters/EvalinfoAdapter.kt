@@ -67,6 +67,30 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
                 evalinfoText = "해당시설 층수"
                 holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_elevator)
             }
+            "경보 및 피난설비" -> {
+                evalinfoText = "경보 및 피난설비"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_add_alert)
+            }
+            "매표소" -> {
+                evalinfoText = "매표소"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_store)
+            }
+            "판매기" -> {
+                evalinfoText = "판매기"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_storefront)
+            }
+            "음료대" -> {
+                evalinfoText = "음료대"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_touch_app)
+            }
+            "비치용품" -> {
+                evalinfoText = "비치용품"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_group_work)
+            }
+            "접수대 및 작업대" -> {
+                evalinfoText = "접수대 및 작업대"
+                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_calendar)
+            }
             else -> {
                 evalinfoText = serv.evalInfo
                 holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_more)

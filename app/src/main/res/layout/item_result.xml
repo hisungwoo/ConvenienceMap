@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="25dp"
         app:srcCompat="@drawable/ic_baseline_stairs"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,8 @@
 
     <TextView
         android:id="@+id/result_item_evalInfo_tv"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="5dp"
+        android:textSize="13sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/result_item_img"
