@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
     private val categoryFragment: CategoryFragment by lazy { CategoryFragment.newInstance() }
     private val bookmarkFragment: BookmarkFragment by lazy { BookmarkFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
+    private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
 
-    private lateinit var searchFragment: SearchFragment
+//    private lateinit var searchFragment: SearchFragment
     lateinit var fadeInAnim : Animation
     lateinit var fadeOutAnim : Animation
 
@@ -76,16 +77,34 @@ class MainActivity : AppCompatActivity() {
         })
 
         supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
-        replaceFragment(binding)
 
+//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, categoryFragment, "category").commit()
+//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, bookmarkFragment, "bookmark").commit()
+//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, infoFragment, "info").commit()
+//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
+//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment, "map").commit()
+//
+//        supportFragmentManager.beginTransaction().hide(categoryFragment).commit()
+//        supportFragmentManager.beginTransaction().hide(bookmarkFragment).commit()
+//        supportFragmentManager.beginTransaction().hide(infoFragment).commit()
+//        supportFragmentManager.beginTransaction().hide(searchFragment).commit()
+//        supportFragmentManager.beginTransaction().show(mapFragment).commit()
+
+
+//        replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
-
-//            fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
-//            binding.bottomNav.startAnimation(fadeOutAnim)
-//            binding.bottomNav.visibility = View.GONE
-
+        mainViewModel.movemove.observe(this, Observer {
+            //태그 이용해봐
+            // https://lucky516.tistory.com/63
+            if(it == 1) {
+                supportFragmentManager.beginTransaction().remove(searchFragment).addToBackStack(null).commit()
+            } else {
+                supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment).addToBackStack(null).commit()
+            }
+        })
     }
+
 
     private fun replaceFragment(binding: ActivityMainBinding) {
         binding.bottomNav.setOnItemSelectedListener {

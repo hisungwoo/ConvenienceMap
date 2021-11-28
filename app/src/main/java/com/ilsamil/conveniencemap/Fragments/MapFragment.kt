@@ -1,5 +1,6 @@
 package com.ilsamil.conveniencemap.Fragments
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -32,6 +33,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import java.util.*
 
 class MapFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -40,17 +42,17 @@ class MapFragment : Fragment() {
     private lateinit var mapView: MapView
     lateinit var fadeInAnim : Animation
 
-
-
     companion object {
         fun newInstance() : MapFragment {
             return MapFragment()
         }
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +60,10 @@ class MapFragment : Fragment() {
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
         mapView = MapView(activity)
-        mainViewModel.bottomNavLiveData.value = true
+        binding.clKakaoMapView.addView(mapView)
+
+        if(mainViewModel.bottomNavLiveData.value != true)
+            mainViewModel.bottomNavLiveData.value = true
 
         setFragmentResultListener("movePin") { requestKey, bundle ->
             mainViewModel.bottomNavLiveData.value = false
@@ -89,68 +94,30 @@ class MapFragment : Fragment() {
             mapView.addPOIItem(customMarker)
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(container?.context, RecyclerView.HORIZONTAL, false)
-            var instance: Retrofit? = null
-            instance = Retrofit.Builder()
-                .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
-                .build()
+            mainViewModel.getEvalInfo(wfcltId)
 
+            binding.resultNmTv.text = faclNm
+            binding.resultTypeTv.text = faclTyCd?.let { ChangeType().changeType(it) }
+            binding.resultLocationTv.text = lcMnad
 
-            val aapi = instance.create(RetrofitService::class.java)
-            val ttest : Call<FacInfoList> = aapi.getEvalInfoList(wfcltId)
-
-            ttest.enqueue(object : Callback<FacInfoList> {
-                override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-                    if(response.isSuccessful()) {
-                        val items = response.body()?.servList!!
-                        var evalinfo = items[0].evalInfo.toString()
-                        Log.d("ttest", evalinfo)
-
-                        val evalinfoList = arrayListOf<EvalInfoList>()
-                        var evalinfos = evalinfo.split(",")
-
-                        for (i in evalinfos) {
-                            Log.d("ttest", "i = " + i.trim())
-                            evalinfoList.add(EvalInfoList(i.trim()))
-                        }
-
-                        val adapter = EvalinfoAdapter()
-                        binding.resultRecyclerView.adapter = adapter
-                        val faclTycdChange = faclTyCd?.let { ChangeType().changeType(it) }
-
-
-                        binding.resultNmTv.text = faclNm
-                        binding.resultTypeTv.text = faclTycdChange
-                        binding.resultLocationTv.text = lcMnad
-
-
-                        adapter.updateItems(evalinfoList)
-                        binding.resultLayout.startAnimation(fadeInAnim)
-                        binding.resultLayout.visibility = View.VISIBLE
-
-
-                    } else { // code == 400
-                        // 실패 처리
-                        Log.d("tttest" , "dd = 실패")
-                    }
-                }
-
-                override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                    Log.d("tttest" , "onFailure = " + t)
-                    t.printStackTrace()
-                }
-
-            })
-
+            binding.resultLayout.startAnimation(fadeInAnim)
+            binding.resultLayout.visibility = View.VISIBLE
         }
 
 
-        binding.clKakaoMapView.addView(mapView)
+        val adapter = EvalinfoAdapter()
+        binding.resultRecyclerView.adapter = adapter
+        mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
+            adapter.updateItems(it)
+        })
+
 
         binding.searchBtn.setOnClickListener{
+            Log.d("ttest" , "클릭")
             searchFragment = SearchFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
+
+            mainViewModel.movemove.value = 2
+//            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
         }
 
 

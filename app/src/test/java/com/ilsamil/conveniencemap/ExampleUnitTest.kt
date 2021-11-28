@@ -6,7 +6,6 @@ import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import org.junit.Test
 
-import org.junit.Assert.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -27,7 +26,7 @@ class ExampleUnitTest {
             .build()
 
         val aapi = instance.create(RetrofitService::class.java)
-        val ttest : Call<FacInfoList> =aapi.getList(1000, "")
+        val ttest : Call<FacInfoList> =aapi.getFaclList(1000, "")
         var st = ttest.execute().body()?.servList?.get(0)?.faclNm
 
         System.out.println("st = " + st)

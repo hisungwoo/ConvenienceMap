@@ -3,6 +3,7 @@ package com.ilsamil.conveniencemap
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ilsamil.conveniencemap.model.EvalInfoList
 import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.repository.RetrofitService
@@ -15,29 +16,39 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class MainViewModel : ViewModel() {
-    val servLiveData = MutableLiveData<List<ServList>>()
+    private val faclService : RetrofitService
+    private val evalInfoService : RetrofitService
+
+    val faclLiveData = MutableLiveData<List<ServList>>()
+    val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
     val bottomNavLiveData = MutableLiveData<Boolean>()
-    private val service : RetrofitService
+
+    val movemove = MutableLiveData<Int>()
+
 
     init {
-        var instance = Retrofit.Builder()
-            .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
+        val faclInstance = Retrofit.Builder()
+            .baseUrl(RetrofitService.FACL_BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
             .build()
+        faclService = faclInstance.create(RetrofitService::class.java)
 
-        service = instance.create(RetrofitService::class.java)
+        val evalInfoInstance = Retrofit.Builder()
+            .baseUrl(RetrofitService.EVALINFO_BASE_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+            .build()
+        evalInfoService = evalInfoInstance.create(RetrofitService::class.java)
     }
 
-    fun searchFacl(searchText : String) {
-        val facinfoCall : Call<FacInfoList> = service.getList(15, searchText)
+    fun getFacl(searchText : String) {
+        val facinfoCall : Call<FacInfoList> = faclService.getFaclList(15, searchText)
         facinfoCall.enqueue(object : Callback<FacInfoList> {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
                 if(response.isSuccessful()) {
                     val items = response.body()?.servList!!
-                    Log.d("tttest" , "dd = 성공!!")
-                    servLiveData.postValue(items)
-//                    adapter.updateItems(items)
+                    faclLiveData.postValue(items)
 
                 } else { // code == 400
                     // 실패 처리
@@ -53,6 +64,38 @@ class MainViewModel : ViewModel() {
         })
     }
 
+    fun getEvalInfo(wfcltId : String) {
+        val evalInfoCall : Call<FacInfoList> = evalInfoService.getEvalInfoList(wfcltId)
+        evalInfoCall.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    var evalinfo = items[0].evalInfo.toString()
+                    Log.d("ttest", evalinfo)
 
+                    val evalinfoList = arrayListOf<EvalInfoList>()
+                    var evalinfos = evalinfo.split(",")
+
+                    for (i in evalinfos) {
+                        evalinfoList.add(EvalInfoList(i.trim()))
+                    }
+
+                    evalInfoLiveData.postValue(evalinfoList)
+
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+
+            }
+
+
+        })
+
+    }
 
 }
