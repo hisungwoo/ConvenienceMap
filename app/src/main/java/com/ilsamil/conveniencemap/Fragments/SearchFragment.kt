@@ -2,12 +2,14 @@ package com.ilsamil.conveniencemap.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -27,6 +29,8 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm : InputMethodManager
 
+    private lateinit var callback: OnBackPressedCallback
+
     companion object {
         fun newInstance() : SearchFragment {
             return SearchFragment()
@@ -35,14 +39,13 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        mainViewModel.bottomNavLiveData.value = false
+        mainViewModel.bottomNavLiveData.value = false
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(container?.context,
             RecyclerView.VERTICAL,
@@ -86,9 +89,12 @@ class SearchFragment : Fragment() {
                     )
                 )
 
-                mainViewModel.movemove.value = 1
+//                mainViewModel.movemove.value = 1
 
-//                activity?.supportFragmentManager?.beginTransaction()?.remove(searchFragment)?.commit()
+                val searchFragment2 = activity?.supportFragmentManager?.findFragmentByTag("search")
+                if (searchFragment2 != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(searchFragment2)?.addToBackStack(null)?.commit()
+                }
 
 
 //                activity?.supportFragmentManager?.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)

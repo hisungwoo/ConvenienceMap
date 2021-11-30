@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 //        supportFragmentManager.beginTransaction().show(mapFragment).commit()
 
 
-//        replaceFragment(binding)
+        replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         mainViewModel.movemove.observe(this, Observer {
@@ -133,6 +133,8 @@ class MainActivity : AppCompatActivity() {
 
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
+
+
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
         val tag2: Fragment? = supportFragmentManager.findFragmentByTag("bookmark")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("map")
@@ -167,7 +169,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         updateBottomMenu()
-
     }
 
 

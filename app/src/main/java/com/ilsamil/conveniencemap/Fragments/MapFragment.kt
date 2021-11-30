@@ -1,6 +1,7 @@
 package com.ilsamil.conveniencemap.Fragments
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +43,9 @@ class MapFragment : Fragment() {
     private lateinit var searchFragment : SearchFragment
     private lateinit var mapView: MapView
     lateinit var fadeInAnim : Animation
+    private lateinit var callback: OnBackPressedCallback
+
+    var ttee = true
 
     companion object {
         fun newInstance() : MapFragment {
@@ -51,6 +56,32 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("ttest", "백버튼!!")
+
+                if(binding.resultLayout.visibility == View.VISIBLE) {
+                    binding.resultLayout.visibility = View.INVISIBLE
+                    mainViewModel.bottomNavLiveData.value = true
+                    activity?.supportFragmentManager?.popBackStack()
+                } else {
+                    mainViewModel.bottomNavLiveData.value = true
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
 
@@ -64,6 +95,12 @@ class MapFragment : Fragment() {
 
         if(mainViewModel.bottomNavLiveData.value != true)
             mainViewModel.bottomNavLiveData.value = true
+
+        val adapter = EvalinfoAdapter()
+        binding.resultRecyclerView.adapter = adapter
+        mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
+            adapter.updateItems(it)
+        })
 
         setFragmentResultListener("movePin") { requestKey, bundle ->
             mainViewModel.bottomNavLiveData.value = false
@@ -105,19 +142,13 @@ class MapFragment : Fragment() {
         }
 
 
-        val adapter = EvalinfoAdapter()
-        binding.resultRecyclerView.adapter = adapter
-        mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
-            adapter.updateItems(it)
-        })
-
 
         binding.searchBtn.setOnClickListener{
             Log.d("ttest" , "클릭")
             searchFragment = SearchFragment.newInstance()
 
-            mainViewModel.movemove.value = 2
-//            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment)?.addToBackStack(null)?.commit()
+//            mainViewModel.movemove.value = 2
+            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment, "search")?.addToBackStack(null)?.commit()
         }
 
 
