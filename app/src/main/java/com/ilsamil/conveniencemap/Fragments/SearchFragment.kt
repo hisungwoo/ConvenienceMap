@@ -29,8 +29,6 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm : InputMethodManager
 
-    private lateinit var callback: OnBackPressedCallback
-
     companion object {
         fun newInstance() : SearchFragment {
             return SearchFragment()
@@ -52,9 +50,9 @@ class SearchFragment : Fragment() {
             false
         )
 
+
         val adapter = FacInfoAdapter()
         binding.recyclerView.adapter = adapter
-
         mainViewModel.faclLiveData.observe(this, Observer {
             adapter.updateItems(it)
         })
@@ -75,22 +73,18 @@ class SearchFragment : Fragment() {
 
         adapter.setOnItemClickListener(object : FacInfoAdapter.OnItemClickListener {
             override fun onItemClick(v: View, data: ServList, pos: Int) {
-                val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
-                val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
+//                setFragmentResult(
+//                    "movePin",
+//                    bundleOf("faclLng" to data.faclLng,
+//                                    "faclLat" to data.faclLat,
+//                                    "faclNm" to data.faclNm,
+//                                    "faclTyCd" to data.faclTyCd,
+//                                    "lcMnad" to data.lcMnad,
+//                                    "wfcltId" to data.wfcltId
+//                    )
+//                )
 
-                setFragmentResult(
-                    "movePin",
-                    bundleOf("faclLng" to data.faclLng,
-                                    "faclLat" to data.faclLat,
-                                    "faclNm" to data.faclNm,
-                                    "faclTyCd" to data.faclTyCd,
-                                    "lcMnad" to data.lcMnad,
-                                    "wfcltId" to data.wfcltId
-                    )
-                )
-
-//                mainViewModel.movemove.value = 1
-
+                mainViewModel.movePin.value = data
                 val searchFragment2 = activity?.supportFragmentManager?.findFragmentByTag("search")
                 if (searchFragment2 != null) {
                     activity?.supportFragmentManager?.beginTransaction()?.remove(searchFragment2)?.addToBackStack(null)?.commit()
@@ -108,6 +102,8 @@ class SearchFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        Log.d("ttest", "onStart")
+        mainViewModel.mainStatus.value = 2
         imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         binding.searchEt.requestFocus()
         imm.showSoftInput(binding.searchEt, InputMethodManager.SHOW_IMPLICIT)

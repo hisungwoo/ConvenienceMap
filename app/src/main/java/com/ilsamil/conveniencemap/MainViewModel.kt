@@ -22,8 +22,11 @@ class MainViewModel : ViewModel() {
     val faclLiveData = MutableLiveData<List<ServList>>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
     val bottomNavLiveData = MutableLiveData<Boolean>()
+    val mainStatus = MutableLiveData<Int>()
 
-    val movemove = MutableLiveData<Int>()
+    val movePin = MutableLiveData<ServList>()
+
+
 
 
     init {
@@ -90,7 +93,8 @@ class MainViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-
+                Log.d("tttest" , "실패코드 : " + t)
+                t.printStackTrace()
             }
 
 

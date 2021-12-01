@@ -1,7 +1,7 @@
 package com.ilsamil.conveniencemap.utils
 
 class ChangeType {
-    fun changeType(type : String) : String {
+    fun changeType(type : String?) : String? {
         var result = type
         when (type) {
             "UC0A05" -> result = "우체국"

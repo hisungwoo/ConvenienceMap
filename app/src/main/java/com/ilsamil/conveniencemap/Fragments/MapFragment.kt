@@ -45,8 +45,6 @@ class MapFragment : Fragment() {
     lateinit var fadeInAnim : Animation
     private lateinit var callback: OnBackPressedCallback
 
-    var ttee = true
-
     companion object {
         fun newInstance() : MapFragment {
             return MapFragment()
@@ -56,6 +54,7 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onAttach(context: Context) {
@@ -68,10 +67,9 @@ class MapFragment : Fragment() {
                 if(binding.resultLayout.visibility == View.VISIBLE) {
                     binding.resultLayout.visibility = View.INVISIBLE
                     mainViewModel.bottomNavLiveData.value = true
+                    mapView.removeAllPOIItems()
                     activity?.supportFragmentManager?.popBackStack()
                 } else {
-                    mainViewModel.bottomNavLiveData.value = true
-                    activity?.supportFragmentManager?.popBackStack()
                 }
 
             }
@@ -82,6 +80,7 @@ class MapFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+
     }
 
 
@@ -117,12 +116,12 @@ class MapFragment : Fragment() {
             Log.d("ttest" , "faclLat " + faclLat)
             Log.d("ttest" , "faclNm " + faclNm)
 
-            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLng, faclLat), 0, true);
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLat, faclLng), 0, true);
 
             val customMarker = MapPOIItem()
             customMarker.itemName = "테스트 마커"
             customMarker.tag = 1
-            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLng, faclLat)
+            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
             customMarker.customImageResourceId = R.drawable.ic_location_pin_50_2
             customMarker.isCustomImageAutoscale = false
@@ -139,15 +138,13 @@ class MapFragment : Fragment() {
 
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
+
         }
 
 
 
         binding.searchBtn.setOnClickListener{
-            Log.d("ttest" , "클릭")
             searchFragment = SearchFragment.newInstance()
-
-//            mainViewModel.movemove.value = 2
             activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment, "search")?.addToBackStack(null)?.commit()
         }
 

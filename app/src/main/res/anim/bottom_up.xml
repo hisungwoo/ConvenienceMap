@@ -2,7 +2,7 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <!--duration500 - 0.5초동안-->
     <translate
-        android:duration="600"
+        android:duration="300"
         android:fromYDelta="100%p"
         android:toYDelta="0%p"
         android:repeatCount ="0"
