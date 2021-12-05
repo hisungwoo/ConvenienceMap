@@ -54,35 +54,7 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Log.d("ttest", "백버튼!!")
-
-                if(binding.resultLayout.visibility == View.VISIBLE) {
-                    binding.resultLayout.visibility = View.INVISIBLE
-                    mainViewModel.bottomNavLiveData.value = true
-                    mapView.removeAllPOIItems()
-                    activity?.supportFragmentManager?.popBackStack()
-                } else {
-                }
-
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        callback.remove()
-
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,6 +74,7 @@ class MapFragment : Fragment() {
         })
 
         setFragmentResultListener("movePin") { requestKey, bundle ->
+            mainViewModel.mainStatus.value = 3
             mainViewModel.bottomNavLiveData.value = false
             val faclLng = bundle.getDouble("faclLng")
             val faclLat = bundle.getDouble("faclLat")
@@ -145,7 +118,7 @@ class MapFragment : Fragment() {
 
         binding.searchBtn.setOnClickListener{
             searchFragment = SearchFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment, "search")?.addToBackStack(null)?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.add(R.id.fragment_view, searchFragment, "search")?.addToBackStack("search")?.commit()
         }
 
 

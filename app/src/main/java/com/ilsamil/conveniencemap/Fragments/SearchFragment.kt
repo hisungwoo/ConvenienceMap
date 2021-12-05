@@ -28,6 +28,7 @@ class SearchFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm : InputMethodManager
+    private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
 
     companion object {
         fun newInstance() : SearchFragment {
@@ -37,6 +38,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainViewModel.mainStatus.value = 2
     }
 
     override fun onCreateView(
@@ -49,7 +51,6 @@ class SearchFragment : Fragment() {
             RecyclerView.VERTICAL,
             false
         )
-
 
         val adapter = FacInfoAdapter()
         binding.recyclerView.adapter = adapter
@@ -102,8 +103,7 @@ class SearchFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.d("ttest", "onStart")
-        mainViewModel.mainStatus.value = 2
+//        Log.d("ttest", "onStart")
         imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         binding.searchEt.requestFocus()
         imm.showSoftInput(binding.searchEt, InputMethodManager.SHOW_IMPLICIT)

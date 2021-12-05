@@ -18,15 +18,15 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 class MainViewModel : ViewModel() {
     private val faclService : RetrofitService
     private val evalInfoService : RetrofitService
+    private val locationFaclService : RetrofitService
 
     val faclLiveData = MutableLiveData<List<ServList>>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
+    val locationFaclLiveData = MutableLiveData<List<ServList>>()
     val bottomNavLiveData = MutableLiveData<Boolean>()
     val mainStatus = MutableLiveData<Int>()
 
     val movePin = MutableLiveData<ServList>()
-
-
 
 
     init {
@@ -43,6 +43,14 @@ class MainViewModel : ViewModel() {
             .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
             .build()
         evalInfoService = evalInfoInstance.create(RetrofitService::class.java)
+
+        val locationFaclInstance = Retrofit.Builder()
+            .baseUrl(RetrofitService.FACL_BASE_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
+            .build()
+        locationFaclService = locationFaclInstance.create(RetrofitService::class.java)
+
     }
 
     fun getFacl(searchText : String) {
@@ -96,10 +104,29 @@ class MainViewModel : ViewModel() {
                 Log.d("tttest" , "실패코드 : " + t)
                 t.printStackTrace()
             }
+        })
+    }
 
+    fun getLocationFacl(cggNm : String, roadNm : String) {
+        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, roadNm)
+        facinfoCall.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    locationFaclLiveData.postValue(items)
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "onFailure = " + t)
+                t.printStackTrace()
+            }
 
         })
-
     }
 
 }
