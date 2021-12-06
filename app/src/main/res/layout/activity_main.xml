@@ -22,7 +22,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        />
+
+    <Button
+        android:id="@+id/refresh_btn"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:layout_width="110dp"
+        android:layout_height="38dp"
+        android:background="@drawable/refresh"
+        android:text="⟳ 이 지역 재검색"
+        android:textColor="#1750FB"
+        app:layout_constraintTop_toBottomOf="@+id/search_btn"
+        app:layout_constraintStart_toStartOf="@+id/search_btn"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clKakaoMapView"

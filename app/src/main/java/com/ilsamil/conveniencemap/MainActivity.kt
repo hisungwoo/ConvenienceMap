@@ -1,7 +1,6 @@
 package com.ilsamil.conveniencemap
 
 import android.Manifest
-import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -76,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNav.visibility = View.GONE
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
+                    binding.refreshBtn.visibility = View.GONE
                     mapView.removeAllPOIItems()
                 }
             }
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             customMarker.tag = 1
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_2
+            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_1206
             customMarker.isCustomImageAutoscale = false
             customMarker.setCustomImageAnchor(0.5f, 1.0f)
 
@@ -166,6 +166,12 @@ class MainActivity : AppCompatActivity() {
                 if(data.faclLat != null && data.faclLng != null) {
                     marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                     marker.itemName = data.faclNm
+
+                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+                    marker.customImageResourceId = R.drawable.ic_location_pin_40
+                    marker.isCustomImageAutoscale = false
+                    marker.setCustomImageAnchor(0.5f, 1.0f)
+
                     mapView.addPOIItem(marker)
                 }
             }
