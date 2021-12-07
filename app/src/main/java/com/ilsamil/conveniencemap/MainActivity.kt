@@ -1,7 +1,10 @@
 package com.ilsamil.conveniencemap
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Criteria
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,12 +22,13 @@ import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.utils.ChangeType
+import net.daum.android.map.MapViewEventListener
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
@@ -50,16 +54,20 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         mapView = MapView(this)
         binding.clKakaoMapView.addView(mapView)
-
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
+
+
+        mapView.setMapViewEventListener(this)
+        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+
 
         mainViewModel.mainStatus.observe(this, Observer {
             when(it) {
@@ -141,22 +149,27 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        var latitude = 37.49808164308036
-        var longitude = 126.8456638053941
-
-        val geocoder = Geocoder(this)
-        try {
-            var gList = geocoder.getFromLocation(latitude, longitude, 5)
-            val cggNm : String = gList[2].subLocality
-            val roadNm : String = gList[2].featureName
-            mainViewModel.getLocationFacl(cggNm, roadNm)
-
-            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
 
 
 
-        } catch (e : IOException) {
-            Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if(location != null) {
+            val latitude = location.latitude
+            val longitude = location.longitude
+
+            val geocoder = Geocoder(this)
+            try {
+                var gList = geocoder.getFromLocation(latitude, longitude, 5)
+                val cggNm : String = gList[2].subLocality
+                val roadNm : String = gList[2].featureName
+                mainViewModel.getLocationFacl(cggNm, roadNm)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
+
+            } catch (e : IOException) {
+                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+            }
+
         }
 
 
@@ -261,6 +274,45 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         updateBottomMenu()
         updateMapView()
+    }
+
+    override fun onMapViewInitialized(p0: MapView?) {
+        //MapView가 사용가능 한 상태가 되었음을 알려준다.
+    }
+
+    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
+        //지도 중심 좌표가 이동한 경우 호출된다.
+        if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+        }
+    }
+
+    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
+        //지도 확대/축소 레벨이 변경된 경우 호출된다.
+    }
+
+    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
+        //사용자가 지도 위를 터치한 경우 호출된다.
+    }
+
+    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
+        //사용자가 지도 위 한 지점을 더블 터치한 경우 호출된다.
+    }
+
+    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
+        //사용자가 지도 위 한 지점을 길게 누른 경우(long press) 호출된다.
+    }
+
+    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
+        //사용자가 지도 드래그를 시작한 경우 호출된다.
+    }
+
+    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
+        //사용자가 지도 드래그를 끝낸 경우 호출된다.
+    }
+
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+        //지도의 이동이 완료된 경우 호출된다.
     }
 
 
