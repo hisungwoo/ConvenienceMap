@@ -63,6 +63,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nev_menu" />
 
+    <ImageButton
+        android:id="@+id/mylocation_btn"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:elevation="3dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_mylocation"
+        android:src="@drawable/ic_baseline_my_location"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="@+id/bottom_nav"
+        />
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_view"
         android:layout_width="match_parent"

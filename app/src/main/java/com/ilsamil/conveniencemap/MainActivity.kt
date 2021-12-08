@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
 
 
-
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -76,6 +75,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     // 기본 메인 상태
                     binding.bottomNav.visibility = View.VISIBLE
                     binding.searchBtn.visibility = View.VISIBLE
+                    binding.refreshBtn.visibility = View.VISIBLE
+                    binding.mylocationBtn.visibility = View.VISIBLE
                 }
                 2 -> {
                     Log.d("ttest", "status 2")
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
+                    binding.mylocationBtn.visibility = View.GONE
                     mapView.removeAllPOIItems()
                 }
             }
@@ -96,6 +98,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
 
         binding.searchBtn.setOnClickListener{
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
         }
 
@@ -149,9 +152,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         })
 
 
-
-
-
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if(location != null) {
@@ -169,7 +169,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             } catch (e : IOException) {
                 Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
             }
-
         }
 
 
@@ -191,7 +190,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         })
 
 
-
+        binding.mylocationBtn.setOnClickListener {
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        }
 
     }
 
