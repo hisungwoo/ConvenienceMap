@@ -2,10 +2,12 @@ package com.ilsamil.conveniencemap
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.location.Criteria
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -27,6 +29,7 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.io.IOException
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private lateinit var binding: ActivityMainBinding
@@ -53,7 +56,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     }
 
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -63,9 +65,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 
-
         mapView.setMapViewEventListener(this)
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        getLocationFacInfo()
 
 
         mainViewModel.mainStatus.observe(this, Observer {
@@ -80,7 +82,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 }
                 2 -> {
                     Log.d("ttest", "status 2")
-                    // 바템네비, 검색버튼 제거
+                    // 주소검색 버튼 클릭
+                    // 바템네비, 검색, 재검색 제거
                     binding.bottomNav.visibility = View.GONE
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
@@ -88,6 +91,19 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.mylocationBtn.visibility = View.GONE
                     mapView.removeAllPOIItems()
                 }
+                3 -> {
+                    Log.d("ttest", "status 3")
+                    // 검색 결과 화면
+                }
+                4 -> {
+                    Log.d("ttest", "status 4")
+                    // BotNav 이동
+                    // 검색, 재검색, 내위치 제거
+                    binding.searchBtn.visibility = View.GONE
+                    binding.refreshBtn.visibility = View.GONE
+                    binding.mylocationBtn.visibility = View.GONE
+                }
+
             }
         })
 
@@ -151,27 +167,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             mainViewModel.getEvalInfo(wfcltId)
         })
 
-
-        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if(location != null) {
-            val latitude = location.latitude
-            val longitude = location.longitude
-
-            val geocoder = Geocoder(this)
-            try {
-                var gList = geocoder.getFromLocation(latitude, longitude, 5)
-                val cggNm : String = gList[2].subLocality
-                val roadNm : String = gList[2].featureName
-                mainViewModel.getLocationFacl(cggNm, roadNm)
-                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
-
-            } catch (e : IOException) {
-                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
-            }
-        }
-
-
         mainViewModel.locationFaclLiveData.observe(this, Observer {
             for(data in it) {
                 val marker = MapPOIItem()
@@ -196,14 +191,43 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
     }
 
+
+    @SuppressLint("MissingPermission")
+    private fun getLocationFacInfo() {
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        if(location != null) {
+            val latitude = location.latitude
+            val longitude = location.longitude
+
+            val geocoder = Geocoder(this)
+            try {
+                var gList = geocoder.getFromLocation(latitude, longitude, 5)
+                val cggNm : String = gList[1].subLocality
+                val roadNm : String = gList[1].featureName
+
+                Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
+
+                mainViewModel.getLocationFacl(cggNm, roadNm)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
+
+            } catch (e : IOException) {
+                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+            }
+        }
+    }
+
+
     private fun replaceFragment(binding: ActivityMainBinding) {
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.menu_category -> {
+                    mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, categoryFragment, "category").addToBackStack("category").commit()
                 }
                 R.id.menu_bookmark -> {
+                    mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("bookmark", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, bookmarkFragment, "bookmark").addToBackStack("bookmark").commit()
                 }
@@ -211,6 +235,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     bottomClickMap()
                 }
                 R.id.menu_info -> {
+                    mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, infoFragment, "info").addToBackStack("info").commit()
                 }
@@ -315,6 +340,5 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         //지도의 이동이 완료된 경우 호출된다.
     }
-
 
 }
