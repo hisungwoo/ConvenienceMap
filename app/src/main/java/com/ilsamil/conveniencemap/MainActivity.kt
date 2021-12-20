@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
         mapView.setMapViewEventListener(this)
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        getLocationFacInfo()
+
 
 
         mainViewModel.mainStatus.observe(this, Observer {
@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        getLocationFacInfo()
 //        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
 
 
@@ -189,8 +190,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
         }
 
-    }
+        binding.refreshBtn.setOnClickListener {
+            getLocationFacInfo()
+        }
 
+    }
 
     @SuppressLint("MissingPermission")
     private fun getLocationFacInfo() {
