@@ -107,6 +107,8 @@ class MainViewModel : ViewModel() {
         })
     }
 
+
+    // 파라미터 주소의 정보 표시
     fun getLocationFacl(cggNm : String, roadNm : String) {
         val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, roadNm)
         facinfoCall.enqueue(object : Callback<FacInfoList> {

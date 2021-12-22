@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
 
         binding.refreshBtn.setOnClickListener {
-            getLocationFacInfo()
+            getMapFacInfo("구로구","구로동로47길")
         }
 
     }
@@ -219,6 +219,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
             }
         }
+    }
+
+    private fun getMapFacInfo(cggNm : String , roadNm : String) {
+        mapView.removeAllPOIItems()
+        mainViewModel.getLocationFacl(cggNm, roadNm)
     }
 
 
