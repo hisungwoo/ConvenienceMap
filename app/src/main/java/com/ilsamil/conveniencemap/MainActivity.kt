@@ -209,7 +209,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 var gList = geocoder.getFromLocation(latitude, longitude, 5)
                 val cggNm : String = gList[1].subLocality
                 val roadNm : String = gList[1].featureName
-
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
                 mainViewModel.getLocationFacl(cggNm, roadNm)
@@ -218,6 +217,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             } catch (e : IOException) {
                 Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
             }
+        } else {
+            Log.d("ttest", "현재 위치 : null")
         }
     }
 
