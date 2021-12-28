@@ -20,6 +20,8 @@ class MainViewModel : ViewModel() {
     private val evalInfoService : RetrofitService
     private val locationFaclService : RetrofitService
 
+    val categoryLiveData = MutableLiveData<Int>()
+
     val faclLiveData = MutableLiveData<List<ServList>>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
@@ -27,6 +29,7 @@ class MainViewModel : ViewModel() {
     val mainStatus = MutableLiveData<Int>()
 
     val movePin = MutableLiveData<ServList>()
+
 
 
     init {
@@ -108,7 +111,7 @@ class MainViewModel : ViewModel() {
     }
 
 
-    // 파라미터 주소의 정보 표시
+    // 지도에 정보표시
     fun getLocationFacl(cggNm : String, roadNm : String) {
         val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
         facinfoCall.enqueue(object : Callback<FacInfoList> {

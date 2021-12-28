@@ -3,6 +3,7 @@ package com.ilsamil.conveniencemap
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Criteria
 import android.location.Geocoder
 import android.location.LocationManager
@@ -15,6 +16,7 @@ import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -38,12 +40,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
     private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
     private val categoryFragment: CategoryFragment by lazy { CategoryFragment.newInstance() }
-    private val bookmarkFragment: BookmarkFragment by lazy { BookmarkFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
     private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
 
-    lateinit var fadeInAnim : Animation
-    lateinit var fadeOutAnim : Animation
+    private lateinit var fadeInAnim : Animation
+    private lateinit var fadeOutAnim : Animation
 
 
 
@@ -69,6 +70,60 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
 
+        binding.shopCategoryBtn.setOnClickListener {
+            categoryClick(1)
+        }
+
+        binding.livingCategoryBtn.setOnClickListener{
+            categoryClick(2)
+        }
+
+        binding.educationCategoryBtn.setOnClickListener {
+            categoryClick(3)
+        }
+
+        binding.hospitalCategoryBtn.setOnClickListener {
+            categoryClick(4)
+        }
+
+        binding.publicCategoryBtn.setOnClickListener {
+            categoryClick(5)
+        }
+
+
+
+        mainViewModel.categoryLiveData.observe(this, Observer {
+            when(it) {
+                0 -> {
+                    clearCategoryBtn()
+                    getMapFacInfo("구로구","구로동로47길")
+                }
+                1 -> {
+                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.shopCategoryBtn.setTextColor(Color.WHITE)
+                    getMapFacInfo("구로구","구로동로47길")
+                }
+                2 -> {
+                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.livingCategoryBtn.setTextColor(Color.WHITE)
+                }
+                3 -> {
+                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.educationCategoryBtn.setTextColor(Color.WHITE)
+                }
+                4 -> {
+                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
+                }
+                5 -> {
+                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.publicCategoryBtn.setTextColor(Color.WHITE)
+                }
+
+
+            }
+        })
+
 
         mainViewModel.mainStatus.observe(this, Observer {
             when(it) {
@@ -79,6 +134,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.searchBtn.visibility = View.VISIBLE
                     binding.refreshBtn.visibility = View.VISIBLE
                     binding.mylocationBtn.visibility = View.VISIBLE
+                    binding.groupCategoryBtn.visibility = View.VISIBLE
                 }
                 2 -> {
                     Log.d("ttest", "status 2")
@@ -90,6 +146,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
                     mapView.removeAllPOIItems()
+                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
                     Log.d("ttest", "status 3")
@@ -102,6 +159,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.searchBtn.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
+                    binding.groupCategoryBtn.visibility = View.GONE
                 }
 
             }
@@ -171,17 +229,66 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mainViewModel.locationFaclLiveData.observe(this, Observer {
             for(data in it) {
                 val marker = MapPOIItem()
-                if(data.faclLat != null && data.faclLng != null) {
-                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                    marker.itemName = data.faclNm
 
-                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                    marker.isCustomImageAutoscale = false
-                    marker.setCustomImageAnchor(0.5f, 1.0f)
 
-                    mapView.addPOIItem(marker)
+                when(mainViewModel.categoryLiveData.value) {
+                    1 -> {
+                        when(data.faclTyCd.toString()) {
+                            in "UC0B01", "UC0R02", "UC0E01", "UC0B02", "UC0K02" -> {
+                                if (data.faclLat != null && data.faclLng != null) {
+                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                                    marker.itemName = data.faclNm
+
+                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
+                                    marker.isCustomImageAutoscale = false
+                                    marker.setCustomImageAnchor(0.5f, 1.0f)
+
+                                    mapView.addPOIItem(marker)
+                                }
+                            }
+//                            in "UC0R02" -> continue
+//                            in "UC0E01" -> continue
+//                            in "UC0B02" -> continue
+//                            in "UC0K02" -> continue
+                        }
+                    }
                 }
+
+//                if (mainViewModel.categoryLiveData.value == 1) {
+//                    when(data.faclTyCd) {
+//                        !"UC0B01" -> continue
+//                    }
+//                } else if (mainViewModel.categoryLiveData.value == 2) {
+//                    if (data.faclTyCd != "") {
+//                        continue
+//                    }
+//                } else if (mainViewModel.categoryLiveData.value == 3) {
+//                    if (data.faclTyCd != "") {
+//                        continue
+//                    }
+//                } else if (mainViewModel.categoryLiveData.value == 4) {
+//                    if (data.faclTyCd != "") {
+//                        continue
+//                    }
+//                } else if (mainViewModel.categoryLiveData.value == 5) {
+//                    if (data.faclTyCd != "") {
+//                        continue
+//                    }
+//                }
+
+
+//                if (data.faclLat != null && data.faclLng != null) {
+//                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+//                    marker.itemName = data.faclNm
+//
+//                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+//                    marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                    marker.isCustomImageAutoscale = false
+//                    marker.setCustomImageAnchor(0.5f, 1.0f)
+//
+//                    mapView.addPOIItem(marker)
+//                }
             }
         })
 
@@ -211,7 +318,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 val roadNm : String = gList[1].featureName
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
-                mainViewModel.getLocationFacl(cggNm, roadNm)
+//                mainViewModel.getLocationFacl(cggNm, roadNm, "")
+                getMapFacInfo(cggNm, roadNm)
                 mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
 
             } catch (e : IOException) {
@@ -222,11 +330,33 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
     }
 
+    private fun categoryClick(btn : Int) {
+        if (btn == mainViewModel.categoryLiveData.value) {
+            mainViewModel.categoryLiveData.value = 0
+        } else {
+            clearCategoryBtn()
+            mainViewModel.categoryLiveData.value = btn
+        }
+    }
+
+    private fun clearCategoryBtn() {
+        binding.shopCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.livingCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.educationCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.publicCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.hospitalCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+    }
+
+
     private fun getMapFacInfo(cggNm : String , roadNm : String) {
         mapView.removeAllPOIItems()
         mainViewModel.getLocationFacl(cggNm, roadNm)
     }
-
 
     private fun replaceFragment(binding: ActivityMainBinding) {
         binding.bottomNav.setOnItemSelectedListener {
@@ -235,11 +365,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_view, categoryFragment, "category").addToBackStack("category").commit()
-                }
-                R.id.menu_bookmark -> {
-                    mainViewModel.mainStatus.value = 4
-                    supportFragmentManager.popBackStackImmediate("bookmark", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_view, bookmarkFragment, "bookmark").addToBackStack("bookmark").commit()
                 }
                 R.id.menu_map -> {
                     bottomClickMap()
@@ -258,22 +383,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
-        val tag2: Fragment? = supportFragmentManager.findFragmentByTag("bookmark")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
         binding.bottomNav.apply {
             if(tag1 != null && tag1.isVisible) {
                 this.menu.findItem(R.id.menu_category).isChecked = true
             }
-            if(tag2 != null && tag2.isVisible) {
-                this.menu.findItem(R.id.menu_bookmark).isChecked = true
-            }
             if(tag3 != null && tag3.isVisible) {
                 this.menu.findItem(R.id.menu_info).isChecked = true
-            }
-
-            if(tag1 == null && tag2 == null && tag3 == null) {
-                this.menu.findItem(R.id.menu_map).isChecked = true
             }
         }
     }
@@ -290,14 +407,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
     private fun bottomClickMap() {
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
-        val tag2: Fragment? = supportFragmentManager.findFragmentByTag("bookmark")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
         if(tag1 != null) {
             supportFragmentManager.beginTransaction().remove(categoryFragment).addToBackStack(null)?.commit()
-        }
-        if(tag2 != null) {
-            supportFragmentManager.beginTransaction().remove(bookmarkFragment).addToBackStack(null)?.commit()
         }
         if(tag3 != null) {
             supportFragmentManager.beginTransaction().remove(infoFragment).addToBackStack(null)?.commit()

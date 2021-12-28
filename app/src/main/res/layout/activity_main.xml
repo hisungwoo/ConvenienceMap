@@ -24,6 +24,14 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_category_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="shop_category_btn, living_category_btn,
+           education_category_btn, hospital_category_btn, public_category_btn"
+        />
+
     <Button
         android:id="@+id/shop_category_btn"
         android:textSize="12sp"
@@ -32,6 +40,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/refresh"
         android:text="음식⸰상점"
+        android:tag="음식상점"
         android:textColor="#1750FB"
         app:layout_constraintTop_toBottomOf="@+id/search_btn"
         app:layout_constraintStart_toStartOf="@+id/search_btn"
@@ -45,6 +54,7 @@
         android:layout_height="35dp"
         android:background="@drawable/refresh"
         android:text="생활시설"
+        android:tag="생활시설"
         android:textColor="#1750FB"
         app:layout_constraintTop_toTopOf="@+id/shop_category_btn"
         app:layout_constraintStart_toEndOf="@+id/shop_category_btn"
