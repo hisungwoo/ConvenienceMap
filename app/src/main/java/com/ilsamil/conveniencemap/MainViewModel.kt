@@ -9,6 +9,7 @@ import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.repository.RetrofitService
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import net.daum.mf.map.api.MapPOIItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +30,6 @@ class MainViewModel : ViewModel() {
     val mainStatus = MutableLiveData<Int>()
 
     val movePin = MutableLiveData<ServList>()
-
 
 
     init {
