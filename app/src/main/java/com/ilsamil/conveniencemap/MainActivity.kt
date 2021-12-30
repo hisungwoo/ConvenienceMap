@@ -47,7 +47,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private lateinit var fadeInAnim : Animation
     private lateinit var fadeOutAnim : Animation
 
-    var shopList = arrayListOf<MapPOIItem>()
+    private var shopList = arrayListOf<MapPOIItem>()
+    private var livingList = arrayListOf<MapPOIItem>()
+    private var educationList = arrayListOf<MapPOIItem>()
+    private var hospitalList = arrayListOf<MapPOIItem>()
+    private var publicList = arrayListOf<MapPOIItem>()
 
 
 
@@ -73,7 +77,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
 
-
         binding.shopCategoryBtn.setOnClickListener {
             categoryClick(1)
         }
@@ -93,50 +96,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         binding.publicCategoryBtn.setOnClickListener {
             categoryClick(5)
         }
-
-
-
-        mainViewModel.categoryLiveData.observe(this, Observer {
-            when(it) {
-                0 -> {
-                    clearCategoryBtn()
-                    getMapFacInfo("구로구","구로동로47길")
-                }
-                1 -> {
-                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.shopCategoryBtn.setTextColor(Color.WHITE)
-//                    getMapFacInfo("구로구","구로동로47길")
-                    mapView.removeAllPOIItems()
-                    for(data in shopList) {
-                        Log.d("ttest", "ㄱㄱ")
-                        mapView.addPOIItem(data)
-                    }
-
-                }
-                2 -> {
-                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.livingCategoryBtn.setTextColor(Color.WHITE)
-                    getMapFacInfo("구로구","구로동로47길")
-                }
-                3 -> {
-                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.educationCategoryBtn.setTextColor(Color.WHITE)
-                    getMapFacInfo("구로구","구로동로47길")
-                }
-                4 -> {
-                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
-                    getMapFacInfo("구로구","구로동로47길")
-                }
-                5 -> {
-                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.publicCategoryBtn.setTextColor(Color.WHITE)
-                    getMapFacInfo("구로구","구로동로47길")
-                }
-
-
-            }
-        })
 
 
         mainViewModel.mainStatus.observe(this, Observer {
@@ -179,7 +138,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             }
         })
 
-
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         getLocationFacInfo()
@@ -196,6 +154,76 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         binding.resultRecyclerView.adapter = adapter
         mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
             adapter.updateItems(it)
+        })
+
+        mainViewModel.categoryLiveData.observe(this, Observer {
+            when(it) {
+                0 -> {
+                    clearCategoryBtn()
+                    for(data in shopList) {
+                        mapView.addPOIItem(data)
+                    }
+                    for(data in livingList) {
+                        mapView.addPOIItem(data)
+                    }
+                    for(data in educationList) {
+                        mapView.addPOIItem(data)
+                    }
+                    for(data in hospitalList) {
+                        mapView.addPOIItem(data)
+                    }
+                    for(data in publicList) {
+                        mapView.addPOIItem(data)
+                    }
+
+                }
+                1 -> {
+                    Log.d("ttest", "음식상점")
+                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.shopCategoryBtn.setTextColor(Color.WHITE)
+                    mapView.removeAllPOIItems()
+                    for(data in shopList) {
+                        mapView.addPOIItem(data)
+                    }
+
+                }
+                2 -> {
+                    Log.d("ttest", "생활시설")
+                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.livingCategoryBtn.setTextColor(Color.WHITE)
+                    mapView.removeAllPOIItems()
+                    for(data in livingList) {
+                        mapView.addPOIItem(data)
+                    }
+                }
+                3 -> {
+                    Log.d("ttest", "교육시설")
+                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.educationCategoryBtn.setTextColor(Color.WHITE)
+                    mapView.removeAllPOIItems()
+                    for(data in educationList) {
+                        mapView.addPOIItem(data)
+                    }
+                }
+                4 -> {
+                    Log.d("ttest", "병원")
+                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
+                    mapView.removeAllPOIItems()
+                    for(data in hospitalList) {
+                        mapView.addPOIItem(data)
+                    }
+                }
+                5 -> {
+                    Log.d("ttest", "공공기관 및 기타")
+                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.publicCategoryBtn.setTextColor(Color.WHITE)
+                    mapView.removeAllPOIItems()
+                    for(data in publicList) {
+                        mapView.addPOIItem(data)
+                    }
+                }
+            }
         })
 
         mainViewModel.movePin.observe(this, Observer {
@@ -243,118 +271,84 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mainViewModel.locationFaclLiveData.observe(this, Observer {
             for(data in it) {
                 val marker = MapPOIItem()
-                when (mainViewModel.categoryLiveData.value) {
-                    6 -> {
-                        when(data.faclTyCd.toString()) {
-                            in "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03", "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02",
-                               "UC0I02" -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                                    mapView.addPOIItem(marker)
-                                }
-                            }
-                        }
-                    }
-                    else -> {
-                        when(data.faclTyCd.toString()) {
-                            //음식 및 상점
-                            in "UC0B01", "UC0R02", "UC0E01", "UC0B02", "UC0K02" -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-//                                    mapView.addPOIItem(marker)
-
-                                    shopList.add(marker)
-                                }
-                            }
-                            //생활시설
-                            in "UC0A05", "UC0J01", "UC0H03", "UC0I01", "UC0A01", "UC0A02", "UC0T01", "UC0A07", "UC0G09", "UC0C01", "UC0C04",
-                            "UC0C05", "UC0U01", "UC0U03", "UC0U04", "UC0A13", "UC0R01", "UC0J02", "UC0U02", "UC0L01", "UC0V01", "UC0L02"
-                            -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                                    mapView.addPOIItem(marker)
-                                }
-                            }
-                            //교육시설
-                            in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                                    mapView.addPOIItem(marker)
-                                }
-                            }
-                            //병원
-                            in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                                    mapView.addPOIItem(marker)
-                                }
-                            }
-                            // 공공기관 및 기타
-                            in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
-                            "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06" -> {
-                                if (data.faclLat != null && data.faclLng != null) {
-                                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                                    marker.itemName = data.faclNm
-
-                                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                                    marker.customImageResourceId = R.drawable.ic_location_pin_40
-                                    marker.isCustomImageAutoscale = false
-                                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                                    mapView.addPOIItem(marker)
-                                }
-                            }
-                        }
-
-
+                when(data.faclTyCd.toString()) {
+                    //음식 및 상점
+                    in "UC0B01", "UC0R02", "UC0E01", "UC0B02", "UC0K02" -> {
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
-
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.ic_location_pin_40
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                            mapView.addPOIItem(marker)
-
+                            shopList.add(marker)
                         }
                     }
+                    //생활시설
+                    in "UC0A05", "UC0J01", "UC0H03", "UC0I01", "UC0A01", "UC0A02", "UC0T01", "UC0A07", "UC0G09", "UC0C01", "UC0C04",
+                    "UC0C05", "UC0U01", "UC0U03", "UC0U04", "UC0A13", "UC0R01", "UC0J02", "UC0U02", "UC0L01", "UC0V01", "UC0L02"
+                    -> {
+                        if (data.faclLat != null && data.faclLng != null) {
+                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                            marker.itemName = data.faclNm
+                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+                            marker.isCustomImageAutoscale = false
+                            marker.setCustomImageAnchor(0.5f, 1.0f)
+                            livingList.add(marker)
+                        }
+                    }
+                    //교육시설
+                    in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
+                        if (data.faclLat != null && data.faclLng != null) {
+                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                            marker.itemName = data.faclNm
+                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+                            marker.isCustomImageAutoscale = false
+                            marker.setCustomImageAnchor(0.5f, 1.0f)
+                            educationList.add(marker)
+                        }
+                    }
+                    //병원
+                    in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
+                        if (data.faclLat != null && data.faclLng != null) {
+                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                            marker.itemName = data.faclNm
+                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+                            marker.isCustomImageAutoscale = false
+                            marker.setCustomImageAnchor(0.5f, 1.0f)
+                            hospitalList.add(marker)
+                        }
+                    }
+                    // 공공기관 및 기타
+                    in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
+                    "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06", "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03",
+                    "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02" -> {
+                        if (data.faclLat != null && data.faclLng != null) {
+                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                            marker.itemName = data.faclNm
+                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+                            marker.isCustomImageAutoscale = false
+                            marker.setCustomImageAnchor(0.5f, 1.0f)
+                            publicList.add(marker)
+                        }
+                    }
+                }
+
+                if (data.faclLat != null && data.faclLng != null) {
+                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                    marker.itemName = data.faclNm
+
+                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+                    marker.customImageResourceId = R.drawable.ic_location_pin_40
+                    marker.isCustomImageAutoscale = false
+                    marker.setCustomImageAnchor(0.5f, 1.0f)
+
+                    mapView.addPOIItem(marker)
+
                 }
             }
         })
