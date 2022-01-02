@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
 
+        //카테고리 클릭
         binding.shopCategoryBtn.setOnClickListener {
             categoryClick(1)
         }
@@ -101,7 +102,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         mainViewModel.mainStatus.observe(this, Observer {
             when(it) {
                 1 -> {
-                    Log.d("ttest", "status 1")
                     // 기본 메인 상태
                     binding.bottomNav.visibility = View.VISIBLE
                     binding.searchBtn.visibility = View.VISIBLE
@@ -110,7 +110,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.groupCategoryBtn.visibility = View.VISIBLE
                 }
                 2 -> {
-                    Log.d("ttest", "status 2")
                     // 주소검색 버튼 클릭
                     // 바템네비, 검색, 재검색 제거
                     binding.bottomNav.visibility = View.GONE
@@ -122,11 +121,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
-                    Log.d("ttest", "status 3")
                     // 검색 결과 화면
                 }
                 4 -> {
-                    Log.d("ttest", "status 4")
                     // BotNav 이동
                     // 검색, 재검색, 내위치 제거
                     binding.searchBtn.visibility = View.GONE
@@ -178,7 +175,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                 }
                 1 -> {
-                    Log.d("ttest", "음식상점")
                     binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.shopCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
@@ -188,7 +184,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
                 }
                 2 -> {
-                    Log.d("ttest", "생활시설")
                     binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.livingCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
@@ -197,7 +192,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     }
                 }
                 3 -> {
-                    Log.d("ttest", "교육시설")
                     binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.educationCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
@@ -206,7 +200,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     }
                 }
                 4 -> {
-                    Log.d("ttest", "병원")
                     binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
@@ -215,7 +208,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                     }
                 }
                 5 -> {
-                    Log.d("ttest", "공공기관 및 기타")
                     binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.publicCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
