@@ -2,13 +2,10 @@ package com.ilsamil.conveniencemap
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.Criteria
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -25,14 +22,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
-import com.ilsamil.conveniencemap.model.EvalInfoList
 import com.ilsamil.conveniencemap.utils.ChangeType
-import net.daum.android.map.MapViewEventListener
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.io.IOException
-import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private lateinit var binding: ActivityMainBinding
@@ -40,7 +34,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private lateinit var mapView: MapView
 
     private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
-    private val categoryFragment: CategoryFragment by lazy { CategoryFragment.newInstance() }
+    private val listFragment: ListFragment by lazy { ListFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
     private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
 
@@ -417,7 +411,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 R.id.menu_category -> {
                     mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_view, categoryFragment, "category").addToBackStack("category").commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "category").addToBackStack("category").commit()
                 }
                 R.id.menu_map -> {
                     bottomClickMap()
@@ -445,6 +439,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
             if(tag3 != null && tag3.isVisible) {
                 this.menu.findItem(R.id.menu_info).isChecked = true
             }
+            if(tag1 == null && tag3 == null) {
+                this.menu.findItem(R.id.menu_map).isChecked = true
+                mainViewModel.mainStatus.value = 1
+            }
         }
     }
 
@@ -459,11 +457,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     }
 
     private fun bottomClickMap() {
+        mainViewModel.mainStatus.value = 1
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
         if(tag1 != null) {
-            supportFragmentManager.beginTransaction().remove(categoryFragment).addToBackStack(null)?.commit()
+            supportFragmentManager.beginTransaction().remove(listFragment).addToBackStack(null)?.commit()
         }
         if(tag3 != null) {
             supportFragmentManager.beginTransaction().remove(infoFragment).addToBackStack(null)?.commit()

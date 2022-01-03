@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.ilsamil.conveniencemap.R
 
-class CategoryFragment : Fragment() {
+class ListFragment : Fragment() {
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
-        fun newInstance() : CategoryFragment {
-            return CategoryFragment()
+        fun newInstance() : ListFragment {
+            return ListFragment()
         }
     }
 
@@ -32,7 +32,7 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_category, container, false)
+        return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
 
