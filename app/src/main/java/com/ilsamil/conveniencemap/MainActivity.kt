@@ -387,11 +387,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     }
 
     private fun clearCategoryBtn() {
-        binding.shopCategoryBtn.setBackgroundResource(R.drawable.refresh)
-        binding.livingCategoryBtn.setBackgroundResource(R.drawable.refresh)
-        binding.educationCategoryBtn.setBackgroundResource(R.drawable.refresh)
-        binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.refresh)
-        binding.publicCategoryBtn.setBackgroundResource(R.drawable.refresh)
+        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+        binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
         binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
         binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
         binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
