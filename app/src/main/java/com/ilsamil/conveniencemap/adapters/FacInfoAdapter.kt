@@ -41,7 +41,7 @@ class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() 
     fun updateItems(items: List<ServList>) {
         mItems = items
         notifyDataSetChanged() //UI 갱신
-   }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FacInfoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search, parent, false)

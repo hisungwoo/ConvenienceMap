@@ -9,7 +9,7 @@ import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.utils.ChangeType
 
-class ListAdapter : RecyclerView.Adapter<ListAdapter.ListViewHolder>(){
+class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolder>(){
     private var eItems: List<ServList> = ArrayList<ServList>()
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -19,11 +19,11 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ListViewHolder>(){
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_result, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false)
         return ListViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ListFacInfoAdapter.ListViewHolder, position: Int) {
         val serv : ServList = eItems[position]
         holder.listFaclnmTextView.text= serv.faclNm
         holder.listLcmnadTextView.text= serv.lcMnad

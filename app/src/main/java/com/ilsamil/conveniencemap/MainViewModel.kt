@@ -26,6 +26,7 @@ class MainViewModel : ViewModel() {
     val faclLiveData = MutableLiveData<List<ServList>>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
+    val locationFaclListLiveData = MutableLiveData<List<ServList>>()
     val bottomNavLiveData = MutableLiveData<Boolean>()
     val mainStatus = MutableLiveData<Int>()
 
@@ -119,6 +120,29 @@ class MainViewModel : ViewModel() {
                 if(response.isSuccessful()) {
                     val items = response.body()?.servList!!
                     locationFaclLiveData.postValue(items)
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "onFailure = " + t)
+                t.printStackTrace()
+            }
+
+        })
+    }
+
+    // 지도에 정보표시
+    fun getLocationListFacl(cggNm : String) {
+        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
+        facinfoCall.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    locationFaclListLiveData.postValue(items)
 
                 } else { // code == 400
                     // 실패 처리

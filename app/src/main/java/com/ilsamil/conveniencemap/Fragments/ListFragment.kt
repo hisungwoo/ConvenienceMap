@@ -6,9 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
+import com.ilsamil.conveniencemap.adapters.ListFacInfoAdapter
+import com.ilsamil.conveniencemap.databinding.FragmentListBinding
+import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 
 class ListFragment : Fragment() {
+    private val mainViewModel by activityViewModels<MainViewModel>()
+    private lateinit var binding: FragmentListBinding
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
@@ -32,7 +42,31 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+
+        binding = FragmentListBinding.inflate(inflater, container, false)
+        binding.listRecyclerview.layoutManager = LinearLayoutManager(container?.context,
+            RecyclerView.VERTICAL,
+            false
+        )
+
+
+        val adapter = ListFacInfoAdapter()
+        binding.listRecyclerview.adapter = adapter
+
+        mainViewModel.locationFaclListLiveData.observe(this, Observer {
+            adapter.updateItems(it)
+        })
+
+        mainViewModel.getLocationListFacl("구로구")
+
+
+
+
+        return binding.root
+
+
+
+
     }
 
 
