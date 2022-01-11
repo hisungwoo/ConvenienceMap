@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 }
                 3 -> {
                     // 검색 결과 화면
+                    binding.bottomNav.visibility = View.GONE
                 }
                 4 -> {
                     // BotNav 이동
@@ -214,7 +215,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
 
         mainViewModel.movePin.observe(this, Observer {
             mainViewModel.mainStatus.value = 3
-            mainViewModel.bottomNavLiveData.value = false
 
             val faclLng = it.faclLng!!
             val faclLat = it.faclLat!!

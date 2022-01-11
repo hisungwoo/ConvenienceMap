@@ -74,6 +74,13 @@ class SearchFragment : Fragment() {
 
         adapter.setOnItemClickListener(object : FacInfoAdapter.OnItemClickListener {
             override fun onItemClick(v: View, data: ServList, pos: Int) {
+                mainViewModel.movePin.value = data
+                val searchFragment2 = activity?.supportFragmentManager?.findFragmentByTag("search")
+                if (searchFragment2 != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(searchFragment2)?.addToBackStack(null)?.commit()
+                }
+
+
 //                setFragmentResult(
 //                    "movePin",
 //                    bundleOf("faclLng" to data.faclLng,
@@ -84,13 +91,6 @@ class SearchFragment : Fragment() {
 //                                    "wfcltId" to data.wfcltId
 //                    )
 //                )
-
-                mainViewModel.movePin.value = data
-                val searchFragment2 = activity?.supportFragmentManager?.findFragmentByTag("search")
-                if (searchFragment2 != null) {
-                    activity?.supportFragmentManager?.beginTransaction()?.remove(searchFragment2)?.addToBackStack(null)?.commit()
-                }
-
 
 //                activity?.supportFragmentManager?.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 //                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, mapFragment, "map")?.addToBackStack("map")?.commit()

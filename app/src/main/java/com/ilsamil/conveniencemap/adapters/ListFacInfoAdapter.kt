@@ -12,10 +12,28 @@ import com.ilsamil.conveniencemap.utils.ChangeType
 class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolder>(){
     private var eItems: List<ServList> = ArrayList<ServList>()
 
+    interface OnItemClickListener{
+        fun onItemClick(v:View, data: ServList, pos : Int)
+    }
+
+    private var listener : ListFacInfoAdapter.OnItemClickListener? = null
+    fun setOnItemClickListener(listener : ListFacInfoAdapter.OnItemClickListener) {
+        this.listener = listener
+    }
+
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var listFaclnmTextView : TextView = itemView.findViewById(R.id.list_faclnm_tv)
         var listFacltycdTextView : TextView = itemView.findViewById(R.id.list_facltycd_tv)
         var listLcmnadTextView : TextView = itemView.findViewById(R.id.list_lcmnad_tv)
+
+        fun bind(item: ServList) {
+            val pos = adapterPosition
+            if(pos != RecyclerView.NO_POSITION) {
+                itemView.setOnClickListener {
+                    listener?.onItemClick(itemView, item, pos)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -30,7 +48,7 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
 
         val faclTyCdChange = serv.faclTyCd?.let { ChangeType().changeType(it) }
         holder.listFacltycdTextView.text= faclTyCdChange
-
+        holder.bind(eItems[position])
     }
 
     override fun getItemCount(): Int = eItems.size

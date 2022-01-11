@@ -2,6 +2,7 @@ package com.ilsamil.conveniencemap.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.adapters.ListFacInfoAdapter
 import com.ilsamil.conveniencemap.databinding.FragmentListBinding
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
+import com.ilsamil.conveniencemap.model.ServList
 
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -60,11 +62,20 @@ class ListFragment : Fragment() {
         mainViewModel.getLocationListFacl("구로구")
 
 
+        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ServList, pos : Int) {
+                mainViewModel.movePin.value = data
+                val categoryFragment = activity?.supportFragmentManager?.findFragmentByTag("category")
+                if (categoryFragment != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(categoryFragment)?.addToBackStack(null)?.commit()
+                }
+            }
+
+        })
+
 
 
         return binding.root
-
-
 
 
     }
