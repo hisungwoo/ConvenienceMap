@@ -28,7 +28,7 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
+class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.POIItemEventListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
-
+//    private val eventListener = MarkerEventListener(this)
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 
+        mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
@@ -264,7 +265,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             shopList.add(marker)
@@ -278,7 +280,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             livingList.add(marker)
@@ -290,7 +293,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             educationList.add(marker)
@@ -302,7 +306,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             hospitalList.add(marker)
@@ -316,7 +321,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
+//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                             marker.isCustomImageAutoscale = false
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             publicList.add(marker)
@@ -327,14 +333,16 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
                 if (data.faclLat != null && data.faclLng != null) {
                     marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                     marker.itemName = data.faclNm
-
+                    marker.userObject = data.wfcltId
                     marker.markerType = MapPOIItem.MarkerType.CustomImage
+                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                     marker.customImageResourceId = R.drawable.ic_location_pin_40
+                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                     marker.isCustomImageAutoscale = false
                     marker.setCustomImageAnchor(0.5f, 1.0f)
 
                     mapView.addPOIItem(marker)
-
                 }
             }
         })
@@ -349,6 +357,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
         }
 
     }
+
 
     @SuppressLint("MissingPermission")
     private fun getLocationFacInfo() {
@@ -515,5 +524,70 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener {
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         //지도의 이동이 완료된 경우 호출된다.
     }
+
+
+
+    // 마커 클릭 이벤트 리스터
+    override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
+        // 마커 클릭시 발생
+        if (map != null && item != null) {
+            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+                map.currentLocationTrackingMode =
+                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+            }
+
+
+//            val customMarker = MapPOIItem()
+//            customMarker.itemName = "테스트 마커"
+//            customMarker.tag = 1
+//            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
+//            customMarker.markerType = MapPOIItem.MarkerType.CustomImage
+//            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_1206
+//            customMarker.isCustomImageAutoscale = false
+//            customMarker.setCustomImageAnchor(0.5f, 1.0f)
+//
+//            mapView.addPOIItem(customMarker)
+
+
+
+            map.setMapCenterPoint(
+                MapPoint.mapPointWithGeoCoord(
+                    item.mapPoint.mapPointGeoCoord.latitude,
+                    item.mapPoint.mapPointGeoCoord.longitude
+                ),
+                true
+            )
+
+
+            binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+            binding.resultNmTv.text = item.itemName
+//            binding.resultTypeTv.text = faclTyCd?.let { it1 -> ChangeType().changeType(it1) }
+//            binding.resultLocationTv.text = lcMnad
+
+            binding.resultLayout.startAnimation(fadeInAnim)
+            binding.resultLayout.visibility = View.VISIBLE
+
+//            mainViewModel.getEvalInfo(wfcltId)
+
+
+//            Log.d("ttest", item.itemName.toString())
+//            Log.d("ttest", item.userObject.toString())
+        }
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(p0: MapView?, p1: MapPOIItem?) {
+    }
+
+    override fun onCalloutBalloonOfPOIItemTouched(
+        p0: MapView?,
+        p1: MapPOIItem?,
+        p2: MapPOIItem.CalloutBalloonButtonType?
+    ) {
+    }
+
+    override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
+    }
+
+    // 마커 클릭 이벤트 리스터 END
 
 }
