@@ -3,14 +3,14 @@
     <!--duration500 - 0.5초동안-->
     <!--fillAfter 종료 후 상태유지-->
     <translate
-        android:duration="600"
+        android:duration="300"
         android:fromYDelta="0%p"
         android:toYDelta="100%p"
         android:repeatCount ="0"
         />
 
     <alpha
-        android:startOffset="700"
+        android:startOffset="400"
         android:duration="300"
         android:fromAlpha="1.0"
         android:toAlpha="0.0"

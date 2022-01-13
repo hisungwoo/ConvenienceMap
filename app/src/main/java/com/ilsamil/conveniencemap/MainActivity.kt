@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
+import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.utils.ChangeType
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -47,12 +48,18 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
+    private lateinit var selectedMarker : MapPOIItem
+
+
+
 //    private val eventListener = MarkerEventListener(this)
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
+
+            getLocationFacInfo()
 //            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
     }
@@ -69,7 +76,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
-        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+
 
 
         //카테고리 클릭
@@ -98,6 +105,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             when(it) {
                 1 -> {
                     // 기본 메인 상태
+                    Log.d("ttest", "status = 1")
                     binding.bottomNav.visibility = View.VISIBLE
                     binding.searchBtn.visibility = View.VISIBLE
                     binding.refreshBtn.visibility = View.VISIBLE
@@ -107,6 +115,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 2 -> {
                     // 주소검색 버튼 클릭
                     // 바템네비, 검색, 재검색 제거
+                    Log.d("ttest", "status = 2")
                     binding.bottomNav.visibility = View.GONE
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
@@ -116,10 +125,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
+                    Log.d("ttest", "status = 3")
                     // 검색 결과 화면
                     binding.bottomNav.visibility = View.GONE
                 }
                 4 -> {
+                    Log.d("ttest", "status = 4")
                     // BotNav 이동
                     // 검색, 재검색, 내위치 제거
                     binding.searchBtn.visibility = View.GONE
@@ -127,18 +138,28 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.mylocationBtn.visibility = View.GONE
                     binding.groupCategoryBtn.visibility = View.GONE
                 }
+                5 -> {
+                    Log.d("ttest", "status = 5")
+                    // 로케이션 마커 클릭
+                    binding.refreshBtn.visibility = View.GONE
+                    binding.bottomNav.visibility = View.GONE
+                    binding.mylocationBtn.visibility = View.GONE
+                }
 
             }
         })
 
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        getLocationFacInfo()
+
+//        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+//        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+
 //        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
 
 
         binding.searchBtn.setOnClickListener{
-            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+//            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
         }
 
@@ -333,7 +354,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 if (data.faclLat != null && data.faclLng != null) {
                     marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                     marker.itemName = data.faclNm
-                    marker.userObject = data.wfcltId
+                    marker.userObject = data
                     marker.markerType = MapPOIItem.MarkerType.CustomImage
                     marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                     marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
@@ -438,6 +459,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
+        Log.d("ttest", "updateMapView 실행")
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
@@ -456,13 +478,22 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
     private fun updateMapView() {
-        Log.d("ttest", "updateMapView")
+        Log.d("ttest", "updateMapView 실행")
 
         if(mainViewModel.mainStatus.value == 2) {
             mainViewModel.mainStatus.value = 1
         } else if (mainViewModel.mainStatus.value == 3) {
             mainViewModel.mainStatus.value = 2
         }
+    }
+
+    private fun backMarker() {
+        Log.d("ttest", "backMarker 실행")
+        binding.resultLayout.startAnimation(fadeOutAnim)
+        binding.resultLayout.visibility = View.GONE
+
+        mainViewModel.mainStatus.value = 1
+        mapView.deselectPOIItem(selectedMarker)
     }
 
     private fun bottomClickMap() {
@@ -481,9 +512,27 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        updateBottomMenu()
-        updateMapView()
+        when(mainViewModel.mainStatus.value.toString()) {
+            in "1","2","3" -> {
+                updateMapView()
+                super.onBackPressed()
+            }
+            in "4" -> {
+                updateBottomMenu()
+                super.onBackPressed()
+            }
+            in "5" -> {
+                backMarker()
+
+            }
+            else -> {
+                super.onBackPressed()
+            }
+
+        }
+
+
+
     }
 
     override fun onMapViewInitialized(p0: MapView?) {
@@ -492,9 +541,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
         //지도 중심 좌표가 이동한 경우 호출된다.
-        if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
-            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-        }
+//        if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+//            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+//        }
     }
 
     override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
@@ -503,6 +552,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         //사용자가 지도 위를 터치한 경우 호출된다.
+        if(mainViewModel.mainStatus.value == 5) {
+            binding.resultLayout.startAnimation(fadeOutAnim)
+            binding.resultLayout.visibility = View.GONE
+
+            mainViewModel.mainStatus.value = 1
+        }
+
+
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
@@ -531,24 +588,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
         // 마커 클릭시 발생
         if (map != null && item != null) {
-            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
-                map.currentLocationTrackingMode =
-                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-            }
+            mainViewModel.mainStatus.value = 5
 
 
-//            val customMarker = MapPOIItem()
-//            customMarker.itemName = "테스트 마커"
-//            customMarker.tag = 1
-//            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
-//            customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-//            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_1206
-//            customMarker.isCustomImageAutoscale = false
-//            customMarker.setCustomImageAnchor(0.5f, 1.0f)
-//
-//            mapView.addPOIItem(customMarker)
 
-
+//            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+//                map.currentLocationTrackingMode =
+//                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+//            }
 
             map.setMapCenterPoint(
                 MapPoint.mapPointWithGeoCoord(
@@ -557,21 +604,21 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 ),
                 true
             )
+            selectedMarker = item
+            var itemData : ServList = item.userObject as ServList
 
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
             binding.resultNmTv.text = item.itemName
-//            binding.resultTypeTv.text = faclTyCd?.let { it1 -> ChangeType().changeType(it1) }
-//            binding.resultLocationTv.text = lcMnad
+            binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> ChangeType().changeType(it1) }
+            binding.resultLocationTv.text = itemData.lcMnad
 
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
 
-//            mainViewModel.getEvalInfo(wfcltId)
 
+            itemData.wfcltId?.let { mainViewModel.getEvalInfo(it) }
 
-//            Log.d("ttest", item.itemName.toString())
-//            Log.d("ttest", item.userObject.toString())
         }
     }
 

@@ -137,7 +137,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nev_menu" />
+        app:menu="@menu/bottom_nev_menu"
+        tools:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/mylocation_btn"
@@ -173,52 +174,50 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_layout"
-        android:visibility="gone"
-        android:background="@drawable/edittext_shadow"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@+id/gline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/edittext_shadow"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gline"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/result_nm_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            tools:text="오류동 문화센터"
-            android:textColor="#333333"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintHorizontal_bias="0.06"
+            android:textColor="#333333"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/result_layout"
+            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="@+id/result_layout"
-            app:layout_constraintTop_toTopOf="@+id/result_layout" />
+            app:layout_constraintTop_toTopOf="@+id/result_layout"
+            tools:text="오류동 문화센터" />
 
         <TextView
             android:id="@+id/result_type_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="교육시설"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_marginStart="10dp"
-            app:layout_constraintTop_toTopOf="@+id/result_nm_tv"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintBottom_toBottomOf="@+id/result_nm_tv"
             app:layout_constraintStart_toEndOf="@+id/result_nm_tv"
-            />
+            app:layout_constraintTop_toTopOf="@+id/result_nm_tv"
+            tools:text="교육시설" />
 
         <TextView
             android:id="@+id/result_location_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            tools:text="서울특별시 구로구 고척로18길 86"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            app:layout_constraintTop_toBottomOf="@+id/result_nm_tv"
             app:layout_constraintStart_toStartOf="@+id/result_nm_tv"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/result_nm_tv"
+            tools:text="서울특별시 구로구 고척로18길 86" />
 
         <View
             android:id="@+id/result_line"
@@ -226,52 +225,49 @@
             android:layout_height="1dp"
             android:layout_marginTop="15dp"
             android:background="#E6E6E6"
-            app:layout_constraintTop_toBottomOf="@+id/result_location_tv"
-            app:layout_constraintStart_toStartOf="@+id/result_nm_tv"
             app:layout_constraintEnd_toEndOf="@+id/result_more_info_tv"
-            />
+            app:layout_constraintStart_toStartOf="@+id/result_nm_tv"
+            app:layout_constraintTop_toBottomOf="@+id/result_location_tv" />
 
         <Button
             android:id="@+id/result_more_btn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="30dp"
-            android:text="···"
-            android:textSize="15sp"
-            android:textColor="#717171"
             android:background="@drawable/button_circle"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintTop_toTopOf="@+id/result_recycler_view"
-            app:layout_constraintEnd_toEndOf="@+id/result_layout"
+            android:text="···"
+            android:textColor="#717171"
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/result_more_info_tv"
-            />
+            app:layout_constraintEnd_toEndOf="@+id/result_layout"
+            app:layout_constraintTop_toTopOf="@+id/result_recycler_view"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/result_more_info_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:text="상세보기"
-            app:layout_constraintTop_toBottomOf="@+id/result_more_btn"
-            app:layout_constraintStart_toStartOf="@+id/result_more_btn"
-            app:layout_constraintEnd_toEndOf="@+id/result_more_btn"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintBottom_toBottomOf="@+id/result_recycler_view"
-            />
+            app:layout_constraintEnd_toEndOf="@+id/result_more_btn"
+            app:layout_constraintStart_toStartOf="@+id/result_more_btn"
+            app:layout_constraintTop_toBottomOf="@+id/result_more_btn" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/result_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintTop_toBottomOf="@+id/result_line"
-            app:layout_constraintStart_toStartOf="@+id/result_line"
-            app:layout_constraintEnd_toStartOf="@+id/result_more_btn"
             app:layout_constraintBottom_toBottomOf="@+id/result_layout"
-            />
+            app:layout_constraintEnd_toStartOf="@+id/result_more_btn"
+            app:layout_constraintStart_toStartOf="@+id/result_line"
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
