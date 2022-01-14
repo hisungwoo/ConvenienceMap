@@ -96,7 +96,7 @@ class MapFragment : Fragment() {
             customMarker.tag = 1
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_2
+            customMarker.customImageResourceId = R.drawable.ic_location_pin_click_center
             customMarker.isCustomImageAutoscale = false
             customMarker.setCustomImageAnchor(0.5f, 1.0f)
 

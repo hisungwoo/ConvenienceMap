@@ -259,8 +259,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             customMarker.tag = 1
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-            customMarker.customImageResourceId = R.drawable.ic_location_pin_50_1206
-            customMarker.isCustomImageAutoscale = false
+            customMarker.isShowCalloutBalloonOnTouch = false
+            customMarker.customImageResourceId = R.drawable.ic_location_pin_click_center
+            customMarker.isCustomImageAutoscale = true
             customMarker.setCustomImageAnchor(0.5f, 1.0f)
 
             mapView.addPOIItem(customMarker)
@@ -358,10 +359,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     marker.markerType = MapPOIItem.MarkerType.CustomImage
                     marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                     marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                    marker.customImageResourceId = R.drawable.ass
-                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                    marker.isCustomImageAutoscale = false
-                    marker.setCustomImageAnchor(0.5f, 1.0f)
+                    marker.isShowCalloutBalloonOnTouch = false
+                    marker.customImageResourceId = R.drawable.ic_location_pin
+                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_click_left
+                    marker.isCustomImageAutoscale = true
+
 
                     mapView.addPOIItem(marker)
                 }
@@ -463,9 +465,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
-        Log.d("ttest", "updateMapView 실행")
+        Log.d("ttest", "updateBottomMenu 실행")
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
+
 
         binding.bottomNav.apply {
             if(tag1 != null && tag1.isVisible) {
@@ -518,12 +521,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     override fun onBackPressed() {
         when(mainViewModel.mainStatus.value.toString()) {
             in "1","2","3" -> {
-                updateMapView()
                 super.onBackPressed()
+                updateMapView()
             }
             in "4" -> {
-                updateBottomMenu()
                 super.onBackPressed()
+                updateBottomMenu()
             }
             in "5" -> {
                 backMarker()
@@ -591,7 +594,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 마커 클릭 이벤트 리스터
     override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
         // 마커 클릭시 발생
-        if (map != null && item != null) {
+        if (map != null && item != null && item.userObject != null) {
             mainViewModel.mainStatus.value = 5
 
 
