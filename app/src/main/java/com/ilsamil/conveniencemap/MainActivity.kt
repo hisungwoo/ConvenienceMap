@@ -358,7 +358,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     marker.markerType = MapPOIItem.MarkerType.CustomImage
                     marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                     marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                    marker.customImageResourceId = R.drawable.ic_location_pin_40
+                    marker.customImageResourceId = R.drawable.ass
                     marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
                     marker.isCustomImageAutoscale = false
                     marker.setCustomImageAnchor(0.5f, 1.0f)
@@ -387,12 +387,16 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if(location != null) {
             val latitude = location.latitude
             val longitude = location.longitude
+            Log.d("ttest", "latitude : " + latitude)
+            Log.d("ttest", "longitude : " + longitude)
+
 
             val geocoder = Geocoder(this)
             try {
+
                 var gList = geocoder.getFromLocation(latitude, longitude, 5)
-                val cggNm : String = gList[1].subLocality
-                val roadNm : String = gList[1].featureName
+                val cggNm : String = gList[0].subLocality
+                val roadNm : String = gList[0].featureName
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
 //                mainViewModel.getLocationFacl(cggNm, roadNm, "")
