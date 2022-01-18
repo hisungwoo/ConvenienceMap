@@ -171,6 +171,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         })
 
         mainViewModel.categoryLiveData.observe(this, Observer {
+            binding.resultLayout.startAnimation(fadeOutAnim)
+            binding.resultLayout.visibility = View.GONE
+
+            mainViewModel.mainStatus.value = 1
+            mapView.deselectPOIItem(selectedMarker)
+
             when(it) {
                 0 -> {
                     clearCategoryBtn()
