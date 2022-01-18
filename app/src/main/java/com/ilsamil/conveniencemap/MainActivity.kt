@@ -286,12 +286,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
+                            marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
-//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                            marker.isCustomImageAutoscale = false
+                            marker.customImageResourceId = R.drawable.a1
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customSelectedImageResourceId = R.drawable.a11
+                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            marker.isShowCalloutBalloonOnTouch = false
+                            marker.isCustomImageAutoscale = true
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             shopList.add(marker)
+                            mapView.addPOIItem(marker)
                         }
                     }
                     //생활시설
@@ -301,12 +306,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
+                            marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
-//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                            marker.isCustomImageAutoscale = false
+                            marker.customImageResourceId = R.drawable.a2
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customSelectedImageResourceId = R.drawable.a22
+                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            marker.isShowCalloutBalloonOnTouch = false
+                            marker.isCustomImageAutoscale = true
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             livingList.add(marker)
+                            mapView.addPOIItem(marker)
                         }
                     }
                     //교육시설
@@ -314,12 +324,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
+                            marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
-//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                            marker.isCustomImageAutoscale = false
+                            marker.customImageResourceId = R.drawable.a3
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customSelectedImageResourceId = R.drawable.a33
+                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            marker.isShowCalloutBalloonOnTouch = false
+                            marker.isCustomImageAutoscale = true
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             educationList.add(marker)
+                            mapView.addPOIItem(marker)
                         }
                     }
                     //병원
@@ -327,12 +342,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
+                            marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
-//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                            marker.isCustomImageAutoscale = false
+                            marker.customImageResourceId = R.drawable.a4
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customSelectedImageResourceId = R.drawable.a44
+                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            marker.isShowCalloutBalloonOnTouch = false
+                            marker.isCustomImageAutoscale = true
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             hospitalList.add(marker)
+                            mapView.addPOIItem(marker)
                         }
                     }
                     // 공공기관 및 기타
@@ -342,32 +362,45 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         if (data.faclLat != null && data.faclLng != null) {
                             marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
                             marker.itemName = data.faclNm
+                            marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                            marker.customImageResourceId = R.drawable.ic_location_pin_40
-//                            marker.customSelectedImageResourceId = R.drawable.ic_location_pin_50_1206
-                            marker.isCustomImageAutoscale = false
+                            marker.customImageResourceId = R.drawable.a5
+                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            marker.customSelectedImageResourceId = R.drawable.a55
+                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            marker.isShowCalloutBalloonOnTouch = false
+                            marker.isCustomImageAutoscale = true
                             marker.setCustomImageAnchor(0.5f, 1.0f)
                             publicList.add(marker)
+                            mapView.addPOIItem(marker)
                         }
                     }
                 }
 
-                if (data.faclLat != null && data.faclLng != null) {
-                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                    marker.itemName = data.faclNm
-                    marker.userObject = data
-                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                    marker.isShowCalloutBalloonOnTouch = false
-                    marker.customImageResourceId = R.drawable.ic_location_pin
-                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_click_left
-                    marker.isCustomImageAutoscale = true
-
-
-                    mapView.addPOIItem(marker)
-                }
+//                if (data.faclLat != null && data.faclLng != null) {
+//                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+//                    marker.itemName = data.faclNm
+//                    marker.userObject = data
+//                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+//                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+//                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+//
+//                    marker.isShowCalloutBalloonOnTouch = false
+//                    marker.customImageResourceId = R.drawable.ic_location_pin
+//
+//
+//
+//                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_click_left
+//                    marker.isCustomImageAutoscale = true
+//
+//
+//                    mapView.addPOIItem(marker)
+//                }
             }
+
+
+
+
         })
 
 
@@ -403,7 +436,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 //                mainViewModel.getLocationFacl(cggNm, roadNm, "")
                 getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 1, true)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 2, true)
+
 
             } catch (e : IOException) {
                 Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
