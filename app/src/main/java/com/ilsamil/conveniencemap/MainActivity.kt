@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private val listFragment: ListFragment by lazy { ListFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
     private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
+    private val detailFragment: DetailFragment by lazy { DetailFragment.newInstance() }
 
     private lateinit var fadeInAnim : Animation
     private lateinit var fadeOutAnim : Animation
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             when(it) {
                 1 -> {
                     // 기본 메인 상태
-                    Log.d("ttest", "status = 1")
+                    Log.d("ttest", "status = 1   기본 메인 상태")
                     binding.bottomNav.visibility = View.VISIBLE
                     binding.searchBtn.visibility = View.VISIBLE
                     binding.refreshBtn.visibility = View.VISIBLE
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 2 -> {
                     // 주소검색 버튼 클릭
                     // 바템네비, 검색, 재검색 제거
-                    Log.d("ttest", "status = 2")
+                    Log.d("ttest", "status = 2   주소검색 버튼 클릭")
                     binding.bottomNav.visibility = View.GONE
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
@@ -125,25 +126,34 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
-                    Log.d("ttest", "status = 3")
                     // 검색 결과 화면
+                    Log.d("ttest", "status = 3   검색 결과 화면")
                     binding.bottomNav.visibility = View.GONE
                 }
                 4 -> {
-                    Log.d("ttest", "status = 4")
                     // BotNav 이동
                     // 검색, 재검색, 내위치 제거
+                    Log.d("ttest", "status = 4  BotNav 이동")
                     binding.searchBtn.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
                     binding.groupCategoryBtn.visibility = View.GONE
                 }
                 5 -> {
-                    Log.d("ttest", "status = 5")
                     // 로케이션 마커 클릭
+                    Log.d("ttest", "status = 5   로케이션 마커 클릭")
                     binding.refreshBtn.visibility = View.GONE
                     binding.bottomNav.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
+                }
+                6 -> {
+                    // 디테일 프레그먼트 표시
+                    Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
+//                    binding.searchBtn.visibility = View.GONE
+//                    binding.refreshBtn.visibility = View.GONE
+//                    binding.mylocationBtn.visibility = View.GONE
+//                    binding.groupCategoryBtn.visibility = View.GONE
+//                    binding.resultLayout.visibility = View.GONE
                 }
 
             }
@@ -171,11 +181,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         })
 
         mainViewModel.categoryLiveData.observe(this, Observer {
-            binding.resultLayout.startAnimation(fadeOutAnim)
             binding.resultLayout.visibility = View.GONE
-
             mainViewModel.mainStatus.value = 1
-            mapView.deselectPOIItem(selectedMarker)
+
+
+            // selectedMarker 초기화 확인
+            if (this::selectedMarker.isInitialized) {
+                mapView.deselectPOIItem(selectedMarker)
+            }
+
 
             when(it) {
                 0 -> {
@@ -418,6 +432,18 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             getMapFacInfo("구로구","구로동로47길")
         }
 
+        binding.resultDetailBtn.setOnClickListener{
+            Log.d("ttest", "!?!?!")
+            mainViewModel.mainStatus.value = 6
+            supportFragmentManager.beginTransaction().replace(R.id.dddd, detailFragment, "detail").addToBackStack(null).commit()
+
+            var dds = selectedMarker.userObject as ServList
+            Log.d("ttest", dds.faclNm.toString())
+
+            mainViewModel.detailLiveData.value = dds
+        }
+
+
     }
 
 
@@ -574,6 +600,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
             else -> {
                 super.onBackPressed()
+                mainViewModel.mainStatus.value = 5
             }
 
         }

@@ -32,6 +32,8 @@ class MainViewModel : ViewModel() {
 
     val movePin = MutableLiveData<ServList>()
 
+    val detailLiveData = MutableLiveData<ServList>()
+
 
     init {
         val faclInstance = Retrofit.Builder()
