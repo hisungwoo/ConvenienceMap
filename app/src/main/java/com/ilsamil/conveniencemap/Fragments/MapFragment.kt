@@ -103,7 +103,7 @@ class MapFragment : Fragment() {
             mapView.addPOIItem(customMarker)
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(container?.context, RecyclerView.HORIZONTAL, false)
-            mainViewModel.getEvalInfo(wfcltId)
+            mainViewModel.getEvalInfo(wfcltId, "1")
 
             binding.resultNmTv.text = faclNm
             binding.resultTypeTv.text = faclTyCd?.let { ChangeType().changeType(it) }

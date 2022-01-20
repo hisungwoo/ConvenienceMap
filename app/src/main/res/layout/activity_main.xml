@@ -179,25 +179,18 @@
         tools:visibility="gone" />
 
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.76" />
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="20dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         tools:visibility="visible">
 
         <TextView
@@ -244,22 +237,22 @@
             android:layout_height="1dp"
             android:layout_marginTop="17dp"
             android:background="#E6E6E6"
-            app:layout_constraintEnd_toEndOf="@+id/result_more_info_tv"
+            app:layout_constraintEnd_toEndOf="@+id/result_recycler_view"
             app:layout_constraintStart_toStartOf="@+id/result_nm_tv"
             app:layout_constraintTop_toBottomOf="@+id/result_location_tv" />
 
         <Button
             android:id="@+id/result_detail_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginEnd="30dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/button_circle"
             android:text="···"
             android:textColor="#717171"
-            android:textSize="15sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/result_more_info_tv"
             app:layout_constraintEnd_toEndOf="@+id/result_layout"
-            app:layout_constraintTop_toTopOf="@+id/result_recycler_view"
+            app:layout_constraintTop_toTopOf="@+id/result_nm_tv"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
@@ -268,6 +261,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="상세보기"
+            android:textSize="16sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintBottom_toBottomOf="@+id/result_recycler_view"
             app:layout_constraintEnd_toEndOf="@+id/result_detail_btn"
@@ -278,9 +272,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/result_recycler_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/result_layout"
             app:layout_constraintEnd_toStartOf="@+id/result_detail_btn"
             app:layout_constraintStart_toStartOf="@+id/result_line"
             app:layout_constraintTop_toBottomOf="@+id/result_line" />

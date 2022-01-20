@@ -294,7 +294,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
 
-            mainViewModel.getEvalInfo(wfcltId)
+            mainViewModel.getEvalInfo(wfcltId, "1")
         })
 
         mainViewModel.locationFaclLiveData.observe(this, Observer {
@@ -437,7 +437,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             mainViewModel.mainStatus.value = 6
             supportFragmentManager.beginTransaction().replace(R.id.dddd, detailFragment, "detail").addToBackStack(null).commit()
 
-            var dds = selectedMarker.userObject as ServList
+            val dds = selectedMarker.userObject as ServList
             Log.d("ttest", dds.faclNm.toString())
 
             mainViewModel.detailLiveData.value = dds
@@ -627,9 +627,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         //사용자가 지도 위를 터치한 경우 호출된다.
         if(mainViewModel.mainStatus.value == 5) {
-            binding.resultLayout.startAnimation(fadeOutAnim)
-            binding.resultLayout.visibility = View.GONE
+            //selectedMarker 초기화 할당 여부 확인
+            if (this::selectedMarker.isInitialized) {
+                mapView.deselectPOIItem(selectedMarker)
+            }
 
+            binding.resultLayout.visibility = View.GONE
             mainViewModel.mainStatus.value = 1
         }
 
@@ -691,7 +694,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultLayout.visibility = View.VISIBLE
 
 
-            itemData.wfcltId?.let { mainViewModel.getEvalInfo(it) }
+            itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }
 
         }
     }

@@ -16,6 +16,7 @@ import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentDetailBinding
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
+import net.daum.mf.map.api.MapView
 
 class DetailFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -38,17 +39,25 @@ class DetailFragment : Fragment() {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
 
 
-
         mainViewModel.detailLiveData.observe( this, Observer {
-            Log.d("ttest", "디테일 옵저버")
-
             binding.detailFaclNmTv.text = it.faclNm
             binding.detailLcMnadTv.text = it.lcMnad
             binding.detailEstbDateTv.text = it.estbDate
             binding.detailStaTv.text = it.salStaNm
             binding.detailTypeTv.text = it.faclTyCd.toString()
             binding.detailRprnTv.text = it.faclRprnNm
-            binding.detailEvalInfoTv.text = it.evalInfo
+
+            mainViewModel.getEvalInfo(it.wfcltId.toString(), "2")
+        })
+
+
+        mainViewModel.evalInfoDetailLiveData.observe(this, Observer {
+            var evalInfoList = ""
+            for(data in it) {
+                evalInfoList += data.evalInfo + " "
+            }
+
+            binding.detailEvalInfoTv.text = evalInfoList
         })
 
 

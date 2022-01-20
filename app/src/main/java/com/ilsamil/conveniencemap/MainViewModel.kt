@@ -25,6 +25,7 @@ class MainViewModel : ViewModel() {
 
     val faclLiveData = MutableLiveData<List<ServList>>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
+    val evalInfoDetailLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
     val locationFaclListLiveData = MutableLiveData<List<ServList>>()
     val bottomNavLiveData = MutableLiveData<Boolean>()
@@ -81,7 +82,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    fun getEvalInfo(wfcltId : String) {
+    fun getEvalInfo(wfcltId : String, type : String) {
         val evalInfoCall : Call<FacInfoList> = evalInfoService.getEvalInfoList(wfcltId)
         evalInfoCall.enqueue(object : Callback<FacInfoList> {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
@@ -97,7 +98,11 @@ class MainViewModel : ViewModel() {
                         evalinfoList.add(EvalInfoList(i.trim()))
                     }
 
-                    evalInfoLiveData.postValue(evalinfoList)
+                    if(type == "1") {
+                        evalInfoLiveData.postValue(evalinfoList)
+                    } else if (type == "2") {
+                        evalInfoDetailLiveData.postValue(evalinfoList)
+                    }
 
 
                 } else { // code == 400
