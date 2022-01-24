@@ -16,8 +16,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/edittext_shadow"
+        android:drawableLeft="@drawable/ic_baseline_search_24"
+        android:drawablePadding="5dp"
         android:hint="시설명⸰주소⸰건물명 검색"
-        android:paddingStart="25dp"
+        android:paddingStart="20dp"
         android:paddingEnd="15dp"
         android:textAlignment="textStart"
         android:textSize="15sp"
@@ -25,95 +27,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_category_btn"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:constraint_referenced_ids="shop_category_btn, living_category_btn,
-           education_category_btn, hospital_category_btn, public_category_btn"
-        />
-
-    <Button
-        android:id="@+id/shop_category_btn"
-        android:textSize="12sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_refresh"
-        android:drawableStart="@drawable/ic_text_shop"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="음식⸰상점"
-        android:textColor="#3C3C3C"
-        app:layout_constraintStart_toStartOf="@id/search_btn"
-        app:layout_constraintTop_toBottomOf="@+id/search_btn"
-        app:layout_constraintEnd_toStartOf="@id/living_category_btn"
-        />
-
-    <Button
-        android:id="@+id/living_category_btn"
-        android:textSize="12sp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_refresh"
-        android:drawableStart="@drawable/ic_text_living"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="생활"
-        android:textColor="#3C3C3C"
-        app:layout_constraintTop_toTopOf="@+id/shop_category_btn"
-        app:layout_constraintStart_toEndOf="@+id/shop_category_btn"
-        app:layout_constraintEnd_toStartOf="@id/education_category_btn"
-        />
-
-    <Button
-        android:id="@+id/education_category_btn"
-        android:textSize="12sp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_refresh"
-        android:drawableStart="@drawable/ic_text_education"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="교육"
-        android:textColor="#3C3C3C"
-        app:layout_constraintTop_toTopOf="@+id/living_category_btn"
-        app:layout_constraintStart_toEndOf="@+id/living_category_btn"
-        app:layout_constraintEnd_toStartOf="@id/hospital_category_btn"
-        />
-    <Button
-        android:id="@+id/hospital_category_btn"
-        android:textSize="12sp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_refresh"
-        android:drawableStart="@drawable/ic_text_hospital"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="병원"
-        android:textColor="#3C3C3C"
-        app:layout_constraintTop_toTopOf="@+id/education_category_btn"
-        app:layout_constraintStart_toEndOf="@+id/education_category_btn"
-        app:layout_constraintEnd_toStartOf="@id/public_category_btn"
-        />
-
-    <Button
-        android:id="@+id/public_category_btn"
-        android:textSize="12sp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_refresh"
-        android:drawableStart="@drawable/ic_text_public"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        android:text="기타"
-        android:textColor="#3C3C3C"
-        app:layout_constraintTop_toTopOf="@+id/hospital_category_btn"
-        app:layout_constraintStart_toEndOf="@+id/hospital_category_btn"
-        app:layout_constraintEnd_toEndOf="@id/search_btn"
-        />
-
-
 
     <Button
         android:id="@+id/refresh_btn"
@@ -138,6 +51,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/button_category"
+        android:gravity="center"
+
+
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_btn"
+        >
+
+        <Button
+            android:id="@+id/shop_category_btn"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00000000"
+            android:drawableStart="@drawable/ic_text_shop"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="음식⸰상점"
+            android:textColor="#3C3C3C"
+            android:textStyle="bold"
+            />
+
+
+        <Button
+            android:id="@+id/living_category_btn"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_text_living"
+            android:background="#00000000"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="생활"
+            android:textStyle="bold"
+            android:textColor="#3C3C3C"
+            />
+
+        <Button
+            android:id="@+id/education_category_btn"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_text_education"
+            android:background="#00000000"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="교육"
+            android:textStyle="bold"
+            android:textColor="#3C3C3C"
+            />
+
+        <Button
+            android:id="@+id/public_category_btn"
+            android:textSize="13sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_text_public"
+            android:background="#00000000"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="기타"
+            android:textStyle="bold"
+            android:textColor="#3C3C3C"
+            />
+    </LinearLayout>
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

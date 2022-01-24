@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             categoryClick(3)
         }
 
-        binding.hospitalCategoryBtn.setOnClickListener {
-            categoryClick(4)
-        }
+//        binding.hospitalCategoryBtn.setOnClickListener {
+//            categoryClick(4)
+//        }
 
         binding.publicCategoryBtn.setOnClickListener {
             categoryClick(5)
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.searchBtn.visibility = View.VISIBLE
                     binding.refreshBtn.visibility = View.VISIBLE
                     binding.mylocationBtn.visibility = View.VISIBLE
-                    binding.groupCategoryBtn.visibility = View.VISIBLE
+//                    binding.groupCategoryBtn.visibility = View.VISIBLE
                 }
                 2 -> {
                     // 주소검색 버튼 클릭
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
                     mapView.removeAllPOIItems()
-                    binding.groupCategoryBtn.visibility = View.GONE
+//                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
                     // 검색 결과 화면
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.searchBtn.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
-                    binding.groupCategoryBtn.visibility = View.GONE
+//                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 5 -> {
                     // 로케이션 마커 클릭
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
                 }
                 1 -> {
-                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.shopCategoryBtn.setBackgroundResource(R.color.black)
                     binding.shopCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
                     for(data in shopList) {
@@ -236,14 +236,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         mapView.addPOIItem(data)
                     }
                 }
-                4 -> {
-                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
-                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
-                    mapView.removeAllPOIItems()
-                    for(data in hospitalList) {
-                        mapView.addPOIItem(data)
-                    }
-                }
+//                4 -> {
+//                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
+//                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
+//                    mapView.removeAllPOIItems()
+//                    for(data in hospitalList) {
+//                        mapView.addPOIItem(data)
+//                    }
+//                }
                 5 -> {
                     binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
                     binding.publicCategoryBtn.setTextColor(Color.WHITE)
@@ -489,16 +489,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
     private fun clearCategoryBtn() {
-        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-        binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.hospitalCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+//        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+//        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+//        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+//        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
+//        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+//        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+//        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+//        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
     }
 
 

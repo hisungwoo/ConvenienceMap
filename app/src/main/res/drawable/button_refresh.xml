@@ -12,7 +12,6 @@
         <shape>
             <solid android:color="#FFFFFF" />
             <corners android:radius="5dp" />
-            <stroke android:color="#E6E5E5" android:width="0.5dp" />
         </shape>
     </item>
 </layer-list>
