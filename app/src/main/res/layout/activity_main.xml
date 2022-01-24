@@ -8,7 +8,54 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+
+    <View
+        android:id="@+id/topLayout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="5dp"
+        android:background="@drawable/radius_test"
+        />
+
+    <TextView
+        android:id="@+id/app_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:textColor="@color/white"
+        android:text="편할지도"
+        android:elevation="5dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/topLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/topLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        />
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_search_24"
+        android:background="#00000000"
+        android:elevation="5dp"
+        android:layout_marginEnd="13dp"
+        app:layout_constraintTop_toTopOf="@+id/app_title_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/app_title_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        />
+
+
+
+
+    <ImageButton
         android:id="@+id/search_btn"
         android:layout_width="0dp"
         android:layout_height="63dp"
@@ -18,7 +65,6 @@
         android:background="@drawable/edittext_shadow"
         android:drawableLeft="@drawable/ic_baseline_search_24"
         android:drawablePadding="5dp"
-        android:hint="시설명⸰주소⸰건물명 검색"
         android:paddingStart="20dp"
         android:paddingEnd="15dp"
         android:textAlignment="textStart"
@@ -26,7 +72,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         />
+
 
     <Button
         android:id="@+id/refresh_btn"
@@ -57,24 +105,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:elevation="50dp"
         android:background="@drawable/button_category"
         android:gravity="center"
-
-
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_btn"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
         >
 
         <Button
             android:id="@+id/shop_category_btn"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:drawableStart="@drawable/ic_text_shop"
+            android:drawableStart="@drawable/category_button_shop_img"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:text="음식⸰상점"
@@ -85,13 +133,12 @@
 
         <Button
             android:id="@+id/living_category_btn"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_text_living"
+            android:drawableStart="@drawable/category_button_living_img"
+            android:drawablePadding="-7dp"
             android:background="#00000000"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:text="생활"
             android:textStyle="bold"
             android:textColor="#3C3C3C"
@@ -99,13 +146,12 @@
 
         <Button
             android:id="@+id/education_category_btn"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_text_education"
+            android:drawableStart="@drawable/category_button_education_img"
             android:background="#00000000"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:drawablePadding="-7dp"
             android:text="교육"
             android:textStyle="bold"
             android:textColor="#3C3C3C"
@@ -113,13 +159,11 @@
 
         <Button
             android:id="@+id/public_category_btn"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_text_public"
+            android:drawableStart="@drawable/category_button_public_img"
             android:background="#00000000"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:text="기타"
             android:textStyle="bold"
             android:textColor="#3C3C3C"
@@ -132,16 +176,17 @@
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/edittext_shadow"
-        app:itemTextColor="#3A3A3A"
+        app:itemIconTint="@drawable/menu_selector_color"
+        app:itemTextColor="@drawable/menu_selector_color"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nev_menu"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/mylocation_btn"
@@ -179,7 +224,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <TextView
             android:id="@+id/result_nm_tv"

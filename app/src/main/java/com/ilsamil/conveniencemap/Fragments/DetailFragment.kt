@@ -60,8 +60,6 @@ class DetailFragment : Fragment() {
             binding.detailEvalInfoTv.text = evalInfoList
         })
 
-
-
         return binding.root
     }
 

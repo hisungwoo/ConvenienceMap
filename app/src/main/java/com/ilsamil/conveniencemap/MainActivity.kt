@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
                 }
                 1 -> {
-                    binding.shopCategoryBtn.setBackgroundResource(R.color.black)
+                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                     binding.shopCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
                     for(data in shopList) {
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
                 }
                 2 -> {
-                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                     binding.livingCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
                     for(data in livingList) {
@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                 }
                 3 -> {
-                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                     binding.educationCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
                     for(data in educationList) {
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //                    }
 //                }
                 5 -> {
-                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_click)
+                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                     binding.publicCategoryBtn.setTextColor(Color.WHITE)
                     mapView.removeAllPOIItems()
                     for(data in publicList) {
@@ -308,9 +308,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.itemName = data.faclNm
                             marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.a1
+                            marker.customImageResourceId = R.drawable.category_shop_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.a11
+                            marker.customSelectedImageResourceId = R.drawable.category_shop_img
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -328,9 +328,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.itemName = data.faclNm
                             marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.a2
+                            marker.customImageResourceId = R.drawable.category_living_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.a22
+                            marker.customSelectedImageResourceId = R.drawable.category_living_img
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -346,9 +346,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.itemName = data.faclNm
                             marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.a3
+                            marker.customImageResourceId = R.drawable.category_education_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.a33
+                            marker.customSelectedImageResourceId = R.drawable.category_education_img
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -364,9 +364,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.itemName = data.faclNm
                             marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.a4
+                            marker.customImageResourceId = R.drawable.category_public_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.a44
+                            marker.customSelectedImageResourceId = R.drawable.category_public_img
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -384,9 +384,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.itemName = data.faclNm
                             marker.userObject = data
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.a5
+                            marker.customImageResourceId = R.drawable.category_public_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.a55
+                            marker.customSelectedImageResourceId = R.drawable.category_public_img
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -468,7 +468,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 //                mainViewModel.getLocationFacl(cggNm, roadNm, "")
                 getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 2, true)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 3, true)
 
 
             } catch (e : IOException) {
@@ -489,14 +489,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
     private fun clearCategoryBtn() {
-//        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-//        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-//        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-//        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_refresh)
-//        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-//        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-//        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-//        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.shopCategoryBtn.setBackgroundResource(R.color.button_transparency)
+        binding.livingCategoryBtn.setBackgroundResource(R.color.button_transparency)
+        binding.educationCategoryBtn.setBackgroundResource(R.color.button_transparency)
+        binding.publicCategoryBtn.setBackgroundResource(R.color.button_transparency)
+        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
     }
 
 
