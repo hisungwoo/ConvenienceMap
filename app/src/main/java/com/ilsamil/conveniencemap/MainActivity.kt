@@ -111,6 +111,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.searchBtn.visibility = View.VISIBLE
                     binding.refreshBtn.visibility = View.VISIBLE
                     binding.mylocationBtn.visibility = View.VISIBLE
+                    binding.categoryLayout.visibility = View.VISIBLE
+                    binding.appTitleTv.visibility = View.VISIBLE
+                    binding.topLayout.visibility = View.VISIBLE
 //                    binding.groupCategoryBtn.visibility = View.VISIBLE
                 }
                 2 -> {
@@ -118,11 +121,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     // 바템네비, 검색, 재검색 제거
                     Log.d("ttest", "status = 2   주소검색 버튼 클릭")
                     binding.bottomNav.visibility = View.GONE
+                    binding.categoryLayout.visibility = View.GONE
                     binding.searchBtn.visibility = View.GONE
                     binding.resultLayout.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
-                    mapView.removeAllPOIItems()
+                    binding.appTitleTv.visibility = View.GONE
+                    binding.topLayout.visibility = View.GONE
 //                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
@@ -170,6 +175,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         binding.searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+            removeMarker()
             supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
         }
 
@@ -310,7 +316,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.category_shop_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_shop_img
+                            marker.customSelectedImageResourceId = R.drawable.category_click_shop
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -330,7 +336,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.category_living_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_living_img
+                            marker.customSelectedImageResourceId = R.drawable.category_click_living
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -348,7 +354,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.category_education_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_education_img
+                            marker.customSelectedImageResourceId = R.drawable.category_click_education
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -366,7 +372,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.category_public_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_public_img
+                            marker.customSelectedImageResourceId = R.drawable.category_click_public
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -386,7 +392,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.markerType = MapPOIItem.MarkerType.CustomImage
                             marker.customImageResourceId = R.drawable.category_public_img
                             marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_public_img
+                            marker.customSelectedImageResourceId = R.drawable.category_click_public
                             marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                             marker.isShowCalloutBalloonOnTouch = false
                             marker.isCustomImageAutoscale = true
@@ -562,9 +568,24 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         Log.d("ttest", "backMarker 실행")
         binding.resultLayout.startAnimation(fadeOutAnim)
         binding.resultLayout.visibility = View.GONE
+        binding.clickMarkerView.visibility = View.GONE
 
         mainViewModel.mainStatus.value = 1
         mapView.deselectPOIItem(selectedMarker)
+    }
+
+    private fun removeMarker() {
+        Log.d("ttest", "removeMarker 실행")
+        if(mainViewModel.mainStatus.value == 5) {
+            //selectedMarker 초기화 할당 여부 확인
+            if (this::selectedMarker.isInitialized) {
+                mapView.deselectPOIItem(selectedMarker)
+            }
+
+            binding.resultLayout.visibility = View.GONE
+            binding.clickMarkerView.visibility = View.GONE
+            mainViewModel.mainStatus.value = 1
+        }
     }
 
     private fun bottomClickMap() {
@@ -624,17 +645,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         //사용자가 지도 위를 터치한 경우 호출된다.
-        if(mainViewModel.mainStatus.value == 5) {
-            //selectedMarker 초기화 할당 여부 확인
-            if (this::selectedMarker.isInitialized) {
-                mapView.deselectPOIItem(selectedMarker)
-            }
-
-            binding.resultLayout.visibility = View.GONE
-            mainViewModel.mainStatus.value = 1
-        }
-
-
+        removeMarker()
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
@@ -664,9 +675,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         // 마커 클릭시 발생
         if (map != null && item != null && item.userObject != null) {
             mainViewModel.mainStatus.value = 5
-
-
-
 //            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
 //                map.currentLocationTrackingMode =
 //                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
@@ -690,6 +698,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
+            binding.clickMarkerView.visibility = View.VISIBLE
 
 
             itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }

@@ -7,25 +7,41 @@
     android:background="@color/white"
     tools:context=".Fragments.SearchFragment">
 
+
     <EditText
         android:id="@+id/search_et"
-        android:layout_width="match_parent"
-        android:layout_height="63dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
         android:paddingStart="25dp"
         android:paddingEnd="15dp"
         android:hint="시설명⸰주소⸰건물명 검색"
-        android:inputType="text"
-        android:background="@drawable/edittext_shadow"
+        android:drawableStart="@drawable/ic_baseline_search_24_white"
+        android:drawablePadding="10dp"
+        android:background="@drawable/top_layout_radius_search"
         android:imeOptions="actionSearch"
         android:maxLines="1"
         android:textSize="15sp"
-        android:elevation="2dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/back_img"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/back_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_baseline_keyboard_backspace_24"
+        android:background="#00000000"
+        app:layout_constraintTop_toTopOf="@+id/search_et"
+        app:layout_constraintBottom_toBottomOf="@+id/search_et"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/search_et"
+        />
 
 
     <View
