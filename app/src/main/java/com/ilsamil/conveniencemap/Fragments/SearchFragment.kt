@@ -38,13 +38,13 @@ class SearchFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel.mainStatus.value = 2
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainViewModel.mainStatus.value = 2
         mainViewModel.bottomNavLiveData.value = false
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(container?.context,
@@ -96,6 +96,14 @@ class SearchFragment : Fragment() {
 //                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_view, mapFragment, "map")?.addToBackStack("map")?.commit()
             }
         })
+
+        binding.backImg.setOnClickListener {
+            mainViewModel.mainStatus.value = 1
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.remove(this)
+                ?.commit()
+        }
 
         return binding.root
     }

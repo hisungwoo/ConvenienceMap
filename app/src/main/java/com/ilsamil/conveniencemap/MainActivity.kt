@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 
 
+
         //카테고리 클릭
         binding.shopCategoryBtn.setOnClickListener {
             categoryClick(1)
