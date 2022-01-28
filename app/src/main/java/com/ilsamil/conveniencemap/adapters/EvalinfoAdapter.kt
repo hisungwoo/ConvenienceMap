@@ -28,72 +28,72 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
 
         when (serv.evalInfo) {
             "계단 또는 승강설비" -> {
-                evalinfoText = "계단,승강설비"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_stairs)
+                evalinfoText = "계단"
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_stairs_img)
             }
             "대변기" -> {
                 evalinfoText = "대변기"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_wc)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_wc_img)
             }
             "복도" -> {
                 evalinfoText = "복도시설"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_theaters)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_theaters_img)
             }
             "소변기" -> {
                 evalinfoText = "소변기"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_wc)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_wc_img)
             }
             "일반사항" -> {
                 evalinfoText = "일반사항"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_transfer_within_a_station)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_station_img)
             }
             "장애인전용주차구역" -> {
                 evalinfoText = "장애인주차"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_emoji_transportation)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_parking_img)
             }
             "주출입구 높이차이 제거" -> {
                 evalinfoText = "주출입구 높이"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_signal_cellular_bar)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_cellular_bar_img)
             }
             "주출입구 접근로" -> {
                 evalinfoText = "접근로"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_accessible)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_accessible_img)
             }
             "출입구(문)" -> {
                 evalinfoText = "출입구(문)"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_sensor_door)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_sensor_door_img)
             }
             "해당시설 층수" -> {
                 evalinfoText = "해당시설 층수"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_elevator)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_elevator_img)
             }
             "경보 및 피난설비" -> {
                 evalinfoText = "경보 및 피난설비"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_add_alert)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_alert_img)
             }
             "매표소" -> {
                 evalinfoText = "매표소"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_store)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_store_img)
             }
             "판매기" -> {
                 evalinfoText = "판매기"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_storefront)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_store_front_img)
             }
             "음료대" -> {
                 evalinfoText = "음료대"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_touch_app)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_touch_app_img)
             }
             "비치용품" -> {
                 evalinfoText = "비치용품"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_group_work)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_group_work_img)
             }
             "접수대 및 작업대" -> {
                 evalinfoText = "접수대 및 작업대"
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_calendar)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_calendar_img)
             }
             else -> {
                 evalinfoText = serv.evalInfo
-                holder.evalinfoImg.setImageResource(R.drawable.ic_baseline_more)
+                holder.evalinfoImg.setImageResource(R.drawable.evalinfo_more_img)
             }
         }
 
