@@ -13,7 +13,7 @@
         android:id="@+id/topLayout_detail"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="#82CDEC"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:src="@drawable/ic_baseline_keyboard_backspace_24"
+        android:src="@drawable/ic_baseline_keyboard_backspace_white_24"
         android:background="#00000000"
         app:layout_constraintTop_toTopOf="@+id/topLayout_detail"
         app:layout_constraintBottom_toBottomOf="@+id/topLayout_detail"
@@ -59,6 +59,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="#C3C3C3"
+                app:layout_constraintTop_toTopOf="@+id/detail_constraint_in"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:src="@drawable/ic_baseline_person_24"
+                app:layout_constraintTop_toTopOf="@+id/detail_constraint_in"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
             <View
                 android:id="@+id/detail_title_view"
@@ -77,54 +94,78 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="광명7동 행정복지센터"
+                android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintTop_toBottomOf="@+id/detail_web_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-
-
+                app:layout_constraintHorizontal_bias="0.07"
                 />
 
-            <TextView
-                android:id="@+id/detail_lc_mnad_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="경기 광명시 광명동 742-2"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_facl_nm_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_facl_nm_tv"
-
-                />
-
-            <TextView
-                android:id="@+id/detail_estb_date_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20030703"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_lc_mnad_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_lc_mnad_tv"
-                />
-
-            <TextView
-                android:id="@+id/detail_sta_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="영업중"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_estb_date_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_estb_date_tv"
-                />
 
             <TextView
                 android:id="@+id/detail_type_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="공공기관"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_sta_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_sta_tv"
+                android:layout_marginStart="8dp"
+                app:layout_constraintVertical_bias="0.8"
+                app:layout_constraintTop_toTopOf="@+id/detail_facl_nm_tv"
+                app:layout_constraintBottom_toBottomOf="@+id/detail_facl_nm_tv"
+                app:layout_constraintStart_toEndOf="@+id/detail_facl_nm_tv"
+                />
+
+            <ImageView
+                android:id="@+id/detail_location_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location_on_24"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/detail_facl_nm_tv"
+                app:layout_constraintTop_toBottomOf="@id/detail_facl_nm_tv"
+                />
+
+            <TextView
+                android:id="@+id/detail_lc_mnad_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="경기 광명시 광명동 742-2"
+                app:layout_constraintTop_toTopOf="@id/detail_location_img"
+                app:layout_constraintBottom_toBottomOf="@+id/detail_location_img"
+                app:layout_constraintStart_toEndOf="@+id/detail_location_img"
+                />
+
+            <ImageView
+                android:id="@+id/detail_date_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_location_city_24"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/detail_location_img"
+                app:layout_constraintTop_toBottomOf="@id/detail_location_img"
+                />
+
+
+            <TextView
+                android:id="@+id/detail_estb_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="2003년 07월 03일 설립"
+                app:layout_constraintTop_toTopOf="@id/detail_date_img"
+                app:layout_constraintBottom_toBottomOf="@+id/detail_date_img"
+                app:layout_constraintStart_toEndOf="@+id/detail_date_img"
+                />
+
+            <ImageView
+                android:id="@+id/detail_rprn_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_person_24"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/detail_date_img"
+                app:layout_constraintTop_toBottomOf="@id/detail_date_img"
                 />
 
             <TextView
@@ -132,10 +173,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이동건"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_type_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_type_tv"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@id/detail_rprn_img"
+                app:layout_constraintBottom_toBottomOf="@+id/detail_rprn_img"
+                app:layout_constraintStart_toEndOf="@+id/detail_rprn_img"
                 />
+
 
             <View
                 android:id="@+id/detail_title_end_view"
@@ -157,19 +200,40 @@
                 app:layout_constraintBottom_toBottomOf="@+id/eval_info_view_end"
                 />
 
-
             <TextView
                 android:id="@+id/detail_eval_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
                 android:text="시설 정보"
+                android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintTop_toTopOf="@+id/eval_info_view"
+                app:layout_constraintStart_toStartOf="@+id/detail_facl_nm_tv"
+                />
+
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/detail_flexbox_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="20dp"
+                app:alignContent="center"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/detail_eval_info_title">
+
+
+
+
+
+            </com.google.android.flexbox.FlexboxLayout>
+
 
 
             <TextView
@@ -178,8 +242,8 @@
                 android:layout_height="wrap_content"
                 android:text="장애인주차장, 경사로, 대변기"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_eval_info_title"
-                app:layout_constraintStart_toStartOf="@+id/detail_eval_info_title"
+                app:layout_constraintTop_toBottomOf="@+id/detail_flexbox_layout"
+                app:layout_constraintStart_toStartOf="@+id/detail_flexbox_layout"
                 />
 
 

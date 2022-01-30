@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -38,15 +40,12 @@ class DetailFragment : Fragment() {
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-
         mainViewModel.detailLiveData.observe( this, Observer {
             binding.detailFaclNmTv.text = it.faclNm
             binding.detailLcMnadTv.text = it.lcMnad
             binding.detailEstbDateTv.text = it.estbDate
-            binding.detailStaTv.text = it.salStaNm
             binding.detailTypeTv.text = it.faclTyCd.toString()
             binding.detailRprnTv.text = it.faclRprnNm
-
             mainViewModel.getEvalInfo(it.wfcltId.toString(), "2")
         })
 
@@ -54,8 +53,21 @@ class DetailFragment : Fragment() {
         mainViewModel.evalInfoDetailLiveData.observe(this, Observer {
             var evalInfoList = ""
             for(data in it) {
+                val scrapImage = ImageView(container?.context)
+                val imageLayout = ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+                )
+                scrapImage.layoutParams = imageLayout
+                scrapImage.setImageResource(R.drawable.evalinfo_alert_img)
+                binding.detailFlexboxLayout.addView(scrapImage)
+
+
                 evalInfoList += data.evalInfo + " "
             }
+
+
+
 
             binding.detailEvalInfoTv.text = evalInfoList
         })

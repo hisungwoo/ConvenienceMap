@@ -65,8 +65,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     //프래그먼트 데이터 전달
-
     implementation("androidx.fragment:fragment-ktx:1.4.0")
+
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
 
 }
