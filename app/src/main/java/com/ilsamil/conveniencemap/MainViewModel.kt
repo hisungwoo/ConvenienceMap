@@ -1,6 +1,12 @@
 package com.ilsamil.conveniencemap
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.LocationManager
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ilsamil.conveniencemap.model.EvalInfoList
@@ -15,6 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+
 
 class MainViewModel : ViewModel() {
     private val faclService : RetrofitService
@@ -59,6 +66,28 @@ class MainViewModel : ViewModel() {
         locationFaclService = locationFaclInstance.create(RetrofitService::class.java)
 
     }
+
+    @SuppressLint("MissingPermission")
+    fun getLocationFacInfo2(context: Context) : String {
+        val locationManager = context.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+        var latitude = ""
+        var longitude = ""
+
+        if(location != null) {
+            latitude = location.latitude.toString()
+            longitude = location.longitude.toString()
+            Log.d("ttest", "latitude : " + latitude)
+            Log.d("ttest", "longitude : " + longitude)
+        } else {
+            Log.d("ttest", "현재 위치 : null")
+        }
+
+        return  latitude + longitude
+
+    }
+
 
     fun getFacl(searchText : String) {
         val facinfoCall : Call<FacInfoList> = faclService.getFaclList(15, searchText)

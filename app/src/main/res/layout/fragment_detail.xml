@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="경기 광명시 광명동 742-2"
+                tools:text="경기 광명시 광명동 742-2"
                 app:layout_constraintTop_toTopOf="@id/detail_location_img"
                 app:layout_constraintBottom_toBottomOf="@+id/detail_location_img"
                 app:layout_constraintStart_toEndOf="@+id/detail_location_img"
@@ -152,11 +152,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="2003년 07월 03일 설립"
-                app:layout_constraintTop_toTopOf="@id/detail_date_img"
                 app:layout_constraintBottom_toBottomOf="@+id/detail_date_img"
                 app:layout_constraintStart_toEndOf="@+id/detail_date_img"
-                />
+                app:layout_constraintTop_toTopOf="@id/detail_date_img"
+                tools:text="2003년 07월 03일 설립" />
 
             <ImageView
                 android:id="@+id/detail_rprn_img"
@@ -172,7 +171,7 @@
                 android:id="@+id/detail_rprn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이동건"
+                tools:text="이동건"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="@id/detail_rprn_img"
                 app:layout_constraintBottom_toBottomOf="@+id/detail_rprn_img"
@@ -204,7 +203,7 @@
                 android:id="@+id/detail_eval_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="16dp"
                 android:text="시설 정보"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -217,44 +216,67 @@
                 android:id="@+id/detail_flexbox_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginTop="20dp"
                 app:alignContent="center"
                 app:flexDirection="row"
                 app:flexWrap="wrap"
-                app:justifyContent="center"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_eval_info_title">
-
-
-
-
-
             </com.google.android.flexbox.FlexboxLayout>
 
-
-
-            <TextView
-                android:id="@+id/detail_eval_info_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="장애인주차장, 경사로, 대변기"
-                android:layout_marginTop="8dp"
+            <View
+                android:id="@+id/eval_info_view_end"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 app:layout_constraintTop_toBottomOf="@+id/detail_flexbox_layout"
                 app:layout_constraintStart_toStartOf="@+id/detail_flexbox_layout"
                 />
 
 
             <View
-                android:id="@+id/eval_info_view_end"
+                android:id="@+id/detail_kakao_view"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                app:layout_constraintTop_toBottomOf="@+id/detail_eval_info_tv"
-                app:layout_constraintStart_toStartOf="@+id/detail_eval_info_tv"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/eval_info_view_end"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
 
+            <TextView
+                android:id="@+id/detail_kakao_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:text="카카오맵"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintTop_toTopOf="@+id/detail_kakao_view"
+                app:layout_constraintStart_toStartOf="@+id/detail_facl_nm_tv"
+                />
+
+            <Button
+                android:id="@+id/kakao_get_road_bt"
+                android:layout_marginTop="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="길 찾기"
+                app:layout_constraintTop_toBottomOf="@+id/detail_kakao_title"
+                app:layout_constraintStart_toStartOf="@+id/detail_kakao_title"
+                />
+
+            <Button
+                android:id="@+id/kakao_get_road_view_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="로드 뷰"
+                app:layout_constraintTop_toTopOf="@+id/kakao_get_road_bt"
+                app:layout_constraintStart_toEndOf="@+id/kakao_get_road_bt"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

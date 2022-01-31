@@ -486,6 +486,30 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun getLocationFacInfo2() : String {
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+        var latitude = ""
+        var longitude = ""
+
+        if(location != null) {
+            latitude = location.latitude.toString()
+            longitude = location.longitude.toString()
+            Log.d("ttest", "latitude : " + latitude)
+            Log.d("ttest", "longitude : " + longitude)
+        } else {
+            Log.d("ttest", "현재 위치 : null")
+        }
+
+        return  latitude + longitude
+
+    }
+
+
+
+
     private fun categoryClick(btn : Int) {
         if (btn == mainViewModel.categoryLiveData.value) {
             mainViewModel.categoryLiveData.value = 0
