@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -44,14 +45,60 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
+
+
         mainViewModel.detailLiveData.observe( this, Observer {
             binding.detailFaclNmTv.text = it.faclNm
             binding.detailLcMnadTv.text = it.lcMnad
-            binding.detailEstbDateTv.text = it.estbDate
+
+
+            val lat = it.faclLat
+            val lng = it.faclLng
+            val locationNm = it.faclNm
+
+            binding.webTest.apply {
+                webViewClient = WebViewClient()
+//            WebChromeClient = WebChromeClient()
+                settings.javaScriptEnabled = true
+                settings.loadsImagesAutomatically = true
+            }
+            Log.d("ttest", "lat = " + lat)
+            Log.d("ttest", "lng = $lng")
+
+            val API_KEY = "AIzaSyBflVZNYF1HZGJFC8WPd5v0GkqT6nVjDyM"
+            var WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=370x270&location=$lat,$lng&key=$API_KEY"
+
+
+
+            binding.webTest.loadUrl(WEB_VIEW_URL)
+
+
+            Log.d("ttest", "estdata = " + it.estbDate)
+
+
+            lateinit var estbDate : String
+            if(it.estbDate != null) {
+                estbDate = it.estbDate.substring(0,4) + "년 " +
+                        it.estbDate.substring(4,6) + "월 " +
+                        it.estbDate.substring(6) + "일 설립"
+            } else {
+                estbDate = "설립날짜 정보 없음"
+            }
+
+
+
+
+            it.estbDate?.let { date ->
+                var estbDate = date.substring(0,4) + "년 " +
+                           date.substring(4,6) + "월 " +
+                           date.substring(6) + "일 설립"
+            }
+
+            binding.detailEstbDateTv.text = estbDate
             binding.detailTypeTv.text = it.faclTyCd.toString()
             evalLocation = it.faclLat.toString() + "," + it.faclLng.toString()
 
-            if(binding.detailRprnTv.text == "") {
+            if(it.faclRprnNm == "") {
                 binding.detailRprnTv.text = "설립자 정보 없음"
             } else {
                 binding.detailRprnTv.text = it.faclRprnNm
@@ -61,6 +108,8 @@ class DetailFragment : Fragment() {
 
 
         mainViewModel.evalInfoDetailLiveData.observe(this, Observer {
+            binding.detailFlexboxLayout.removeAllViews()
+
             for(data in it) {
                 val evalLayout = LinearLayout(container?.context)
                 val scrapImage = ImageView(container?.context)
@@ -152,6 +201,10 @@ class DetailFragment : Fragment() {
                     }
                     "유도 및 안내 설비" -> {
                         evalTextView.text = "안내설비"
+                        scrapImage.setImageResource(R.drawable.evalinfo_more_img)
+                    }
+                    "샤워실 및 탈의실" -> {
+                        evalTextView.text = "샤워·탈의실"
                         scrapImage.setImageResource(R.drawable.evalinfo_more_img)
                     }
                     else -> {

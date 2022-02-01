@@ -68,10 +68,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 
-            <ImageView
+
+            <WebView
+                android:id="@+id/web_test"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:src="@drawable/ic_baseline_person_24"
                 app:layout_constraintTop_toTopOf="@+id/detail_constraint_in"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

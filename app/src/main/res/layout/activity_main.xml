@@ -19,6 +19,7 @@
         android:background="@drawable/top_layout_radius"
         />
 
+
     <TextView
         android:id="@+id/app_title_tv"
         android:layout_width="wrap_content"

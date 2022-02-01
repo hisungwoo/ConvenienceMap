@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.webkit.WebChromeClient
+import android.webkit.WebViewClient
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -77,7 +79,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
-
 
 
 
