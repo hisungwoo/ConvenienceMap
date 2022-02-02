@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -69,5 +70,7 @@ dependencies {
 
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    //구글 맵 api
+    implementation 'com.google.android.gms:play-services-maps:18.0.1'
 
 }

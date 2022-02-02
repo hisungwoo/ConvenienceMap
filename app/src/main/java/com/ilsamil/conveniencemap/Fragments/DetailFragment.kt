@@ -20,6 +20,8 @@ import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
+import com.google.android.gms.maps.model.LatLng
 import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
@@ -34,10 +36,22 @@ class DetailFragment : Fragment() {
         fun newInstance() : DetailFragment {
             return DetailFragment()
         }
+
+        private val SYDNEY = LatLng(37.49720079504562, 126.84579445747916)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val streetViewPanoramaFragment =
+            activity?.supportFragmentManager?.findFragmentById(R.id.teww) as SupportStreetViewPanoramaFragment?
+
+        streetViewPanoramaFragment?.getStreetViewPanoramaAsync { panorama ->
+            // Only set the panorama to SYDNEY on startup (when no panoramas have been
+            // loaded which is when the savedInstanceState is null).
+            savedInstanceState ?: panorama.setPosition(SYDNEY)
+        }
+
     }
 
     override fun onCreateView(
@@ -45,6 +59,10 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
+
+
+
+
 
 
         mainViewModel.detailLiveData.observe( this, Observer {

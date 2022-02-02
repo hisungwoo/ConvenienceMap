@@ -21,6 +21,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback
+import com.google.android.gms.maps.StreetViewPanorama
+import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
+import com.google.android.gms.maps.model.LatLng
 import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
@@ -67,6 +71,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
+//    companion object {
+//        // George St, Sydney
+//        private val SYDNEY = LatLng(37.49720079504562, 126.84579445747916)
+//    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +89,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
+
+//        val streetViewPanoramaFragment =
+//            supportFragmentManager.findFragmentById(R.id.asdf) as SupportStreetViewPanoramaFragment?
+//
+//        streetViewPanoramaFragment?.getStreetViewPanoramaAsync { panorama ->
+//            // Only set the panorama to SYDNEY on startup (when no panoramas have been
+//            // loaded which is when the savedInstanceState is null).
+//            savedInstanceState ?: panorama.setPosition(SYDNEY)
+//        }
 
 
         //카테고리 클릭
@@ -744,7 +762,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
     }
-
     // 마커 클릭 이벤트 리스터 END
 
 }
