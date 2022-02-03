@@ -10,8 +10,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.webkit.WebChromeClient
-import android.webkit.WebViewClient
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,10 +19,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback
-import com.google.android.gms.maps.StreetViewPanorama
-import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
-import com.google.android.gms.maps.model.LatLng
 import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
@@ -58,9 +52,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private lateinit var selectedMarker : MapPOIItem
 
 
-
-//    private val eventListener = MarkerEventListener(this)
-
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -70,11 +61,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
     }
-
-//    companion object {
-//        // George St, Sydney
-//        private val SYDNEY = LatLng(37.49720079504562, 126.84579445747916)
-//    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,16 +74,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
-
-
-//        val streetViewPanoramaFragment =
-//            supportFragmentManager.findFragmentById(R.id.asdf) as SupportStreetViewPanoramaFragment?
-//
-//        streetViewPanoramaFragment?.getStreetViewPanoramaAsync { panorama ->
-//            // Only set the panorama to SYDNEY on startup (when no panoramas have been
-//            // loaded which is when the savedInstanceState is null).
-//            savedInstanceState ?: panorama.setPosition(SYDNEY)
-//        }
 
 
         //카테고리 클릭
@@ -459,14 +435,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
 
         binding.resultDetailBtn.setOnClickListener{
-            Log.d("ttest", "!?!?!")
             mainViewModel.mainStatus.value = 6
-            supportFragmentManager.beginTransaction().replace(R.id.dddd, detailFragment, "detail").addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
 
-            val dds = selectedMarker.userObject as ServList
-            Log.d("ttest", dds.faclNm.toString())
-
-            mainViewModel.detailLiveData.value = dds
+            val userObject = selectedMarker.userObject as ServList
+            mainViewModel.detailLiveData.value = userObject
         }
 
 
@@ -504,29 +477,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             Log.d("ttest", "현재 위치 : null")
         }
     }
-
-    @SuppressLint("MissingPermission")
-    private fun getLocationFacInfo2() : String {
-        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-        var latitude = ""
-        var longitude = ""
-
-        if(location != null) {
-            latitude = location.latitude.toString()
-            longitude = location.longitude.toString()
-            Log.d("ttest", "latitude : " + latitude)
-            Log.d("ttest", "longitude : " + longitude)
-        } else {
-            Log.d("ttest", "현재 위치 : null")
-        }
-
-        return  latitude + longitude
-
-    }
-
-
 
 
     private fun categoryClick(btn : Int) {

@@ -14,18 +14,18 @@ import android.view.ViewGroup
 import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.google.android.gms.maps.SupportStreetViewPanoramaFragment
-import com.google.android.gms.maps.model.LatLng
 import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentDetailBinding
+import com.ilsamil.conveniencemap.utils.ChangeType
 
 class DetailFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -36,22 +36,10 @@ class DetailFragment : Fragment() {
         fun newInstance() : DetailFragment {
             return DetailFragment()
         }
-
-        private val SYDNEY = LatLng(37.49720079504562, 126.84579445747916)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val streetViewPanoramaFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.teww) as SupportStreetViewPanoramaFragment?
-
-        streetViewPanoramaFragment?.getStreetViewPanoramaAsync { panorama ->
-            // Only set the panorama to SYDNEY on startup (when no panoramas have been
-            // loaded which is when the savedInstanceState is null).
-            savedInstanceState ?: panorama.setPosition(SYDNEY)
-        }
-
     }
 
     override fun onCreateView(
@@ -60,23 +48,19 @@ class DetailFragment : Fragment() {
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-
-
-
-
+        binding.detailScrollview.post {
+            binding.detailScrollview.fullScroll(ScrollView.FOCUS_UP)
+        }
 
         mainViewModel.detailLiveData.observe( this, Observer {
             binding.detailFaclNmTv.text = it.faclNm
             binding.detailLcMnadTv.text = it.lcMnad
 
-
             val lat = it.faclLat
             val lng = it.faclLng
-            val locationNm = it.faclNm
 
-            binding.webTest.apply {
+            binding.webView.apply {
                 webViewClient = WebViewClient()
-//            WebChromeClient = WebChromeClient()
                 settings.javaScriptEnabled = true
                 settings.loadsImagesAutomatically = true
             }
@@ -84,39 +68,24 @@ class DetailFragment : Fragment() {
             Log.d("ttest", "lng = $lng")
 
             val API_KEY = "AIzaSyBflVZNYF1HZGJFC8WPd5v0GkqT6nVjDyM"
-            var WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=370x270&location=$lat,$lng&key=$API_KEY"
+            val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=400x300&location=$lat,$lng&key=$API_KEY"
+            binding.webView.loadUrl(WEB_VIEW_URL)
 
-
-
-            binding.webTest.loadUrl(WEB_VIEW_URL)
-
-
-            Log.d("ttest", "estdata = " + it.estbDate)
-
-
-            lateinit var estbDate : String
             if(it.estbDate != null) {
-                estbDate = it.estbDate.substring(0,4) + "년 " +
+                val estbDate = it.estbDate.substring(0,4) + "년 " +
                         it.estbDate.substring(4,6) + "월 " +
                         it.estbDate.substring(6) + "일 설립"
+
+                binding.detailEstbDateTv.text = estbDate
             } else {
-                estbDate = "설립날짜 정보 없음"
+                binding.detailEstbDateTv.text = "설립날짜 정보 없음"
             }
 
-
-
-
-            it.estbDate?.let { date ->
-                var estbDate = date.substring(0,4) + "년 " +
-                           date.substring(4,6) + "월 " +
-                           date.substring(6) + "일 설립"
-            }
-
-            binding.detailEstbDateTv.text = estbDate
-            binding.detailTypeTv.text = it.faclTyCd.toString()
+            val changeType = ChangeType()
+            binding.detailTypeTv.text = changeType.changeType(it.faclTyCd.toString())
             evalLocation = it.faclLat.toString() + "," + it.faclLng.toString()
 
-            if(it.faclRprnNm == "") {
+            if(it.faclRprnNm == "" || it.faclRprnNm == null) {
                 binding.detailRprnTv.text = "설립자 정보 없음"
             } else {
                 binding.detailRprnTv.text = it.faclRprnNm
