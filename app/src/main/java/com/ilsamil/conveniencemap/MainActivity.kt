@@ -609,7 +609,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
             in "5" -> {
                 backMarker()
-
+            }
+            in "7" -> {
+                super.onBackPressed()
             }
             else -> {
                 super.onBackPressed()
@@ -682,7 +684,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 true
             )
             selectedMarker = item
-            var itemData : ServList = item.userObject as ServList
+            val itemData : ServList = item.userObject as ServList
 
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)

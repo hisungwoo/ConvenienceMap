@@ -6,21 +6,22 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.github.chrisbanes.photoview.PhotoView
 import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
@@ -31,12 +32,28 @@ class DetailFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentDetailBinding
     private lateinit var evalLocation : String
+    private lateinit var callback: OnBackPressedCallback
 
     companion object {
         fun newInstance() : DetailFragment {
             return DetailFragment()
         }
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (mainViewModel.mainStatus.value == 7) {
+                    backClickImg()
+                } else {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,18 +75,33 @@ class DetailFragment : Fragment() {
 
             val lat = it.faclLat
             val lng = it.faclLng
-
-            binding.webView.apply {
-                webViewClient = WebViewClient()
-                settings.javaScriptEnabled = true
-                settings.loadsImagesAutomatically = true
-            }
-            Log.d("ttest", "lat = " + lat)
-            Log.d("ttest", "lng = $lng")
-
             val API_KEY = "AIzaSyBflVZNYF1HZGJFC8WPd5v0GkqT6nVjDyM"
-            val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=400x300&location=$lat,$lng&key=$API_KEY"
-            binding.webView.loadUrl(WEB_VIEW_URL)
+            val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=420x300&return_error_code=true&location=$lat,$lng&key=$API_KEY"
+
+            val ttss = binding.detailImg
+            if (container != null) {
+                Glide.with(container.context)
+                    .load(WEB_VIEW_URL)
+                    .error(R.drawable.image_error)
+                    .into(ttss)
+            }
+
+            binding.detailImg.setOnClickListener {
+                mainViewModel.mainStatus.value = 7
+                val constIn = binding.detailConstraintIn as ViewGroup
+                constIn.removeView(binding.detailImg)
+
+                binding.clickImgView.visibility = View.VISIBLE
+                val sda = binding.detailImg as PhotoView
+                val clickImgLayout = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                sda.layoutParams = clickImgLayout
+                sda.bringToFront()
+                binding.detailConsLayout.addView(sda)
+            }
+
 
             if(it.estbDate != null) {
                 val estbDate = it.estbDate.substring(0,4) + "년 " +
@@ -96,7 +128,6 @@ class DetailFragment : Fragment() {
 
         mainViewModel.evalInfoDetailLiveData.observe(this, Observer {
             binding.detailFlexboxLayout.removeAllViews()
-
             for(data in it) {
                 val evalLayout = LinearLayout(container?.context)
                 val scrapImage = ImageView(container?.context)
@@ -232,30 +263,43 @@ class DetailFragment : Fragment() {
 
     //dp로 변경
     private fun changeDP(value : Int) : Int{
-        var displayMetrics = resources.displayMetrics
-        var dp = Math.round(value * displayMetrics.density)
+        val displayMetrics = resources.displayMetrics
+        val dp = Math.round(value * displayMetrics.density)
         return dp
+    }
+
+    private fun backClickImg() {
+        Log.d("ttest", "backClickImg 실행")
+        val constLayout = binding.detailConsLayout as ViewGroup
+        constLayout.removeView(binding.detailImg)
+
+        binding.clickImgView.visibility = View.GONE
+        val sda = binding.detailImg as PhotoView
+        val clickImgLayout = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            changeDP(300)
+        )
+        sda.layoutParams = clickImgLayout
+        binding.detailConstraintIn.addView(sda)
+        mainViewModel.mainStatus.value = 6
     }
 
     private fun kakaoGetRoad(context : Context) {
         val i = Intent(Intent.ACTION_VIEW)
-        Log.d("ttest", "evalLocation = " + evalLocation)
-
-//        val myLocation = mainViewModel.getLocationFacInfo2(context)
-//        Log.d("ttest", "myLocation = " + myLocation)
-
         i.data = Uri.parse("kakaomap://route?ep=$evalLocation&by=CAR")
         startActivity(i)
     }
 
     private fun kakaoGetRoadView() {
         val i = Intent(Intent.ACTION_VIEW)
-        Log.d("ttest", "evalLocation = " + evalLocation)
         i.data = Uri.parse("kakaomap://roadView?p=$evalLocation")
         startActivity(i)
     }
 
-
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
 }
 
 
