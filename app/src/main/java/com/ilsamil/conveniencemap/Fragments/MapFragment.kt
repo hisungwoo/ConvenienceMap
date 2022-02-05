@@ -1,7 +1,5 @@
 package com.ilsamil.conveniencemap.Fragments
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,27 +13,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
-import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.databinding.FragmentMapBinding
-import com.ilsamil.conveniencemap.model.EvalInfoList
-import com.ilsamil.conveniencemap.model.FacInfoList
-import com.ilsamil.conveniencemap.repository.RetrofitService
-import com.ilsamil.conveniencemap.utils.ChangeType
-import com.tickaroo.tikxml.TikXml
-import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import com.ilsamil.conveniencemap.utils.Util
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import java.util.*
 
 class MapFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -106,7 +91,7 @@ class MapFragment : Fragment() {
             mainViewModel.getEvalInfo(wfcltId, "1")
 
             binding.resultNmTv.text = faclNm
-            binding.resultTypeTv.text = faclTyCd?.let { ChangeType().changeType(it) }
+            binding.resultTypeTv.text = faclTyCd?.let { Util().changeType(it) }
             binding.resultLocationTv.text = lcMnad
 
             binding.resultLayout.startAnimation(fadeInAnim)

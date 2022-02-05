@@ -2,31 +2,24 @@ package com.ilsamil.conveniencemap.Fragments
 
 import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginBottom
-import androidx.core.view.marginEnd
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
-import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentDetailBinding
-import com.ilsamil.conveniencemap.utils.ChangeType
+import com.ilsamil.conveniencemap.utils.Util
 
 class DetailFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -87,19 +80,23 @@ class DetailFragment : Fragment() {
             }
 
             binding.detailImg.setOnClickListener {
-                mainViewModel.mainStatus.value = 7
-                val constIn = binding.detailConstraintIn as ViewGroup
-                constIn.removeView(binding.detailImg)
+                if(mainViewModel.mainStatus.value == 6) {
+                    mainViewModel.mainStatus.value = 7
+                    val constIn = binding.detailConstraintIn as ViewGroup
+                    constIn.removeView(binding.detailImg)
 
-                binding.clickImgView.visibility = View.VISIBLE
-                val sda = binding.detailImg as PhotoView
-                val clickImgLayout = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-                )
-                sda.layoutParams = clickImgLayout
-                sda.bringToFront()
-                binding.detailConsLayout.addView(sda)
+                    binding.clickImgView.visibility = View.VISIBLE
+                    binding.clickCloseBt.visibility = View.VISIBLE
+
+                    val sda = binding.detailImg as PhotoView
+                    val clickImgLayout = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                    )
+                    sda.layoutParams = clickImgLayout
+                    binding.clickCloseBt.bringToFront()
+                    binding.detailConsLayout.addView(sda)
+                }
             }
 
 
@@ -113,7 +110,7 @@ class DetailFragment : Fragment() {
                 binding.detailEstbDateTv.text = "설립날짜 정보 없음"
             }
 
-            val changeType = ChangeType()
+            val changeType = Util()
             binding.detailTypeTv.text = changeType.changeType(it.faclTyCd.toString())
             evalLocation = it.faclLat.toString() + "," + it.faclLng.toString()
 
@@ -258,6 +255,12 @@ class DetailFragment : Fragment() {
             kakaoGetRoadView()
         }
 
+        //이미지 확대 후 X버튼 클릭 시
+        binding.clickCloseBt.setOnClickListener {
+            backClickImg()
+        }
+
+
         return binding.root
     }
 
@@ -274,6 +277,8 @@ class DetailFragment : Fragment() {
         constLayout.removeView(binding.detailImg)
 
         binding.clickImgView.visibility = View.GONE
+        binding.clickCloseBt.visibility = View.GONE
+
         val sda = binding.detailImg as PhotoView
         val clickImgLayout = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,

@@ -1,6 +1,6 @@
 package com.ilsamil.conveniencemap.utils
 
-class ChangeType {
+class Util {
     fun changeType(type : String?) : String? {
         var result = type
         when (type) {
@@ -78,6 +78,10 @@ class ChangeType {
             "UC0U02" -> result = "아파트 부대복리시설"
         }
         return result
+    }
+
+    fun chaneFaclType() {
+
     }
 
 

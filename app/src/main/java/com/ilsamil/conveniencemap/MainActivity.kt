@@ -23,7 +23,7 @@ import com.ilsamil.conveniencemap.Fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.model.ServList
-import com.ilsamil.conveniencemap.utils.ChangeType
+import com.ilsamil.conveniencemap.utils.Util
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
-
             getLocationFacInfo()
 //            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
@@ -74,7 +73,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
-
 
         //카테고리 클릭
         binding.shopCategoryBtn.setOnClickListener {
@@ -259,14 +257,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mainViewModel.movePin.observe(this, Observer {
             mainViewModel.mainStatus.value = 3
-
+            mapView.removeAllPOIItems()
             val faclLng = it.faclLng!!
             val faclLat = it.faclLat!!
             val faclNm = it.faclNm
             val faclTyCd = it.faclTyCd
             val lcMnad = it.lcMnad
             val wfcltId = it.wfcltId!!
-
 
             Log.d("ttest" , "faclLng " + faclLng)
             Log.d("ttest" , "faclLat " + faclLat)
@@ -282,7 +279,22 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
             customMarker.isShowCalloutBalloonOnTouch = false
-            customMarker.customImageResourceId = R.drawable.ic_location_pin_click_center
+
+            when(changeFaclType(faclTyCd.toString())) {
+                "음식 및 상점" -> {
+                    customMarker.customImageResourceId = R.drawable.category_click_shop
+                }
+                "생활시설" -> {
+                    customMarker.customImageResourceId = R.drawable.category_click_living
+                }
+                "교육시설" -> {
+                    customMarker.customImageResourceId = R.drawable.category_click_education
+                }
+                "기타" -> {
+                    customMarker.customImageResourceId = R.drawable.category_click_public
+                }
+            }
+
             customMarker.isCustomImageAutoscale = true
             customMarker.setCustomImageAnchor(0.5f, 1.0f)
 
@@ -290,7 +302,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
             binding.resultNmTv.text = faclNm
-            binding.resultTypeTv.text = faclTyCd?.let { it1 -> ChangeType().changeType(it1) }
+            binding.resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeType(it1) }
             binding.resultLocationTv.text = lcMnad
 
             binding.resultLayout.startAnimation(fadeInAnim)
@@ -301,128 +313,46 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mainViewModel.locationFaclLiveData.observe(this, Observer {
             for(data in it) {
-                val marker = MapPOIItem()
-                when(data.faclTyCd.toString()) {
-                    //음식 및 상점
-                    in "UC0B01", "UC0R02", "UC0E01", "UC0B02", "UC0K02" -> {
-                        if (data.faclLat != null && data.faclLng != null) {
-                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                            marker.itemName = data.faclNm
-                            marker.userObject = data
-                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                if (data.faclLat != null && data.faclLng != null) {
+                    val marker = MapPOIItem()
+                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                    marker.itemName = data.faclNm
+                    marker.userObject = data
+                    marker.markerType = MapPOIItem.MarkerType.CustomImage
+                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                    marker.isShowCalloutBalloonOnTouch = false
+                    marker.isCustomImageAutoscale = true
+                    marker.setCustomImageAnchor(0.5f, 1.0f)
+
+                    when(changeFaclType(data.faclTyCd.toString())) {
+                        "음식 및 상점" -> {
                             marker.customImageResourceId = R.drawable.category_shop_img
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                             marker.customSelectedImageResourceId = R.drawable.category_click_shop
-                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                            marker.isShowCalloutBalloonOnTouch = false
-                            marker.isCustomImageAutoscale = true
-                            marker.setCustomImageAnchor(0.5f, 1.0f)
                             shopList.add(marker)
                             mapView.addPOIItem(marker)
                         }
-                    }
-                    //생활시설
-                    in "UC0A05", "UC0J01", "UC0H03", "UC0I01", "UC0A01", "UC0A02", "UC0T01", "UC0A07", "UC0G09", "UC0C01", "UC0C04",
-                    "UC0C05", "UC0U01", "UC0U03", "UC0U04", "UC0A13", "UC0R01", "UC0J02", "UC0U02", "UC0L01", "UC0V01", "UC0L02"
-                    -> {
-                        if (data.faclLat != null && data.faclLng != null) {
-                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                            marker.itemName = data.faclNm
-                            marker.userObject = data
-                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                        "생활시설" -> {
                             marker.customImageResourceId = R.drawable.category_living_img
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                             marker.customSelectedImageResourceId = R.drawable.category_click_living
-                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                            marker.isShowCalloutBalloonOnTouch = false
-                            marker.isCustomImageAutoscale = true
-                            marker.setCustomImageAnchor(0.5f, 1.0f)
                             livingList.add(marker)
                             mapView.addPOIItem(marker)
                         }
-                    }
-                    //교육시설
-                    in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
-                        if (data.faclLat != null && data.faclLng != null) {
-                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                            marker.itemName = data.faclNm
-                            marker.userObject = data
-                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                        "교육시설" -> {
                             marker.customImageResourceId = R.drawable.category_education_img
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                             marker.customSelectedImageResourceId = R.drawable.category_click_education
-                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                            marker.isShowCalloutBalloonOnTouch = false
-                            marker.isCustomImageAutoscale = true
-                            marker.setCustomImageAnchor(0.5f, 1.0f)
                             educationList.add(marker)
                             mapView.addPOIItem(marker)
                         }
-                    }
-                    //병원
-                    in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
-                        if (data.faclLat != null && data.faclLng != null) {
-                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                            marker.itemName = data.faclNm
-                            marker.userObject = data
-                            marker.markerType = MapPOIItem.MarkerType.CustomImage
+                        "기타" -> {
                             marker.customImageResourceId = R.drawable.category_public_img
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
                             marker.customSelectedImageResourceId = R.drawable.category_click_public
-                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                            marker.isShowCalloutBalloonOnTouch = false
-                            marker.isCustomImageAutoscale = true
-                            marker.setCustomImageAnchor(0.5f, 1.0f)
-                            hospitalList.add(marker)
-                            mapView.addPOIItem(marker)
-                        }
-                    }
-                    // 공공기관 및 기타
-                    in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
-                    "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06", "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03",
-                    "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02" -> {
-                        if (data.faclLat != null && data.faclLng != null) {
-                            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                            marker.itemName = data.faclNm
-                            marker.userObject = data
-                            marker.markerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customImageResourceId = R.drawable.category_public_img
-                            marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                            marker.customSelectedImageResourceId = R.drawable.category_click_public
-                            marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                            marker.isShowCalloutBalloonOnTouch = false
-                            marker.isCustomImageAutoscale = true
-                            marker.setCustomImageAnchor(0.5f, 1.0f)
                             publicList.add(marker)
                             mapView.addPOIItem(marker)
                         }
                     }
                 }
-
-//                if (data.faclLat != null && data.faclLng != null) {
-//                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-//                    marker.itemName = data.faclNm
-//                    marker.userObject = data
-//                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-//                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-//                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-//
-//                    marker.isShowCalloutBalloonOnTouch = false
-//                    marker.customImageResourceId = R.drawable.ic_location_pin
-//
-//
-//
-//                    marker.customSelectedImageResourceId = R.drawable.ic_location_pin_click_left
-//                    marker.isCustomImageAutoscale = true
-//
-//
-//                    mapView.addPOIItem(marker)
-//                }
             }
-
-
-
-
         })
 
 
@@ -441,8 +371,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             val userObject = selectedMarker.userObject as ServList
             mainViewModel.detailLiveData.value = userObject
         }
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        val mapdf = mapView.poiItems
+        if(mapdf != null) {
+            Log.d("ttest", mapdf.size.toString())
+        }
     }
 
 
@@ -593,15 +529,49 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if(tag3 != null) {
             supportFragmentManager.beginTransaction().remove(infoFragment).addToBackStack(null)?.commit()
         }
-
     }
+
+
+    private fun changeFaclType(faclType : String) : String {
+        when(faclType) {
+            //음식 및 상점
+            in "UC0B01", "UC0R02", "UC0E01", "UC0B02", "UC0K02" -> {
+                return "음식 및 상점"
+            }
+            //생활시설
+            in "UC0A05", "UC0J01", "UC0H03", "UC0I01", "UC0A01", "UC0A02", "UC0T01", "UC0A07", "UC0G09", "UC0C01", "UC0C04",
+            "UC0C05", "UC0U01", "UC0U03", "UC0U04", "UC0A13", "UC0R01", "UC0J02", "UC0U02", "UC0L01", "UC0V01", "UC0L02"
+            -> {
+                return "생활시설"
+            }
+            //교육시설
+            in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
+                return "교육시설"
+            }
+            //병원
+            in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
+                return "기타"
+            }
+            // 공공기관 및 기타
+            in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
+            "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06", "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03",
+            "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02" -> {
+                return "기타"
+            }
+        }
+        return ""
+    }
+
 
 
     override fun onBackPressed() {
         when(mainViewModel.mainStatus.value.toString()) {
-            in "1","2","3" -> {
+            in "1","2" -> {
                 super.onBackPressed()
                 updateMapView()
+            }
+            in "3" -> {
+                super.onBackPressed()
             }
             in "4" -> {
                 super.onBackPressed()
@@ -689,7 +659,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
             binding.resultNmTv.text = item.itemName
-            binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> ChangeType().changeType(it1) }
+            binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
             binding.resultLocationTv.text = itemData.lcMnad
 
             binding.resultLayout.startAnimation(fadeInAnim)
