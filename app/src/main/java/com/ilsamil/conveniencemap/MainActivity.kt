@@ -49,9 +49,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
-    private lateinit var selectedMarker : MapPOIItem
-
-
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -70,7 +67,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.clKakaoMapView.addView(mapView)
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
-
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
@@ -108,6 +104,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.categoryLayout.visibility = View.VISIBLE
                     binding.appTitleTv.visibility = View.VISIBLE
                     binding.topLayout.visibility = View.VISIBLE
+
+                    // 검색결과 마커 제거
+                    if (mapView.findPOIItemByName("searchItem") != null) {
+                        val searchMarker = mapView.findPOIItemByName("searchItem")[0]
+                        mapView.removePOIItem(searchMarker)
+                    }
+
 //                    binding.groupCategoryBtn.visibility = View.VISIBLE
                 }
                 2 -> {
@@ -184,10 +187,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultLayout.visibility = View.GONE
             mainViewModel.mainStatus.value = 1
 
-
-            // selectedMarker 초기화 확인
-            if (this::selectedMarker.isInitialized) {
-                mapView.deselectPOIItem(selectedMarker)
+            if(mapView.findPOIItemByTag(1) != null) {
+                mapView.deselectPOIItem(mapView.findPOIItemByTag(1))
             }
 
 
@@ -257,7 +258,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mainViewModel.movePin.observe(this, Observer {
             mainViewModel.mainStatus.value = 3
-            mapView.removeAllPOIItems()
             val faclLng = it.faclLng!!
             val faclLat = it.faclLat!!
             val faclNm = it.faclNm
@@ -274,11 +274,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLat, faclLng), 0, true)
 
             val customMarker = MapPOIItem()
-            customMarker.itemName = "테스트 마커"
+            customMarker.itemName = "searchItem"
             customMarker.tag = 1
             customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
             customMarker.markerType = MapPOIItem.MarkerType.CustomImage
             customMarker.isShowCalloutBalloonOnTouch = false
+            customMarker.userObject = it
+
 
             when(changeFaclType(faclTyCd.toString())) {
                 "음식 및 상점" -> {
@@ -364,23 +366,21 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             getMapFacInfo("구로구","구로동로47길")
         }
 
+        //상세보기 클릭
         binding.resultDetailBtn.setOnClickListener{
             mainViewModel.mainStatus.value = 6
             supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
 
-            val userObject = selectedMarker.userObject as ServList
-            mainViewModel.detailLiveData.value = userObject
+            if(mapView.findPOIItemByTag(1) != null) {
+                Log.d("ttest","태그 실행")
+                val userObject = mapView.findPOIItemByTag(1).userObject as ServList
+                mainViewModel.detailLiveData.value = userObject
+            }
+
+//            val userObject = selectedMarker.userObject as ServList
+//            mainViewModel.detailLiveData.value = userObject
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        val mapdf = mapView.poiItems
-        if(mapdf != null) {
-            Log.d("ttest", mapdf.size.toString())
-        }
-    }
-
 
     @SuppressLint("MissingPermission")
     private fun getLocationFacInfo() {
@@ -494,22 +494,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
-    private fun backMarker() {
-        Log.d("ttest", "backMarker 실행")
-        binding.resultLayout.startAnimation(fadeOutAnim)
-        binding.resultLayout.visibility = View.GONE
-        binding.clickMarkerView.visibility = View.GONE
-
-        mainViewModel.mainStatus.value = 1
-        mapView.deselectPOIItem(selectedMarker)
-    }
 
     private fun removeMarker() {
         Log.d("ttest", "removeMarker 실행")
         if(mainViewModel.mainStatus.value == 5) {
-            //selectedMarker 초기화 할당 여부 확인
-            if (this::selectedMarker.isInitialized) {
-                mapView.deselectPOIItem(selectedMarker)
+            if(mapView.findPOIItemByTag(1) != null) {
+                val searchMarker = mapView.findPOIItemByTag(1)
+                mapView.deselectPOIItem(searchMarker)
+                searchMarker.tag = 0
             }
 
             binding.resultLayout.visibility = View.GONE
@@ -578,7 +570,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 updateBottomMenu()
             }
             in "5" -> {
-                backMarker()
+                removeMarker()
             }
             in "7" -> {
                 super.onBackPressed()
@@ -653,7 +645,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 ),
                 true
             )
-            selectedMarker = item
+//            selectedMarker = item
+            item.tag = 1
             val itemData : ServList = item.userObject as ServList
 
 
