@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.ilsamil.conveniencemap"
         minSdkVersion 23
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 

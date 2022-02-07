@@ -2,6 +2,7 @@ package com.ilsamil.conveniencemap
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.LocationManager
@@ -10,9 +11,11 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -29,7 +32,8 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.POIItemEventListener {
+class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.POIItemEventListener,
+    MapView.CurrentLocationEventListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
@@ -49,14 +53,24 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
+    private var fLatitude = 1.00
+    private var fLongitude = 1.00
+    private var mCurrentLat : Double = 1.00
+    private var mCurrentLng : Double = 1.00
+
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
             getLocationFacInfo()
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
 //            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
     }
+
+    private val GPS_ENABLE_REQUEST_CODE = 2001
+    private val PERMISSIONS_REQUEST_CODE = 100
+    var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +83,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
+        mapView.setCurrentLocationEventListener(this)
+
 
         //카테고리 클릭
         binding.shopCategoryBtn.setOnClickListener {
@@ -163,9 +179,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-
-//        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-//        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
 
 //        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
 
@@ -359,6 +372,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 
         binding.mylocationBtn.setOnClickListener {
+            if(mCurrentLat != 1.00) {
+                val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
+                mapView.setMapCenterPoint(currentMapPoint, true)
+            } else {
+                val currentMapPoint = MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude)
+                mapView.setMapCenterPoint(currentMapPoint, true)
+            }
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
         }
 
@@ -387,23 +407,23 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if(location != null) {
-            val latitude = location.latitude
-            val longitude = location.longitude
-            Log.d("ttest", "latitude : " + latitude)
-            Log.d("ttest", "longitude : " + longitude)
+            fLatitude = location.latitude
+            fLongitude = location.longitude
+            Log.d("ttest", "latitude : " + fLatitude)
+            Log.d("ttest", "longitude : " + fLongitude)
 
 
             val geocoder = Geocoder(this)
             try {
 
-                var gList = geocoder.getFromLocation(latitude, longitude, 5)
+                val gList = geocoder.getFromLocation(fLatitude, fLongitude, 5)
                 val cggNm : String = gList[0].subLocality
                 val roadNm : String = gList[0].featureName
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
 //                mainViewModel.getLocationFacl(cggNm, roadNm, "")
                 getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude, longitude), 3, true)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
 
 
             } catch (e : IOException) {
@@ -555,7 +575,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
 
-
     override fun onBackPressed() {
         when(mainViewModel.mainStatus.value.toString()) {
             in "1","2" -> {
@@ -678,5 +697,36 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
     }
     // 마커 클릭 이벤트 리스터 END
+
+
+    // CurrentLocationEventListener
+    override fun onCurrentLocationUpdate(mapViewP: MapView?, mapPoint: MapPoint?, p2: Float) {
+        val mapPointGeo = mapPoint?.mapPointGeoCoord
+        val currentMapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo?.latitude!!, mapPointGeo?.longitude)
+
+        //이 좌표로 지도 중심 이동
+//        mapViewP?.setMapCenterPoint(currentMapPoint, true)
+
+        //전역변수로 현재 좌표 저장
+        mCurrentLat = mapPointGeo.latitude
+        mCurrentLng = mapPointGeo.longitude
+
+        Log.d("ttest", "현재 위치 = $mCurrentLat     $mCurrentLng")
+
+    }
+
+    override fun onCurrentLocationDeviceHeadingUpdate(p0: MapView?, p1: Float) {
+    }
+
+    override fun onCurrentLocationUpdateFailed(p0: MapView?) {
+        Toast.makeText(this, "현재위치 갱신 작업에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+        Log.d("ttest", "onCurrentLocationUpdateFailed 발생!")
+    }
+
+    override fun onCurrentLocationUpdateCancelled(p0: MapView?) {
+        Log.d("ttest", "onCurrentLocationUpdateCancelled 발생!")
+    }
+    // CurrentLocationEventListener End
+
 
 }
