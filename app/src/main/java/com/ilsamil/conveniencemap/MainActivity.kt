@@ -2,7 +2,6 @@ package com.ilsamil.conveniencemap
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.LocationManager
@@ -15,7 +14,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -58,6 +56,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var mCurrentLat : Double = 1.00
     private var mCurrentLng : Double = 1.00
 
+    private lateinit var selectedMarker : MapPOIItem
+
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -67,11 +67,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
     }
-
-    private val GPS_ENABLE_REQUEST_CODE = 2001
-    private val PERMISSIONS_REQUEST_CODE = 100
-    var REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -383,22 +378,37 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
 
         binding.refreshBtn.setOnClickListener {
-            getMapFacInfo("구로구","구로동로47길")
+            val refreshLocation = mapView.mapCenterPoint
+            val refreshLat = refreshLocation.mapPointGeoCoord.latitude
+            val refreshLong = refreshLocation.mapPointGeoCoord.longitude
+            val geocoder = Geocoder(this)
+
+            try {
+                val gList = geocoder.getFromLocation(refreshLat, refreshLong, 5)
+                val cggNm = if (gList[0].subLocality != null) {
+                    gList[0].subLocality
+                } else {
+                    gList[0].locality
+                }
+                val roadNm = ""
+                Log.d("ttest", "지역 재검색 위치 : $cggNm")
+
+                getMapFacInfo(cggNm, roadNm)
+                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(refreshLat, refreshLong), true)
+
+            } catch (e : IOException) {
+                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+            }
+
+
         }
 
         //상세보기 클릭
         binding.resultDetailBtn.setOnClickListener{
             mainViewModel.mainStatus.value = 6
             supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
-
-            if(mapView.findPOIItemByTag(1) != null) {
-                Log.d("ttest","태그 실행")
-                val userObject = mapView.findPOIItemByTag(1).userObject as ServList
-                mainViewModel.detailLiveData.value = userObject
-            }
-
-//            val userObject = selectedMarker.userObject as ServList
-//            mainViewModel.detailLiveData.value = userObject
+            val userObject = selectedMarker.userObject as ServList
+            mainViewModel.detailLiveData.value = userObject
         }
     }
 
@@ -415,10 +425,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
             val geocoder = Geocoder(this)
             try {
-
                 val gList = geocoder.getFromLocation(fLatitude, fLongitude, 5)
-                val cggNm : String = gList[0].subLocality
-                val roadNm : String = gList[0].featureName
+                val cggNm = if (gList[0].subLocality != null) {
+                    gList[0].subLocality
+                } else {
+                    gList[0].locality
+                }
+                val roadNm = ""
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
 //                mainViewModel.getLocationFacl(cggNm, roadNm, "")
@@ -611,9 +624,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
         //지도 중심 좌표가 이동한 경우 호출된다.
-//        if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
-//            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-//        }
+        if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+        }
     }
 
     override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
@@ -664,8 +677,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 ),
                 true
             )
-//            selectedMarker = item
-            item.tag = 1
+            selectedMarker = item
+//            item.tag = 1
             val itemData : ServList = item.userObject as ServList
 
 
@@ -710,9 +723,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         //전역변수로 현재 좌표 저장
         mCurrentLat = mapPointGeo.latitude
         mCurrentLng = mapPointGeo.longitude
-
-        Log.d("ttest", "현재 위치 = $mCurrentLat     $mCurrentLng")
-
     }
 
     override fun onCurrentLocationDeviceHeadingUpdate(p0: MapView?, p1: Float) {
