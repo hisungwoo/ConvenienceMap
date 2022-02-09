@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if (granted) {
             getLocationFacInfo()
             mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-//            Toast.makeText(this@MainActivity, "위치권한 승인", Toast.LENGTH_SHORT ).show()
         }
     }
 
@@ -93,10 +92,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.educationCategoryBtn.setOnClickListener {
             categoryClick(3)
         }
-
-//        binding.hospitalCategoryBtn.setOnClickListener {
-//            categoryClick(4)
-//        }
 
         binding.publicCategoryBtn.setOnClickListener {
             categoryClick(5)
