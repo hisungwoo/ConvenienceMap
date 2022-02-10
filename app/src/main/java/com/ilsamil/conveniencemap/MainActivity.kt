@@ -71,7 +71,18 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Log.d("ttest", "tile = " + MapView.isMapTilePersistentCacheEnabled())
+//        if (!(MapView.isMapTilePersistentCacheEnabled())) {
+//            MapView.setMapTilePersistentCacheEnabled(true)
+//            Log.d("ttest", "tile2 = " + MapView.isMapTilePersistentCacheEnabled())
+//        }
+
         mapView = MapView(this)
+        mapView.isHDMapTileEnabled
+        mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.current_location_marker, MapPOIItem.ImageOffset(30,30))
+        mapView.setCurrentLocationRadiusStrokeColor(android.graphics.Color.argb(1, 1, 1, 1))
+        mapView.setCurrentLocationRadiusFillColor(android.graphics.Color.argb(1, 1, 1, 1))
         binding.clKakaoMapView.addView(mapView)
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
@@ -176,7 +187,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             removeMarker()
-            supportFragmentManager.beginTransaction().add(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
         }
 
 
