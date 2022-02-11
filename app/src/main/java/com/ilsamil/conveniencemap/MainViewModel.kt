@@ -171,7 +171,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    // 지도에 정보표시
+    // 리스트 프레그먼트 - 지도에 정보표시
     fun getLocationListFacl(cggNm : String) {
         val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
         facinfoCall.enqueue(object : Callback<FacInfoList> {

@@ -21,6 +21,7 @@ import com.ilsamil.conveniencemap.model.ServList
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentListBinding
+    private lateinit var cggNm: String
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
@@ -51,6 +52,13 @@ class ListFragment : Fragment() {
             false
         )
 
+        val bundle = arguments
+        cggNm = if(bundle != null) {
+            bundle.getString("cggNm").toString()
+        } else {
+            ""
+        }
+
 
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.adapter = adapter
@@ -59,7 +67,7 @@ class ListFragment : Fragment() {
             adapter.updateItems(it)
         })
 
-        mainViewModel.getLocationListFacl("구로구")
+        mainViewModel.getLocationListFacl(cggNm)
 
 
         adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{

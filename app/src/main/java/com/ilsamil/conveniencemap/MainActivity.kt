@@ -485,8 +485,39 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             when(it.itemId) {
                 R.id.menu_category -> {
                     mainViewModel.mainStatus.value = 4
-                    supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "category").addToBackStack("category").commit()
+
+                    val mapLocation = mapView.mapCenterPoint
+                    val mapLat = mapLocation.mapPointGeoCoord.latitude
+                    val mapLong = mapLocation.mapPointGeoCoord.longitude
+
+                    val geocoder = Geocoder(this)
+
+                    try {
+                        val gList = geocoder.getFromLocation(mapLat, mapLong, 5)
+                        val cggNm = if (gList[0].subLocality != null) {
+                            gList[0].subLocality
+                        } else {
+                            gList[0].locality
+                        }
+
+                        Log.d("ttest", "리스트 프래그먼트 이동 위치 : $cggNm")
+
+                        val bundle = Bundle()
+                        bundle.putString("cggNm", cggNm)
+
+                        listFragment.arguments = bundle
+                        supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "category").addToBackStack("category").commit()
+
+
+                    } catch (e : IOException) {
+                        Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+                    }
+
+
+
+
+
                 }
                 R.id.menu_map -> {
                     bottomClickMap()
