@@ -45,7 +45,7 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        mainViewModel.mainStatus.value = 4
         binding = FragmentListBinding.inflate(inflater, container, false)
         binding.listRecyclerview.layoutManager = LinearLayoutManager(container?.context,
             RecyclerView.VERTICAL,
@@ -59,6 +59,7 @@ class ListFragment : Fragment() {
             ""
         }
 
+        binding.locationTv.text = cggNm
 
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.adapter = adapter
@@ -73,10 +74,11 @@ class ListFragment : Fragment() {
         adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ServList, pos : Int) {
                 mainViewModel.movePin.value = data
-                val categoryFragment = activity?.supportFragmentManager?.findFragmentByTag("category")
-                if (categoryFragment != null) {
-                    activity?.supportFragmentManager?.beginTransaction()?.remove(categoryFragment)?.addToBackStack(null)?.commit()
+                val categoryFragment2 = activity?.supportFragmentManager?.findFragmentByTag("category")
+                if (categoryFragment2 != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(categoryFragment2)?.addToBackStack(null)?.commit()
                 }
+
             }
 
         })

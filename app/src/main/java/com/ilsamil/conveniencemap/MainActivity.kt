@@ -55,6 +55,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var fLongitude = 1.00
     private var mCurrentLat : Double = 1.00
     private var mCurrentLng : Double = 1.00
+    private var markedLat : Double = 1.00
+    private var markedLng : Double = 1.00
+
 
     private lateinit var selectedMarker : MapPOIItem
 
@@ -72,11 +75,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("ttest", "tile = " + MapView.isMapTilePersistentCacheEnabled())
-//        if (!(MapView.isMapTilePersistentCacheEnabled())) {
-//            MapView.setMapTilePersistentCacheEnabled(true)
-//            Log.d("ttest", "tile2 = " + MapView.isMapTilePersistentCacheEnabled())
-//        }
+        if (!(MapView.isMapTilePersistentCacheEnabled())) {
+            MapView.setMapTilePersistentCacheEnabled(true)
+        }
 
         mapView = MapView(this)
         mapView.isHDMapTileEnabled
@@ -108,6 +109,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             categoryClick(5)
         }
 
+        replaceFragment(binding)
+        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+
+
 
         mainViewModel.mainStatus.observe(this, Observer {
             when(it) {
@@ -121,6 +126,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.categoryLayout.visibility = View.VISIBLE
                     binding.appTitleTv.visibility = View.VISIBLE
                     binding.topLayout.visibility = View.VISIBLE
+                    binding.resultLayout.visibility = View.GONE
 
                     // 검색결과 마커 제거
                     if (mapView.findPOIItemByName("searchItem") != null) {
@@ -134,14 +140,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     // 주소검색 버튼 클릭
                     // 바템네비, 검색, 재검색 제거
                     Log.d("ttest", "status = 2   주소검색 버튼 클릭")
-                    binding.bottomNav.visibility = View.GONE
-                    binding.categoryLayout.visibility = View.GONE
-                    binding.searchBtn.visibility = View.GONE
-                    binding.resultLayout.visibility = View.GONE
-                    binding.refreshBtn.visibility = View.GONE
-                    binding.mylocationBtn.visibility = View.GONE
-                    binding.appTitleTv.visibility = View.GONE
-                    binding.topLayout.visibility = View.GONE
+//                    binding.bottomNav.visibility = View.GONE
+//                    binding.categoryLayout.visibility = View.GONE
+//                    binding.searchBtn.visibility = View.GONE
+//                    binding.resultLayout.visibility = View.GONE
+//                    binding.refreshBtn.visibility = View.GONE
+//                    binding.mylocationBtn.visibility = View.GONE
+//                    binding.appTitleTv.visibility = View.GONE
+//                    binding.topLayout.visibility = View.GONE
 //                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 3 -> {
@@ -156,6 +162,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.searchBtn.visibility = View.GONE
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
+//                    binding.categoryLayout.visibility = View.GONE
+
+//                    binding.topLayout.visibility = View.GONE
+//                    binding.appTitleTv.visibility = View.GONE
+
 //                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 5 -> {
@@ -178,16 +189,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
         })
 
-        replaceFragment(binding)
-        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-
 //        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
 
 
         binding.searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             removeMarker()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, searchFragment, "search").addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, searchFragment, "search").addToBackStack(null).commit()
         }
 
 
@@ -272,6 +280,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mainViewModel.movePin.observe(this, Observer {
             mainViewModel.mainStatus.value = 3
+            mapView.removeAllPOIItems()
+            binding.categoryLayout.visibility = View.GONE
+
             val faclLng = it.faclLng!!
             val faclLat = it.faclLat!!
             val faclNm = it.faclNm
@@ -385,12 +396,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         binding.refreshBtn.setOnClickListener {
             val refreshLocation = mapView.mapCenterPoint
-            val refreshLat = refreshLocation.mapPointGeoCoord.latitude
-            val refreshLong = refreshLocation.mapPointGeoCoord.longitude
+            markedLat = refreshLocation.mapPointGeoCoord.latitude
+            markedLng = refreshLocation.mapPointGeoCoord.longitude
             val geocoder = Geocoder(this)
 
             try {
-                val gList = geocoder.getFromLocation(refreshLat, refreshLong, 5)
+                val gList = geocoder.getFromLocation(markedLat, markedLng, 5)
                 val cggNm = if (gList[0].subLocality != null) {
                     gList[0].subLocality
                 } else {
@@ -400,7 +411,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 Log.d("ttest", "지역 재검색 위치 : $cggNm")
 
                 getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(refreshLat, refreshLong), true)
+                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(markedLat, markedLng), true)
 
             } catch (e : IOException) {
                 Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
@@ -425,9 +436,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if(location != null) {
             fLatitude = location.latitude
             fLongitude = location.longitude
+            markedLat = fLatitude
+            markedLng = fLongitude
             Log.d("ttest", "latitude : " + fLatitude)
             Log.d("ttest", "longitude : " + fLongitude)
-
 
             val geocoder = Geocoder(this)
             try {
@@ -484,16 +496,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.menu_category -> {
-                    mainViewModel.mainStatus.value = 4
-
-                    val mapLocation = mapView.mapCenterPoint
-                    val mapLat = mapLocation.mapPointGeoCoord.latitude
-                    val mapLong = mapLocation.mapPointGeoCoord.longitude
-
                     val geocoder = Geocoder(this)
-
                     try {
-                        val gList = geocoder.getFromLocation(mapLat, mapLong, 5)
+                        val gList = geocoder.getFromLocation(markedLat, markedLng, 5)
                         val cggNm = if (gList[0].subLocality != null) {
                             gList[0].subLocality
                         } else {
@@ -501,22 +506,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         }
 
                         Log.d("ttest", "리스트 프래그먼트 이동 위치 : $cggNm")
-
                         val bundle = Bundle()
                         bundle.putString("cggNm", cggNm)
 
                         listFragment.arguments = bundle
                         supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "category").addToBackStack("category").commit()
+                        supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, listFragment, "category").addToBackStack("category").commit()
 
 
                     } catch (e : IOException) {
                         Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
                     }
-
-
-
-
 
                 }
                 R.id.menu_map -> {
