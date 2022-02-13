@@ -378,6 +378,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             mapView.addPOIItem(marker)
                         }
                     }
+                    binding.progressBarCenter.visibility = View.GONE
+
                 }
             }
         })
@@ -431,6 +433,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     @SuppressLint("MissingPermission")
     private fun getLocationFacInfo() {
+        binding.progressBarCenter.visibility = View.VISIBLE
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if(location != null) {
