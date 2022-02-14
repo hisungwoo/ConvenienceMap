@@ -111,5 +111,4 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
         eItems = items
         notifyDataSetChanged() //UI 갱신
     }
-
 }

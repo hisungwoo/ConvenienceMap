@@ -65,6 +65,7 @@ class DetailFragment : Fragment() {
         mainViewModel.detailLiveData.observe( this, Observer {
             binding.detailFaclNmTv.text = it.faclNm
             binding.detailLcMnadTv.text = it.lcMnad
+            binding.detailProgressBar.visibility = View.VISIBLE
 
             val lat = it.faclLat
             val lng = it.faclLng
@@ -242,6 +243,7 @@ class DetailFragment : Fragment() {
 
 
                 binding.detailFlexboxLayout.addView(evalLayout)
+                binding.detailProgressBar.visibility = View.GONE
             }
         })
 

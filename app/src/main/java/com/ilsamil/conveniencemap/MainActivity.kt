@@ -170,11 +170,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //                    binding.groupCategoryBtn.visibility = View.GONE
                 }
                 5 -> {
-                    // 로케이션 마커 클릭
-                    Log.d("ttest", "status = 5   로케이션 마커 클릭")
-                    binding.refreshBtn.visibility = View.GONE
-                    binding.bottomNav.visibility = View.GONE
-                    binding.mylocationBtn.visibility = View.GONE
+                    // 로케이션 마커 클릭 진행중
+                    Log.d("ttest", "status = 5   로케이션 마커 클릭 진행중")
                 }
                 6 -> {
                     // 디테일 프레그먼트 표시
@@ -184,6 +181,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //                    binding.mylocationBtn.visibility = View.GONE
 //                    binding.groupCategoryBtn.visibility = View.GONE
 //                    binding.resultLayout.visibility = View.GONE
+                }
+                7-> {
+                    // 로케이션 마커 클릭
+                    Log.d("ttest", "status = 7   로케이션 마커 클릭")
+                    binding.refreshBtn.visibility = View.GONE
+                    binding.bottomNav.visibility = View.GONE
+                    binding.mylocationBtn.visibility = View.GONE
                 }
 
             }
@@ -199,10 +203,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
 
 
-        val adapter = EvalinfoAdapter()
-        binding.resultRecyclerView.adapter = adapter
+
         mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
+            val adapter = EvalinfoAdapter()
+            binding.resultRecyclerView.adapter = adapter
             adapter.updateItems(it)
+
+            binding.resultLayout.startAnimation(fadeInAnim)
+            binding.resultLayout.visibility = View.VISIBLE
+            binding.progressBarCenter.visibility = View.GONE
+
+            mainViewModel.mainStatus.value = 7
         })
 
         mainViewModel.categoryLiveData.observe(this, Observer {
@@ -570,7 +581,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     private fun removeMarker() {
         Log.d("ttest", "removeMarker 실행")
-        if(mainViewModel.mainStatus.value == 5) {
+        if(mainViewModel.mainStatus.value == 7) {
             if(mapView.findPOIItemByTag(1) != null) {
                 val searchMarker = mapView.findPOIItemByTag(1)
                 mapView.deselectPOIItem(searchMarker)
@@ -578,7 +589,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
 
             binding.resultLayout.visibility = View.GONE
-            binding.clickMarkerView.visibility = View.GONE
+            binding.progressView.visibility = View.GONE
             mainViewModel.mainStatus.value = 1
         }
     }
@@ -642,14 +653,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 updateBottomMenu()
             }
             in "5" -> {
-                removeMarker()
+                super.onBackPressed()
+            }
+            in "6" -> {
+                super.onBackPressed()
+                mainViewModel.mainStatus.value = 7
             }
             in "7" -> {
-                super.onBackPressed()
+                removeMarker()
             }
             else -> {
                 super.onBackPressed()
-                mainViewModel.mainStatus.value = 5
             }
 
         }
@@ -703,12 +717,16 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 마커 클릭 이벤트 리스터
     override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
         // 마커 클릭시 발생
-        if (map != null && item != null && item.userObject != null) {
+        if (map != null && item != null && item.userObject != null && mainViewModel.mainStatus.value != 5) {
             mainViewModel.mainStatus.value = 5
-//            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
-//                map.currentLocationTrackingMode =
-//                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-//            }
+            binding.resultLayout.visibility = View.GONE
+            binding.progressBarCenter.visibility = View.VISIBLE
+            binding.progressView.visibility = View.VISIBLE
+
+            if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+                map.currentLocationTrackingMode =
+                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+            }
 
             map.setMapCenterPoint(
                 MapPoint.mapPointWithGeoCoord(
@@ -718,7 +736,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 true
             )
             selectedMarker = item
-//            item.tag = 1
             val itemData : ServList = item.userObject as ServList
 
 
@@ -726,10 +743,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultNmTv.text = item.itemName
             binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
             binding.resultLocationTv.text = itemData.lcMnad
-
-            binding.resultLayout.startAnimation(fadeInAnim)
-            binding.resultLayout.visibility = View.VISIBLE
-            binding.clickMarkerView.visibility = View.VISIBLE
 
 
             itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }
