@@ -63,7 +63,6 @@ class ListFragment : Fragment() {
 
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.adapter = adapter
-
         mainViewModel.locationFaclListLiveData.observe(this, Observer {
             adapter.updateItems(it)
         })
@@ -82,9 +81,6 @@ class ListFragment : Fragment() {
             }
 
         })
-
-
-
         return binding.root
 
 

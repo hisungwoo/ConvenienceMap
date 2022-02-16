@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var markedLng : Double = 1.00
 
 
-    private lateinit var selectedMarker : MapPOIItem
+    private lateinit var selectedMarker : ServList
 
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -185,11 +185,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 7-> {
                     // 로케이션 마커 클릭
                     Log.d("ttest", "status = 7   로케이션 마커 클릭")
-                    binding.refreshBtn.visibility = View.GONE
-                    binding.bottomNav.visibility = View.GONE
-                    binding.mylocationBtn.visibility = View.GONE
-                }
 
+                }
             }
         })
 
@@ -208,12 +205,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             val adapter = EvalinfoAdapter()
             binding.resultRecyclerView.adapter = adapter
             adapter.updateItems(it)
-
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
             binding.progressBarCenter.visibility = View.GONE
-
-            mainViewModel.mainStatus.value = 7
         })
 
         mainViewModel.categoryLiveData.observe(this, Observer {
@@ -290,9 +284,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         })
 
         mainViewModel.movePin.observe(this, Observer {
-            mainViewModel.mainStatus.value = 3
+            if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+                mapView.currentLocationTrackingMode =
+                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+            }
             mapView.removeAllPOIItems()
             binding.categoryLayout.visibility = View.GONE
+            binding.bottomNav.visibility = View.GONE
+            mainViewModel.mainStatus.value = 9
+
 
             val faclLng = it.faclLng!!
             val faclLat = it.faclLat!!
@@ -342,9 +342,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultNmTv.text = faclNm
             binding.resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeType(it1) }
             binding.resultLocationTv.text = lcMnad
+            selectedMarker = it
 
-            binding.resultLayout.startAnimation(fadeInAnim)
-            binding.resultLayout.visibility = View.VISIBLE
 
             mainViewModel.getEvalInfo(wfcltId, "1")
         })
@@ -441,7 +440,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.resultDetailBtn.setOnClickListener{
             mainViewModel.mainStatus.value = 6
             supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
-            val userObject = selectedMarker.userObject as ServList
+            val userObject = selectedMarker
             mainViewModel.detailLiveData.value = userObject
         }
     }
@@ -666,7 +665,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
             in "6" -> {
                 super.onBackPressed()
-                mainViewModel.mainStatus.value = 7
             }
             in "7" -> {
                 removeMarker()
@@ -674,8 +672,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             else -> {
                 super.onBackPressed()
             }
-
         }
+
+
+
+
+
 
 
 
@@ -744,8 +746,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 ),
                 true
             )
-            selectedMarker = item
             val itemData : ServList = item.userObject as ServList
+            selectedMarker = itemData
 
 
             binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
@@ -753,6 +755,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
             binding.resultLocationTv.text = itemData.lcMnad
 
+            mainViewModel.mainStatus.value = 7
+            binding.refreshBtn.visibility = View.GONE
+            binding.bottomNav.visibility = View.GONE
+            binding.mylocationBtn.visibility = View.GONE
+            mainViewModel.selectMarkerStatus = true
 
             itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }
 

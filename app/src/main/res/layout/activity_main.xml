@@ -57,8 +57,8 @@
         android:id="@+id/refresh_btn"
         android:textSize="12sp"
         android:layout_width="110dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="7dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="2dp"
         android:background="@drawable/button_refresh"
         android:text="⟳ 이 지역 재검색"
         android:textColor="#1750FB"
@@ -75,7 +75,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout
@@ -178,18 +185,6 @@
         />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fragment_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:visibility="visible" />
-
     <View
         android:id="@+id/progress_view"
         android:layout_width="wrap_content"
@@ -216,7 +211,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <TextView
             android:id="@+id/result_nm_tv"

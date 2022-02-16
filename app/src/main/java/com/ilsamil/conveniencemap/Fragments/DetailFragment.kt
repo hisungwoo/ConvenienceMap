@@ -27,6 +27,7 @@ class DetailFragment : Fragment() {
     private lateinit var evalLocation : String
     private lateinit var callback: OnBackPressedCallback
 
+
     companion object {
         fun newInstance() : DetailFragment {
             return DetailFragment()
@@ -37,10 +38,12 @@ class DetailFragment : Fragment() {
         super.onAttach(context)
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (mainViewModel.mainStatus.value == 7) {
+                if (mainViewModel.clickImgStatus) {
                     backClickImg()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
+                    Log.d("ttest", "selectMarkerStatus = " + mainViewModel.selectMarkerStatus)
+                    if(mainViewModel.selectMarkerStatus) mainViewModel.mainStatus.value = 7
                 }
             }
         }
@@ -82,7 +85,7 @@ class DetailFragment : Fragment() {
 
             binding.detailImg.setOnClickListener {
                 if(mainViewModel.mainStatus.value == 6) {
-                    mainViewModel.mainStatus.value = 7
+                    mainViewModel.clickImgStatus = true
                     val constIn = binding.detailConstraintIn as ViewGroup
                     constIn.removeView(binding.detailImg)
 
@@ -288,7 +291,7 @@ class DetailFragment : Fragment() {
         )
         sda.layoutParams = clickImgLayout
         binding.detailConstraintIn.addView(sda)
-        mainViewModel.mainStatus.value = 6
+        mainViewModel.clickImgStatus = false
     }
 
     private fun kakaoGetRoad(context : Context) {

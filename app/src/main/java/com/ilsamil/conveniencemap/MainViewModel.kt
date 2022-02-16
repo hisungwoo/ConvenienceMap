@@ -42,6 +42,9 @@ class MainViewModel : ViewModel() {
 
     val detailLiveData = MutableLiveData<ServList>()
 
+    var clickImgStatus = false
+    var selectMarkerStatus = false
+
 
     init {
         val faclInstance = Retrofit.Builder()
