@@ -43,12 +43,16 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
 
     override fun onBindViewHolder(holder: ListFacInfoAdapter.ListViewHolder, position: Int) {
         val serv : ServList = eItems[position]
-        holder.listFaclnmTextView.text= serv.faclNm
-        holder.listLcmnadTextView.text= serv.lcMnad
+        if (serv.faclTyCd == "UC0U04") {
 
-        val faclTyCdChange = serv.faclTyCd?.let { Util().changeType(it) }
-        holder.listFacltycdTextView.text= faclTyCdChange
-        holder.bind(eItems[position])
+        } else {
+            holder.listFaclnmTextView.text= serv.faclNm
+            holder.listLcmnadTextView.text= serv.lcMnad
+
+            val faclTyCdChange = serv.faclTyCd?.let { Util().changeType(it) }
+            holder.listFacltycdTextView.text= faclTyCdChange
+            holder.bind(eItems[position])
+        }
     }
 
     override fun getItemCount(): Int = eItems.size

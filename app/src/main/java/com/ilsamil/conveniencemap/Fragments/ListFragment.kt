@@ -17,11 +17,13 @@ import com.ilsamil.conveniencemap.adapters.ListFacInfoAdapter
 import com.ilsamil.conveniencemap.databinding.FragmentListBinding
 import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 import com.ilsamil.conveniencemap.model.ServList
+import net.daum.mf.map.api.MapPOIItem
 
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentListBinding
     private lateinit var cggNm: String
+
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
@@ -59,13 +61,43 @@ class ListFragment : Fragment() {
             ""
         }
 
-        binding.locationTv.text = cggNm
+//        val ttest = bundle?.getSerializable("publicList") as List<ServList>
+//        Log.d("ttest", "!!!!!!!! = " + ttest[0].faclNm)
+
+        val shopServList = bundle?.getSerializable("shopServList") as List<ServList>
+        val livingServList = bundle?.getSerializable("livingServList") as List<ServList>
+        val educationServList = bundle?.getSerializable("educationServList") as List<ServList>
+        val hospitalServList = bundle?.getSerializable("hospitalServList") as List<ServList>
+        val publicServList = bundle?.getSerializable("publicServList") as List<ServList>
 
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.adapter = adapter
-        mainViewModel.locationFaclListLiveData.observe(this, Observer {
-            adapter.updateItems(it)
-        })
+        adapter.updateItems(shopServList)
+        adapter.updateItems(livingServList)
+        adapter.updateItems(educationServList)
+        adapter.updateItems(hospitalServList)
+        adapter.updateItems(publicServList)
+
+
+
+        var listCnt = shopServList.size + livingServList.size + educationServList.size + hospitalServList.size + publicServList.size
+        binding.locationTv.text = cggNm
+        binding.listCount.text = listCnt.toString()
+
+
+
+
+
+
+
+
+
+
+//        val adapter = ListFacInfoAdapter()
+//        binding.listRecyclerview.adapter = adapter
+//        mainViewModel.locationFaclListLiveData.observe(this, Observer {
+//            adapter.updateItems(it)
+//        })
 
         mainViewModel.getLocationListFacl(cggNm)
 

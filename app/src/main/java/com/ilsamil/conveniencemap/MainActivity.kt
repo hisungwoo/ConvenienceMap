@@ -51,6 +51,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
+    private var shopServList = arrayListOf<ServList>()
+    private var livingServList = arrayListOf<ServList>()
+    private var educationServList = arrayListOf<ServList>()
+    private var hospitalServList = arrayListOf<ServList>()
+    private var publicServList = arrayListOf<ServList>()
+
     private var fLatitude = 1.00
     private var fLongitude = 1.00
     private var mCurrentLat : Double = 1.00
@@ -208,6 +214,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.resultLayout.startAnimation(fadeInAnim)
             binding.resultLayout.visibility = View.VISIBLE
             binding.progressBarCenter.visibility = View.GONE
+            binding.progressView.visibility = View.GONE
         })
 
         mainViewModel.categoryLiveData.observe(this, Observer {
@@ -289,6 +296,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
             }
             mapView.removeAllPOIItems()
+            binding.progressBarCenter.visibility = View.VISIBLE
+            binding.progressView.visibility = View.VISIBLE
             binding.categoryLayout.visibility = View.GONE
             binding.bottomNav.visibility = View.GONE
             mainViewModel.mainStatus.value = 9
@@ -367,24 +376,28 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             marker.customImageResourceId = R.drawable.category_shop_img
                             marker.customSelectedImageResourceId = R.drawable.category_click_shop
                             shopList.add(marker)
+                            shopServList.add(data)
                             mapView.addPOIItem(marker)
                         }
                         "생활시설" -> {
                             marker.customImageResourceId = R.drawable.category_living_img
                             marker.customSelectedImageResourceId = R.drawable.category_click_living
                             livingList.add(marker)
+                            livingServList.add(data)
                             mapView.addPOIItem(marker)
                         }
                         "교육시설" -> {
                             marker.customImageResourceId = R.drawable.category_education_img
                             marker.customSelectedImageResourceId = R.drawable.category_click_education
                             educationList.add(marker)
+                            educationServList.add(data)
                             mapView.addPOIItem(marker)
                         }
                         "기타" -> {
                             marker.customImageResourceId = R.drawable.category_public_img
                             marker.customSelectedImageResourceId = R.drawable.category_click_public
                             publicList.add(marker)
+                            publicServList.add(data)
                             mapView.addPOIItem(marker)
                         }
                     }
@@ -526,6 +539,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         Log.d("ttest", "리스트 프래그먼트 이동 위치 : $cggNm")
                         val bundle = Bundle()
                         bundle.putString("cggNm", cggNm)
+                        bundle.putSerializable("shopServList", shopServList)
+                        bundle.putSerializable("livingServList", livingServList)
+                        bundle.putSerializable("educationServList", educationServList)
+                        bundle.putSerializable("hospitalServList", hospitalServList)
+                        bundle.putSerializable("publicServList", publicServList)
+
 
                         listFragment.arguments = bundle
                         supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -673,14 +692,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 super.onBackPressed()
             }
         }
-
-
-
-
-
-
-
-
     }
 
     override fun onMapViewInitialized(p0: MapView?) {
