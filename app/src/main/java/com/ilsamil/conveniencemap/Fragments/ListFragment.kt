@@ -90,9 +90,6 @@ class ListFragment : Fragment() {
 
 
 
-
-
-
 //        val adapter = ListFacInfoAdapter()
 //        binding.listRecyclerview.adapter = adapter
 //        mainViewModel.locationFaclListLiveData.observe(this, Observer {

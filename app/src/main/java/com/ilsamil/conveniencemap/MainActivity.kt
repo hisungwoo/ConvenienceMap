@@ -358,6 +358,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         })
 
         mainViewModel.locationFaclLiveData.observe(this, Observer {
+            removeCategoryData()
             for(data in it) {
                 if (data.faclLat != null && data.faclLng != null) {
                     val marker = MapPOIItem()
@@ -665,6 +666,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         return ""
     }
 
+    private fun removeCategoryData() {
+        shopList.clear()
+        livingList.clear()
+        educationList.clear()
+        publicList.clear()
+        shopServList.clear()
+        livingServList.clear()
+        educationServList.clear()
+        publicServList.clear()
+    }
+
 
     override fun onBackPressed() {
         when(mainViewModel.mainStatus.value.toString()) {
@@ -739,7 +751,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 마커 클릭 이벤트 리스터
     override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
         // 마커 클릭시 발생
-        if (map != null && item != null && item.userObject != null && mainViewModel.mainStatus.value != 5) {
+        if (map != null && item != null && item.userObject != null
+            && mainViewModel.mainStatus.value != 5 && mainViewModel.mainStatus.value != 9) {
             mainViewModel.mainStatus.value = 5
             binding.resultLayout.visibility = View.GONE
             binding.progressBarCenter.visibility = View.VISIBLE
