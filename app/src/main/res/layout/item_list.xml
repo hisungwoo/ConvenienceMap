@@ -5,18 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/list_item_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_location_on_24"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/list_faclnm_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:textColor="#373737"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_item_img"
+        app:layout_constraintTop_toTopOf="@+id/list_item_img"
         app:layout_constraintBottom_toTopOf="@+id/list_lcmnad_tv"
         tools:text="인크커피" />
 
@@ -29,6 +38,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintTop_toBottomOf="@+id/list_faclnm_tv"
         app:layout_constraintStart_toStartOf="@+id/list_faclnm_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/list_item_img"
         tools:text="서울 금천구 가산디지털2로 127-20 (가산동)" />
 
     <TextView

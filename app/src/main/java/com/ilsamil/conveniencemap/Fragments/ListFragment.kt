@@ -61,33 +61,22 @@ class ListFragment : Fragment() {
             ""
         }
 
-//        val ttest = bundle?.getSerializable("publicList") as List<ServList>
-//        Log.d("ttest", "!!!!!!!! = " + ttest[0].faclNm)
-
         val shopServList = bundle?.getSerializable("shopServList") as List<ServList>
         val livingServList = bundle?.getSerializable("livingServList") as List<ServList>
         val educationServList = bundle?.getSerializable("educationServList") as List<ServList>
         val hospitalServList = bundle?.getSerializable("hospitalServList") as List<ServList>
         val publicServList = bundle?.getSerializable("publicServList") as List<ServList>
 
+        val mapServList = bundle?.getSerializable("mapServList") as List<ServList>
+
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.adapter = adapter
-        adapter.updateItems(shopServList)
-        adapter.updateItems(livingServList)
-        adapter.updateItems(educationServList)
-        adapter.updateItems(hospitalServList)
-        adapter.updateItems(publicServList)
+        adapter.updateItems(mapServList)
 
 
-
-        var listCnt = shopServList.size + livingServList.size + educationServList.size + hospitalServList.size + publicServList.size
+        var listCnt = mapServList.size
         binding.locationTv.text = cggNm
         binding.listCount.text = listCnt.toString()
-
-
-
-
-
 
 
 //        val adapter = ListFacInfoAdapter()
