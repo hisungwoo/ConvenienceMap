@@ -65,6 +65,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintStart_toStartOf="@id/bottom_nav"
         app:layout_constraintEnd_toEndOf="@id/bottom_nav"
+        android:visibility="invisible"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -170,7 +171,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nev_menu"
-        tools:visibility="visible" />
+        android:visibility="invisible"/>
 
     <ImageButton
         android:id="@+id/mylocation_btn"

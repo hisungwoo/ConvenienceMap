@@ -74,9 +74,9 @@ class ListFragment : Fragment() {
         adapter.updateItems(mapServList)
 
 
-        var listCnt = mapServList.size
+        val listCnt = mapServList.size
         binding.locationTv.text = cggNm
-        binding.listCount.text = listCnt.toString()
+        binding.listCount.text = "총 " + listCnt.toString() + "건"
 
 
 //        val adapter = ListFacInfoAdapter()

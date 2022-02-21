@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var publicServList = arrayListOf<ServList>()
 
     private var mapServList = arrayListOf<ServList>()
+    private var mapCggNm = "지역"
 
 
     private var fLatitude = 1.00
@@ -413,6 +414,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     binding.progressBarCenter.visibility = View.GONE
                     binding.progressView.visibility = View.GONE
 
+                    binding.bottomNav.startAnimation(fadeInAnim)
+                    binding.bottomNav.visibility = View.VISIBLE
+                    binding.refreshBtn.visibility = View.VISIBLE
+
                 }
             }
         })
@@ -488,10 +493,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 } else {
                     gList[0].locality
                 }
+
+                mapCggNm = cggNm
                 val roadNm = ""
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
-//                mainViewModel.getLocationFacl(cggNm, roadNm, "")
                 getMapFacInfo(cggNm, roadNm)
                 mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
 
@@ -536,18 +542,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.menu_category -> {
-                    val geocoder = Geocoder(this)
-                    try {
-                        val gList = geocoder.getFromLocation(markedLat, markedLng, 5)
-                        val cggNm = if (gList[0].subLocality != null) {
-                            gList[0].subLocality
-                        } else {
-                            gList[0].locality
-                        }
-
-                        Log.d("ttest", "리스트 프래그먼트 이동 위치 : $cggNm")
+                    if(mapServList.isNotEmpty()) {
                         val bundle = Bundle()
-                        bundle.putString("cggNm", cggNm)
+                        bundle.putString("cggNm", mapCggNm)
                         bundle.putSerializable("shopServList", shopServList)
                         bundle.putSerializable("livingServList", livingServList)
                         bundle.putSerializable("educationServList", educationServList)
@@ -556,14 +553,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
                         bundle.putSerializable("mapServList", mapServList)
 
-
                         listFragment.arguments = bundle
                         supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, listFragment, "category").addToBackStack("category").commit()
-
-
-                    } catch (e : IOException) {
-                        Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
                     }
 
                 }
