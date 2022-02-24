@@ -554,8 +554,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         bundle.putSerializable("mapServList", mapServList)
 
                         listFragment.arguments = bundle
-                        supportFragmentManager.popBackStackImmediate("category", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, listFragment, "category").addToBackStack("category").commit()
+                        supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                        supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, listFragment, "list").addToBackStack("list").commit()
                     }
 
                 }
@@ -576,7 +576,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
         Log.d("ttest", "updateBottomMenu 실행")
-        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
+        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
 
@@ -622,7 +622,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     private fun bottomClickMap() {
         mainViewModel.mainStatus.value = 1
-        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("category")
+        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
         if(tag1 != null) {

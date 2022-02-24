@@ -87,6 +87,12 @@ class ListFragment : Fragment() {
 
         mainViewModel.getLocationListFacl(cggNm)
 
+        binding.listBackImg.setOnClickListener {
+            val listFragment = activity?.supportFragmentManager?.findFragmentByTag("category")
+            if (listFragment != null) {
+                activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
+            }
+        }
 
         adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ServList, pos : Int) {
@@ -99,13 +105,37 @@ class ListFragment : Fragment() {
             }
 
         })
+
+        binding.listShopBtn.setOnClickListener {
+            val adapter = ListFacInfoAdapter()
+            binding.listRecyclerview.adapter = adapter
+            adapter.updateItems(shopServList)
+        }
+
+        binding.listLivingBtn.setOnClickListener {
+            val adapter = ListFacInfoAdapter()
+            binding.listRecyclerview.adapter = adapter
+            adapter.updateItems(livingServList)
+        }
+
+        binding.listEducationBtn.setOnClickListener {
+            val adapter = ListFacInfoAdapter()
+            binding.listRecyclerview.adapter = adapter
+            adapter.updateItems(educationServList)
+        }
+
+        binding.listPublicBtn.setOnClickListener {
+            val adapter = ListFacInfoAdapter()
+            binding.listRecyclerview.adapter = adapter
+            adapter.updateItems(publicServList)
+        }
+
+
+
+
+
         return binding.root
-
-
     }
-
-
-
 
 
 }
