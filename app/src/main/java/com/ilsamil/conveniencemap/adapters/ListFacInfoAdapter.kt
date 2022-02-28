@@ -55,9 +55,7 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
             val util = Util()
 
             serv.faclTyCd.let {
-                Log.d("ttest", "it = " + it.toString())
                 holder.listFacltycdTextView.text = util.changeType(it)
-
                 when(util.chaneFaclCategory(it.toString())) {
                     "음식 및 상점" -> holder.listItemImg.setImageResource(R.drawable.category_button_shop_img)
                     "생활시설" -> holder.listItemImg.setImageResource(R.drawable.category_button_living_img)
@@ -65,7 +63,6 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
                     "기타" -> holder.listItemImg.setImageResource(R.drawable.category_button_public_img)
                 }
             }
-
             holder.bind(eItems[position])
         }
     }

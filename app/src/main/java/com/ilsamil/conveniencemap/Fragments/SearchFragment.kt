@@ -45,7 +45,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mainViewModel.mainStatus.value = 2
-        mainViewModel.bottomNavLiveData.value = false
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(container?.context,
             RecyclerView.VERTICAL,
