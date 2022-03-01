@@ -36,17 +36,6 @@ class MainActivity : AppCompatActivity() {
     private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
     private val listFragment: ListFragment by lazy { ListFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
-    private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
-    private val detailFragment: DetailFragment by lazy { DetailFragment.newInstance() }
-
-    private lateinit var fadeInAnim : Animation
-    private lateinit var fadeOutAnim : Animation
-
-    private var shopList = arrayListOf<MapPOIItem>()
-    private var livingList = arrayListOf<MapPOIItem>()
-    private var educationList = arrayListOf<MapPOIItem>()
-    private var hospitalList = arrayListOf<MapPOIItem>()
-    private var publicList = arrayListOf<MapPOIItem>()
 
     private var shopServList = arrayListOf<ServList>()
     private var livingServList = arrayListOf<ServList>()
@@ -60,8 +49,6 @@ class MainActivity : AppCompatActivity() {
 
     private var fLatitude = 1.00
     private var fLongitude = 1.00
-    private var mCurrentLat : Double = 1.00
-    private var mCurrentLng : Double = 1.00
     private var markedLat : Double = 1.00
     private var markedLng : Double = 1.00
 
@@ -82,26 +69,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        if (!(MapView.isMapTilePersistentCacheEnabled())) {
-//            MapView.setMapTilePersistentCacheEnabled(true)
-//        }
-
-//        mapView = MapView(this)
-//        mapView.isHDMapTileEnabled
-//        mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.current_location_marker, MapPOIItem.ImageOffset(30,30))
-//        mapView.setCurrentLocationRadiusStrokeColor(android.graphics.Color.argb(1, 1, 1, 1))
-//        mapView.setCurrentLocationRadiusFillColor(android.graphics.Color.argb(1, 1, 1, 1))
-//        binding.clKakaoMapView.addView(mapView)
-//        fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
-//        fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
-//        mapView.setPOIItemEventListener(this)
-//        mapView.setMapViewEventListener(this)
-//        mapView.setCurrentLocationEventListener(this)
-
-
-
         replaceFragment(binding)
-        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, mapFragment, "").commit()
+
+//        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
 
 

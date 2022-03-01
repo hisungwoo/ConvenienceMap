@@ -44,6 +44,11 @@ class MainViewModel : ViewModel() {
     var clickImgStatus = false
     var selectMarkerStatus = false
 
+    var mapCggNm = "지역"
+    var mCurrentLat = 0.1
+    var mCurrentLng = 0.1
+
+
 
     init {
         val faclInstance = Retrofit.Builder()

@@ -60,21 +60,13 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
     private var shopServList = arrayListOf<ServList>()
     private var livingServList = arrayListOf<ServList>()
     private var educationServList = arrayListOf<ServList>()
-    private var hospitalServList = arrayListOf<ServList>()
     private var publicServList = arrayListOf<ServList>()
 
     private var mapServList = arrayListOf<ServList>()
-    private var mapCggNm = "지역"
-
     private var resultVisible = false
-
 
     private var fLatitude = 1.00
     private var fLongitude = 1.00
-    private var mCurrentLat : Double = 1.00
-    private var mCurrentLng : Double = 1.00
-    private var markedLat : Double = 1.00
-    private var markedLng : Double = 1.00
 
     private lateinit var selectedMarker : ServList
 
@@ -120,10 +112,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         binding = FragmentMapBinding.inflate(inflater, container, false)
         mapView = MapView(context)
 
-        val bundle = arguments
-        cggNm = bundle?.getString("cggNm")?.toString() ?: ""
-        fLatitude = bundle?.getDouble("fLatitude")!!
-        fLongitude = bundle?.getDouble("fLongitude")!!
+        if (!(MapView.isMapTilePersistentCacheEnabled())) {
+            MapView.setMapTilePersistentCacheEnabled(true)
+        }
 
         mapView.isHDMapTileEnabled
         mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.current_location_marker, MapPOIItem.ImageOffset(30,30))
@@ -154,14 +145,14 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             categoryClick(5)
         }
 
-//        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
-        Log.d("ttest", "cggNm 번들 = $cggNm")
-        Log.d("ttest", "fLongitude 번들 = $fLongitude")
-        Log.d("ttest", "fLongitude 번들 = $fLongitude")
-        getMapFacInfo("구로구", "")
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
-        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+//        Log.d("ttest", "cggNm 번들 = $cggNm")
+//        Log.d("ttest", "fLongitude 번들 = $fLongitude")
+//        Log.d("ttest", "fLongitude 번들 = $fLongitude")
+//        getMapFacInfo("구로구", "")
+//        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
+//        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
 
 
 
@@ -467,8 +458,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         })
 
         binding.mylocationBtn.setOnClickListener {
-            if(mCurrentLat != 1.00) {
-                val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
+            if(mainViewModel.mCurrentLat != 1.00) {
+                val currentMapPoint = MapPoint.mapPointWithGeoCoord(mainViewModel.mCurrentLat, mainViewModel.mCurrentLng)
                 mapView.setMapCenterPoint(currentMapPoint, true)
             } else {
                 val currentMapPoint = MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude)
@@ -482,8 +473,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             binding.progressView.visibility = View.VISIBLE
 
             val refreshLocation = mapView.mapCenterPoint
-            markedLat = refreshLocation.mapPointGeoCoord.latitude
-            markedLng = refreshLocation.mapPointGeoCoord.longitude
+            val markedLat = refreshLocation.mapPointGeoCoord.latitude
+            val markedLng = refreshLocation.mapPointGeoCoord.longitude
             val geocoder = Geocoder(context)
 
             try {
@@ -582,8 +573,6 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         if(location != null) {
             fLatitude = location.latitude
             fLongitude = location.longitude
-            markedLat = fLatitude
-            markedLng = fLongitude
             Log.d("ttest", "latitude : " + fLatitude)
             Log.d("ttest", "longitude : " + fLongitude)
 
@@ -596,7 +585,8 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
                     gList[0].locality
                 }
 
-                mapCggNm = cggNm
+                mainViewModel.mapCggNm = cggNm
+
                 val roadNm = ""
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
@@ -670,14 +660,11 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
             in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
                 return "교육시설"
             }
-            //병원
-            in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
-                return "기타"
-            }
             // 공공기관 및 기타
             in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
             "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06", "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03",
-            "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02", "UC0U01", "UC0U03", "UC0L01" -> {
+            "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02", "UC0U01", "UC0U03", "UC0L01",
+            "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
                 return "기타"
             }
         }
@@ -813,9 +800,9 @@ class MapFragment : Fragment(), MapView.MapViewEventListener, MapView.POIItemEve
         //이 좌표로 지도 중심 이동
 //        mapViewP?.setMapCenterPoint(currentMapPoint, true)
 
-        //전역변수로 현재 좌표 저장
-        mCurrentLat = mapPointGeo.latitude
-        mCurrentLng = mapPointGeo.longitude
+        //현재 좌표 저장
+        mainViewModel.mCurrentLat = mapPointGeo.latitude
+        mainViewModel.mCurrentLng = mapPointGeo.longitude
     }
 
     override fun onCurrentLocationDeviceHeadingUpdate(p0: MapView?, p1: Float) {
