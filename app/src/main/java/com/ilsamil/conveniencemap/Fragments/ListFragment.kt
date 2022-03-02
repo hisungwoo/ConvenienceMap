@@ -85,24 +85,21 @@ class ListFragment : Fragment() {
 //            adapter.updateItems(it)
 //        })
 
-
-
-
+        mainViewModel.getLocationListFacl(cggNm)
 
         binding.listBackImg.setOnClickListener {
-            val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
+            val listFragment = activity?.supportFragmentManager?.findFragmentByTag("category")
             if (listFragment != null) {
                 activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
-                mainViewModel.mainStatus.value = 1
             }
         }
 
         adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ServList, pos : Int) {
                 mainViewModel.movePin.value = data
-                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
-                if (listFragment != null) {
-                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
+                val categoryFragment2 = activity?.supportFragmentManager?.findFragmentByTag("category")
+                if (categoryFragment2 != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(categoryFragment2)?.addToBackStack(null)?.commit()
                 }
 
             }

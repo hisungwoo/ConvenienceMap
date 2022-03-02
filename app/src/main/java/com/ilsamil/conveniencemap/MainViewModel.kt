@@ -35,6 +35,7 @@ class MainViewModel : ViewModel() {
     val evalInfoDetailLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
     val locationFaclListLiveData = MutableLiveData<List<ServList>>()
+    val bottomNavLiveData = MutableLiveData<Boolean>()
     val mainStatus = MutableLiveData<Int>()
 
     val movePin = MutableLiveData<ServList>()
@@ -43,11 +44,6 @@ class MainViewModel : ViewModel() {
 
     var clickImgStatus = false
     var selectMarkerStatus = false
-
-    var mapCggNm = "지역"
-    var mCurrentLat = 0.1
-    var mCurrentLng = 0.1
-
 
 
     init {
@@ -178,5 +174,27 @@ class MainViewModel : ViewModel() {
         })
     }
 
+    // 리스트 프레그먼트 - 지도에 정보표시
+    fun getLocationListFacl(cggNm : String) {
+        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
+        facinfoCall.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    locationFaclListLiveData.postValue(items)
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "onFailure = " + t)
+                t.printStackTrace()
+            }
+
+        })
+    }
 
 }
