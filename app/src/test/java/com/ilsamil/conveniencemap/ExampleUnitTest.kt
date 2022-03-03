@@ -1,12 +1,17 @@
 package com.ilsamil.conveniencemap
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.repository.RetrofitService
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import kotlinx.coroutines.launch
 import org.junit.Test
 
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
@@ -18,18 +23,23 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        var instance: Retrofit? = null
-        instance = Retrofit.Builder()
-            .baseUrl("http://apis.data.go.kr/B554287/DisabledPersonConvenientFacility/")
+        val locationFaclService : RetrofitService
+        val locationFaclInstance = Retrofit.Builder()
+            .baseUrl(RetrofitService.FACL_BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
             .build()
+        locationFaclService = locationFaclInstance.create(RetrofitService::class.java)
+        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList("구로구", "", "1000")
+        System.out.println("시작")
 
-        val aapi = instance.create(RetrofitService::class.java)
-        val ttest : Call<FacInfoList> =aapi.getFaclList(1000, "")
-        var st = ttest.execute().body()?.servList?.get(0)?.faclNm
 
-        System.out.println("st = " + st)
+        val dd = facinfoCall.execute().body()?.servList?.get(0)?.faclNm
+        System.out.println("dd = " + dd)
+
+
+
+
 
     }
 

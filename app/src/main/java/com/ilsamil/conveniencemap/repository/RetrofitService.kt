@@ -1,6 +1,7 @@
 package com.ilsamil.conveniencemap.repository
 
 import com.ilsamil.conveniencemap.model.FacInfoList
+import com.ilsamil.conveniencemap.model.OpenAPIServiceResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -28,7 +29,13 @@ interface RetrofitService {
                             @Query("numOfRows") numOfRows : String)
     : Call<FacInfoList>
 
+    @GET("getDisConvFaclList?serviceKey=E6PZth5Xxp14kb9K%2BcdqMVPdltgGfmjR5OY8gEi1ARAV7mibmfWj7lq54rPJx0wiWoNJ0jZHAyMMsto875iTPw%3D%3D")
+    suspend fun getLocationFaclList2(@Query("cggNm") cggNm : String,
+                            @Query("numOfRows") numOfRows : String)
+    : OpenAPIServiceResponse
 
-
+    @GET("getFacInfoOpenApiJpEvalInfoList?serviceKey=E6PZth5Xxp14kb9K%2BcdqMVPdltgGfmjR5OY8gEi1ARAV7mibmfWj7lq54rPJx0wiWoNJ0jZHAyMMsto875iTPw%3D%3D")
+    suspend fun getEvalInfoList2(@Query("wfcltId") wfcltId : String)
+    : FacInfoList
 
 }

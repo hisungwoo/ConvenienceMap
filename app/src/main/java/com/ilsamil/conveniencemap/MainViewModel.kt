@@ -9,12 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ilsamil.conveniencemap.model.EvalInfoList
 import com.ilsamil.conveniencemap.model.FacInfoList
 import com.ilsamil.conveniencemap.model.ServList
 import com.ilsamil.conveniencemap.repository.RetrofitService
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import retrofit2.Call
 import retrofit2.Callback
@@ -153,25 +155,42 @@ class MainViewModel : ViewModel() {
 
     // 지도에 정보표시
     fun getLocationFacl(cggNm : String, roadNm : String) {
-        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
-        facinfoCall.enqueue(object : Callback<FacInfoList> {
-            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-                if(response.isSuccessful()) {
-                    val items = response.body()?.servList!!
-                    locationFaclLiveData.postValue(items)
+//        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
+//        facinfoCall.enqueue(object : Callback<FacInfoList> {
+//            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+//                if(response.isSuccessful()) {
+//                    val items = response.body()?.servList!!
+//                    locationFaclLiveData.postValue(items)
+//
+//                } else { // code == 400
+//                    // 실패 처리
+//                    Log.d("tttest" , "dd = 실패")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+//                Log.d("tttest" , "onFailure = " + t)
+//                t.printStackTrace()
+//            }
+//
+//        })
 
-                } else { // code == 400
-                    // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
-                }
-            }
+        viewModelScope.launch {
+            val facinfoCall = locationFaclService.getLocationFaclList2("구로구", "1000")
+            val dd1 = facinfoCall.cmmMsgHeader
+            val dd2 = dd1?.errMsg
+            val dd3 = dd1?.returnAuthMsg
+            val dd4 = dd1?.returnReasonCode
 
-            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "onFailure = " + t)
-                t.printStackTrace()
-            }
+            Log.d("ttest","errMsg " + dd2)
+            Log.d("ttest","returnAuthMsg " + dd3)
+            Log.d("ttest","returnReasonCode " + dd4)
 
-        })
+        }
+
+
+
+
     }
 
     // 리스트 프레그먼트 - 지도에 정보표시

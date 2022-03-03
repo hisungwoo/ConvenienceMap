@@ -9,11 +9,11 @@ data class FacInfoList(
     @PropertyElement
     val totalCount: Int,
     @Element
-    val servList: List<ServList>,
+    val servList: List<ServList>?,
     @PropertyElement
     val resultCode: Int,
     @PropertyElement
-    val resultMessage: String,
+    val resultMessage: String?,
 )
 
 @Xml(name="servList")
@@ -51,6 +51,22 @@ data class ServList(
 )
 
 
-class EvalInfoList(
+data class EvalInfoList(
     val evalInfo: String?,
+)
+
+@Xml(name="OpenAPI_ServiceResponse")
+data class OpenAPIServiceResponse(
+    @Element
+    val cmmMsgHeader: CmmMsgHeader?,
+)
+
+@Xml(name="cmmMsgHeader")
+data class CmmMsgHeader(
+    @PropertyElement
+    val errMsg: String?,
+    @PropertyElement
+    val returnAuthMsg: String?,
+    @PropertyElement
+    val returnReasonCode: String?,
 )

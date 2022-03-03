@@ -364,6 +364,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         mainViewModel.locationFaclLiveData.observe(this, Observer {
             removeCategoryData()
+
             for(data in it) {
                 if (data.faclLat != null && data.faclLng != null) {
                     val marker = MapPOIItem()
@@ -555,7 +556,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
                         listFragment.arguments = bundle
                         supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, listFragment, "list").addToBackStack("list").commit()
+                        supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "list").addToBackStack("list").commit()
                     }
 
                 }
