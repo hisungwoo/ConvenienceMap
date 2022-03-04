@@ -177,14 +177,20 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             val facinfoCall = locationFaclService.getLocationFaclList2("구로구", "1000")
-            val dd1 = facinfoCall.cmmMsgHeader
-            val dd2 = dd1?.errMsg
-            val dd3 = dd1?.returnAuthMsg
-            val dd4 = dd1?.returnReasonCode
+            val dd1 = facinfoCall.resultMessage
+            val dd2 = facinfoCall.totalCount
+            Log.d("ttest","resultMessage " + dd1)
+            Log.d("ttest","totalCount " + dd2)
 
-            Log.d("ttest","errMsg " + dd2)
-            Log.d("ttest","returnAuthMsg " + dd3)
-            Log.d("ttest","returnReasonCode " + dd4)
+
+//            val dd1 = facinfoCall.cmmMsgHeader
+//            val dd2 = dd1?.errMsg
+//            val dd3 = dd1?.returnAuthMsg
+//            val dd4 = dd1?.returnReasonCode
+
+//            Log.d("ttest","errMsg " + dd2)
+//            Log.d("ttest","returnAuthMsg " + dd3)
+//            Log.d("ttest","returnReasonCode " + dd4)
 
         }
 

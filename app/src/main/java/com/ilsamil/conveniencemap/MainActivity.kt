@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
 
-    private val mapFragment: MapFragment by lazy { MapFragment.newInstance() }
     private val listFragment: ListFragment by lazy { ListFragment.newInstance() }
     private val infoFragment: InfoFragment by lazy { InfoFragment.newInstance() }
     private val searchFragment: SearchFragment by lazy { SearchFragment.newInstance() }
@@ -102,54 +101,52 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         mapView.setCurrentLocationEventListener(this)
 
 
-        //카테고리 클릭
-        binding.shopCategoryBtn.setOnClickListener {
-            categoryClick(1)
-        }
-
-        binding.livingCategoryBtn.setOnClickListener{
-            categoryClick(2)
-        }
-
-        binding.educationCategoryBtn.setOnClickListener {
-            categoryClick(3)
-        }
-
-        binding.publicCategoryBtn.setOnClickListener {
-            categoryClick(5)
+        binding.apply {
+            //카테고리 클릭
+            shopCategoryBtn.setOnClickListener {
+                categoryClick(1)
+            }
+            livingCategoryBtn.setOnClickListener{
+                categoryClick(2)
+            }
+            educationCategoryBtn.setOnClickListener {
+                categoryClick(3)
+            }
+            publicCategoryBtn.setOnClickListener {
+                categoryClick(5)
+            }
         }
 
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
+        mainViewModel.apply {
+            mainStatus.observe(this@MainActivity, Observer {
+                when(it) {
+                    1 -> {
+                        // 기본 메인 상태
+                        Log.d("ttest", "status = 1   기본 메인 상태")
+                        binding.bottomNav.visibility = View.VISIBLE
+                        binding.searchBtn.visibility = View.VISIBLE
+                        binding.refreshBtn.visibility = View.VISIBLE
+                        binding.mylocationBtn.visibility = View.VISIBLE
+                        binding.categoryLayout.visibility = View.VISIBLE
+                        binding.appTitleTv.visibility = View.VISIBLE
+                        binding.topLayout.visibility = View.VISIBLE
+                        binding.resultLayout.visibility = View.GONE
 
-
-        mainViewModel.mainStatus.observe(this, Observer {
-            when(it) {
-                1 -> {
-                    // 기본 메인 상태
-                    Log.d("ttest", "status = 1   기본 메인 상태")
-                    binding.bottomNav.visibility = View.VISIBLE
-                    binding.searchBtn.visibility = View.VISIBLE
-                    binding.refreshBtn.visibility = View.VISIBLE
-                    binding.mylocationBtn.visibility = View.VISIBLE
-                    binding.categoryLayout.visibility = View.VISIBLE
-                    binding.appTitleTv.visibility = View.VISIBLE
-                    binding.topLayout.visibility = View.VISIBLE
-                    binding.resultLayout.visibility = View.GONE
-
-                    // 검색결과 마커 제거
-                    if (mapView.findPOIItemByName("searchItem") != null) {
-                        val searchMarker = mapView.findPOIItemByName("searchItem")[0]
-                        mapView.removePOIItem(searchMarker)
-                    }
+                        // 검색결과 마커 제거
+                        if (mapView.findPOIItemByName("searchItem") != null) {
+                            val searchMarker = mapView.findPOIItemByName("searchItem")[0]
+                            mapView.removePOIItem(searchMarker)
+                        }
 
 //                    binding.groupCategoryBtn.visibility = View.VISIBLE
-                }
-                2 -> {
-                    // 주소검색 버튼 클릭
-                    // 바템네비, 검색, 재검색 제거
-                    Log.d("ttest", "status = 2   주소검색 버튼 클릭")
+                    }
+                    2 -> {
+                        // 주소검색 버튼 클릭
+                        // 바템네비, 검색, 재검색 제거
+                        Log.d("ttest", "status = 2   주소검색 버튼 클릭")
 //                    binding.bottomNav.visibility = View.GONE
 //                    binding.categoryLayout.visibility = View.GONE
 //                    binding.searchBtn.visibility = View.GONE
@@ -159,317 +156,309 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 //                    binding.appTitleTv.visibility = View.GONE
 //                    binding.topLayout.visibility = View.GONE
 //                    binding.groupCategoryBtn.visibility = View.GONE
-                }
-                3 -> {
-                    // 검색 결과 화면
-                    Log.d("ttest", "status = 3   검색 결과 화면")
-                    binding.bottomNav.visibility = View.GONE
-                }
-                4 -> {
-                    // BotNav 이동
-                    // 검색, 재검색, 내위치 제거
-                    Log.d("ttest", "status = 4  BotNav 이동")
-                    binding.searchBtn.visibility = View.GONE
-                    binding.refreshBtn.visibility = View.GONE
-                    binding.mylocationBtn.visibility = View.GONE
+                    }
+                    3 -> {
+                        // 검색 결과 화면
+                        Log.d("ttest", "status = 3   검색 결과 화면")
+                        binding.bottomNav.visibility = View.GONE
+                    }
+                    4 -> {
+                        // BotNav 이동
+                        // 검색, 재검색, 내위치 제거
+                        Log.d("ttest", "status = 4  BotNav 이동")
+                        binding.searchBtn.visibility = View.GONE
+                        binding.refreshBtn.visibility = View.GONE
+                        binding.mylocationBtn.visibility = View.GONE
 //                    binding.categoryLayout.visibility = View.GONE
 
 //                    binding.topLayout.visibility = View.GONE
 //                    binding.appTitleTv.visibility = View.GONE
 
 //                    binding.groupCategoryBtn.visibility = View.GONE
-                }
-                5 -> {
-                    // 로케이션 마커 클릭 진행중
-                    Log.d("ttest", "status = 5   로케이션 마커 클릭 진행중")
-                }
-                6 -> {
-                    // 디테일 프레그먼트 표시
-                    Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
+                    }
+                    5 -> {
+                        // 로케이션 마커 클릭 진행중
+                        Log.d("ttest", "status = 5   로케이션 마커 클릭 진행중")
+                    }
+                    6 -> {
+                        // 디테일 프레그먼트 표시
+                        Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
 //                    binding.searchBtn.visibility = View.GONE
 //                    binding.refreshBtn.visibility = View.GONE
 //                    binding.mylocationBtn.visibility = View.GONE
 //                    binding.groupCategoryBtn.visibility = View.GONE
 //                    binding.resultLayout.visibility = View.GONE
+                    }
+                    7-> {
+                        // 로케이션 마커 클릭
+                        Log.d("ttest", "status = 7   로케이션 마커 클릭")
+
+                    }
                 }
-                7-> {
-                    // 로케이션 마커 클릭
-                    Log.d("ttest", "status = 7   로케이션 마커 클릭")
+            })
 
+            evalInfoLiveData.observe(this@MainActivity, Observer {
+                val adapter = EvalinfoAdapter()
+                binding.apply {
+                    resultRecyclerView.adapter = adapter
+                    adapter.updateItems(it)
+                    resultLayout.startAnimation(fadeInAnim)
+                    resultLayout.visibility = View.VISIBLE
+                    progressBarCenter.visibility = View.GONE
+                    progressView.visibility = View.GONE
                 }
-            }
-        })
-
-//        supportFragmentManager.beginTransaction().add(R.id.fragment_view, mapFragment, "map").commit()
+            })
 
 
-        binding.searchBtn.setOnClickListener{
+            categoryLiveData.observe(this@MainActivity, Observer {
+                binding.resultLayout.visibility = View.GONE
+                mainViewModel.mainStatus.value = 1
+
+                if(mapView.findPOIItemByTag(1) != null) {
+                    mapView.deselectPOIItem(mapView.findPOIItemByTag(1))
+                }
+                when(it) {
+                    0 -> {
+                        clearCategoryBtn()
+                        for(data in shopList) {
+                            mapView.addPOIItem(data)
+                        }
+                        for(data in livingList) {
+                            mapView.addPOIItem(data)
+                        }
+                        for(data in educationList) {
+                            mapView.addPOIItem(data)
+                        }
+                        for(data in hospitalList) {
+                            mapView.addPOIItem(data)
+                        }
+                        for(data in publicList) {
+                            mapView.addPOIItem(data)
+                        }
+
+                    }
+                    1 -> {
+                        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
+                        binding.shopCategoryBtn.setTextColor(Color.WHITE)
+                        mapView.removeAllPOIItems()
+                        for(data in shopList) {
+                            mapView.addPOIItem(data)
+                        }
+
+                    }
+                    2 -> {
+                        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
+                        binding.livingCategoryBtn.setTextColor(Color.WHITE)
+                        mapView.removeAllPOIItems()
+                        for(data in livingList) {
+                            mapView.addPOIItem(data)
+                        }
+                    }
+                    3 -> {
+                        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
+                        binding.educationCategoryBtn.setTextColor(Color.WHITE)
+                        mapView.removeAllPOIItems()
+                        for(data in educationList) {
+                            mapView.addPOIItem(data)
+                        }
+                    }
+                    5 -> {
+                        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
+                        binding.publicCategoryBtn.setTextColor(Color.WHITE)
+                        mapView.removeAllPOIItems()
+                        for(data in publicList) {
+                            mapView.addPOIItem(data)
+                        }
+                    }
+                }
+            })
+
+            movePin.observe(this@MainActivity, Observer {
+                if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
+                    mapView.currentLocationTrackingMode =
+                        MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
+                }
+                mapView.removeAllPOIItems()
+                binding.apply {
+                    progressBarCenter.visibility = View.VISIBLE
+                    progressView.visibility = View.VISIBLE
+                    categoryLayout.visibility = View.GONE
+                    bottomNav.visibility = View.GONE
+                    resultLayout.visibility = View.GONE
+                }
+                mainViewModel.mainStatus.value = 9
+
+                val faclLng = it.faclLng!!
+                val faclLat = it.faclLat!!
+                val faclNm = it.faclNm
+                val faclTyCd = it.faclTyCd
+                val lcMnad = it.lcMnad
+                val wfcltId = it.wfcltId!!
+
+                Log.d("ttest" , "faclLng " + faclLng)
+                Log.d("ttest" , "faclLat " + faclLat)
+                Log.d("ttest" , "faclNm " + faclNm)
+                Log.d("ttest" , "wfcltId " + wfcltId)
+                Log.d("ttest" , "faclTyCd " + faclTyCd)
+
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLat, faclLng), 0, true)
+
+                val customMarker = MapPOIItem()
+                customMarker.itemName = "searchItem"
+                customMarker.tag = 1
+                customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
+                customMarker.markerType = MapPOIItem.MarkerType.CustomImage
+                customMarker.isShowCalloutBalloonOnTouch = false
+                customMarker.userObject = it
+
+
+                when(changeFaclType(faclTyCd.toString())) {
+                    "음식 및 상점" -> {
+                        customMarker.customImageResourceId = R.drawable.category_click_shop
+                    }
+                    "생활시설" -> {
+                        customMarker.customImageResourceId = R.drawable.category_click_living
+                    }
+                    "교육시설" -> {
+                        customMarker.customImageResourceId = R.drawable.category_click_education
+                    }
+                    "기타" -> {
+                        customMarker.customImageResourceId = R.drawable.category_click_public
+                    }
+                }
+
+                customMarker.isCustomImageAutoscale = true
+                customMarker.setCustomImageAnchor(0.5f, 1.0f)
+
+                mapView.addPOIItem(customMarker)
+
+                binding.apply {
+                    resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+                    resultNmTv.text = faclNm
+                    resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeType(it1) }
+                    resultLocationTv.text = lcMnad
+                }
+
+                selectedMarker = it
+                mainViewModel.getEvalInfo(wfcltId, "1")
+            })
+
+            locationFaclLiveData.observe(this@MainActivity, Observer {
+                removeCategoryData()
+                for(data in it) {
+                    if (data.faclLat != null && data.faclLng != null) {
+                        val marker = MapPOIItem()
+                        marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                        marker.itemName = data.faclNm
+                        marker.userObject = data
+                        marker.markerType = MapPOIItem.MarkerType.CustomImage
+                        marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                        marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                        marker.isShowCalloutBalloonOnTouch = false
+                        marker.isCustomImageAutoscale = true
+                        marker.setCustomImageAnchor(0.5f, 1.0f)
+
+                        when(changeFaclType(data.faclTyCd.toString())) {
+                            "음식 및 상점" -> {
+                                marker.customImageResourceId = R.drawable.category_shop_img
+                                marker.customSelectedImageResourceId = R.drawable.category_click_shop
+                                shopList.add(marker)
+                                shopServList.add(data)
+                                mapServList.add(data)
+                                mapView.addPOIItem(marker)
+                            }
+                            "생활시설" -> {
+                                marker.customImageResourceId = R.drawable.category_living_img
+                                marker.customSelectedImageResourceId = R.drawable.category_click_living
+                                livingList.add(marker)
+                                livingServList.add(data)
+                                mapServList.add(data)
+                                mapView.addPOIItem(marker)
+                            }
+                            "교육시설" -> {
+                                marker.customImageResourceId = R.drawable.category_education_img
+                                marker.customSelectedImageResourceId = R.drawable.category_click_education
+                                educationList.add(marker)
+                                educationServList.add(data)
+                                mapServList.add(data)
+                                mapView.addPOIItem(marker)
+                            }
+                            "기타" -> {
+                                marker.customImageResourceId = R.drawable.category_public_img
+                                marker.customSelectedImageResourceId = R.drawable.category_click_public
+                                publicList.add(marker)
+                                publicServList.add(data)
+                                mapServList.add(data)
+                                mapView.addPOIItem(marker)
+                            }
+                        }
+                        binding.progressBarCenter.visibility = View.GONE
+                        binding.progressView.visibility = View.GONE
+
+                        binding.bottomNav.startAnimation(fadeInAnim)
+                        binding.bottomNav.visibility = View.VISIBLE
+                        binding.refreshBtn.visibility = View.VISIBLE
+
+                    }
+                }
+            })
+        }
+
+        binding.apply {
+            //검색버튼 클릭
+            searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-            removeMarker()
-            supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, searchFragment, "search").addToBackStack(null).commit()
-        }
-
-
-
-        mainViewModel.evalInfoLiveData.observe(this, androidx.lifecycle.Observer {
-            val adapter = EvalinfoAdapter()
-            binding.resultRecyclerView.adapter = adapter
-            adapter.updateItems(it)
-            binding.resultLayout.startAnimation(fadeInAnim)
-            binding.resultLayout.visibility = View.VISIBLE
-            binding.progressBarCenter.visibility = View.GONE
-            binding.progressView.visibility = View.GONE
-        })
-
-        mainViewModel.categoryLiveData.observe(this, Observer {
-            binding.resultLayout.visibility = View.GONE
-            mainViewModel.mainStatus.value = 1
-
-            if(mapView.findPOIItemByTag(1) != null) {
-                mapView.deselectPOIItem(mapView.findPOIItemByTag(1))
+                removeMarker()
+                supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, searchFragment, "search").addToBackStack(null).commit()
             }
 
-
-            when(it) {
-                0 -> {
-                    clearCategoryBtn()
-                    for(data in shopList) {
-                        mapView.addPOIItem(data)
-                    }
-                    for(data in livingList) {
-                        mapView.addPOIItem(data)
-                    }
-                    for(data in educationList) {
-                        mapView.addPOIItem(data)
-                    }
-                    for(data in hospitalList) {
-                        mapView.addPOIItem(data)
-                    }
-                    for(data in publicList) {
-                        mapView.addPOIItem(data)
-                    }
-
-                }
-                1 -> {
-                    binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                    binding.shopCategoryBtn.setTextColor(Color.WHITE)
-                    mapView.removeAllPOIItems()
-                    for(data in shopList) {
-                        mapView.addPOIItem(data)
-                    }
-
-                }
-                2 -> {
-                    binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                    binding.livingCategoryBtn.setTextColor(Color.WHITE)
-                    mapView.removeAllPOIItems()
-                    for(data in livingList) {
-                        mapView.addPOIItem(data)
-                    }
-                }
-                3 -> {
-                    binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                    binding.educationCategoryBtn.setTextColor(Color.WHITE)
-                    mapView.removeAllPOIItems()
-                    for(data in educationList) {
-                        mapView.addPOIItem(data)
-                    }
-                }
-//                4 -> {
-//                    binding.hospitalCategoryBtn.setBackgroundResource(R.drawable.button_click)
-//                    binding.hospitalCategoryBtn.setTextColor(Color.WHITE)
-//                    mapView.removeAllPOIItems()
-//                    for(data in hospitalList) {
-//                        mapView.addPOIItem(data)
-//                    }
-//                }
-                5 -> {
-                    binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                    binding.publicCategoryBtn.setTextColor(Color.WHITE)
-                    mapView.removeAllPOIItems()
-                    for(data in publicList) {
-                        mapView.addPOIItem(data)
-                    }
-                }
-            }
-        })
-
-        mainViewModel.movePin.observe(this, Observer {
-            if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
-                mapView.currentLocationTrackingMode =
-                    MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
-            }
-            mapView.removeAllPOIItems()
-            binding.progressBarCenter.visibility = View.VISIBLE
-            binding.progressView.visibility = View.VISIBLE
-            binding.categoryLayout.visibility = View.GONE
-            binding.bottomNav.visibility = View.GONE
-            binding.resultLayout.visibility = View.GONE
-            mainViewModel.mainStatus.value = 9
-
-
-            val faclLng = it.faclLng!!
-            val faclLat = it.faclLat!!
-            val faclNm = it.faclNm
-            val faclTyCd = it.faclTyCd
-            val lcMnad = it.lcMnad
-            val wfcltId = it.wfcltId!!
-
-            Log.d("ttest" , "faclLng " + faclLng)
-            Log.d("ttest" , "faclLat " + faclLat)
-            Log.d("ttest" , "faclNm " + faclNm)
-            Log.d("ttest" , "wfcltId " + wfcltId)
-            Log.d("ttest" , "faclTyCd " + faclTyCd)
-
-            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLat, faclLng), 0, true)
-
-            val customMarker = MapPOIItem()
-            customMarker.itemName = "searchItem"
-            customMarker.tag = 1
-            customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(faclLat, faclLng)
-            customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-            customMarker.isShowCalloutBalloonOnTouch = false
-            customMarker.userObject = it
-
-
-            when(changeFaclType(faclTyCd.toString())) {
-                "음식 및 상점" -> {
-                    customMarker.customImageResourceId = R.drawable.category_click_shop
-                }
-                "생활시설" -> {
-                    customMarker.customImageResourceId = R.drawable.category_click_living
-                }
-                "교육시설" -> {
-                    customMarker.customImageResourceId = R.drawable.category_click_education
-                }
-                "기타" -> {
-                    customMarker.customImageResourceId = R.drawable.category_click_public
-                }
-            }
-
-            customMarker.isCustomImageAutoscale = true
-            customMarker.setCustomImageAnchor(0.5f, 1.0f)
-
-            mapView.addPOIItem(customMarker)
-
-            binding.resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-            binding.resultNmTv.text = faclNm
-            binding.resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeType(it1) }
-            binding.resultLocationTv.text = lcMnad
-            selectedMarker = it
-
-
-            mainViewModel.getEvalInfo(wfcltId, "1")
-        })
-
-        mainViewModel.locationFaclLiveData.observe(this, Observer {
-            removeCategoryData()
-
-            for(data in it) {
-                if (data.faclLat != null && data.faclLng != null) {
-                    val marker = MapPOIItem()
-                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                    marker.itemName = data.faclNm
-                    marker.userObject = data
-                    marker.markerType = MapPOIItem.MarkerType.CustomImage
-                    marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                    marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                    marker.isShowCalloutBalloonOnTouch = false
-                    marker.isCustomImageAutoscale = true
-                    marker.setCustomImageAnchor(0.5f, 1.0f)
-
-                    when(changeFaclType(data.faclTyCd.toString())) {
-                        "음식 및 상점" -> {
-                            marker.customImageResourceId = R.drawable.category_shop_img
-                            marker.customSelectedImageResourceId = R.drawable.category_click_shop
-                            shopList.add(marker)
-                            shopServList.add(data)
-                            mapServList.add(data)
-                            mapView.addPOIItem(marker)
-                        }
-                        "생활시설" -> {
-                            marker.customImageResourceId = R.drawable.category_living_img
-                            marker.customSelectedImageResourceId = R.drawable.category_click_living
-                            livingList.add(marker)
-                            livingServList.add(data)
-                            mapServList.add(data)
-                            mapView.addPOIItem(marker)
-                        }
-                        "교육시설" -> {
-                            marker.customImageResourceId = R.drawable.category_education_img
-                            marker.customSelectedImageResourceId = R.drawable.category_click_education
-                            educationList.add(marker)
-                            educationServList.add(data)
-                            mapServList.add(data)
-                            mapView.addPOIItem(marker)
-                        }
-                        "기타" -> {
-                            marker.customImageResourceId = R.drawable.category_public_img
-                            marker.customSelectedImageResourceId = R.drawable.category_click_public
-                            publicList.add(marker)
-                            publicServList.add(data)
-                            mapServList.add(data)
-                            mapView.addPOIItem(marker)
-                        }
-                    }
-                    binding.progressBarCenter.visibility = View.GONE
-                    binding.progressView.visibility = View.GONE
-
-                    binding.bottomNav.startAnimation(fadeInAnim)
-                    binding.bottomNav.visibility = View.VISIBLE
-                    binding.refreshBtn.visibility = View.VISIBLE
-
-                }
-            }
-        })
-
-
-        binding.mylocationBtn.setOnClickListener {
-            if(mCurrentLat != 1.00) {
-                val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
-                mapView.setMapCenterPoint(currentMapPoint, true)
-            } else {
-                val currentMapPoint = MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude)
-                mapView.setMapCenterPoint(currentMapPoint, true)
-            }
-            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        }
-
-        binding.refreshBtn.setOnClickListener {
-            binding.progressBarCenter.visibility = View.VISIBLE
-            binding.progressView.visibility = View.VISIBLE
-
-            val refreshLocation = mapView.mapCenterPoint
-            markedLat = refreshLocation.mapPointGeoCoord.latitude
-            markedLng = refreshLocation.mapPointGeoCoord.longitude
-            val geocoder = Geocoder(this)
-
-            try {
-                val gList = geocoder.getFromLocation(markedLat, markedLng, 5)
-                val cggNm = if (gList[0].subLocality != null) {
-                    gList[0].subLocality
+            //내 위치 버튼 클릭
+            mylocationBtn.setOnClickListener {
+                if(mCurrentLat != 1.00) {
+                    val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
+                    mapView.setMapCenterPoint(currentMapPoint, true)
                 } else {
-                    gList[0].locality
+                    val currentMapPoint = MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude)
+                    mapView.setMapCenterPoint(currentMapPoint, true)
                 }
-                val roadNm = ""
-                Log.d("ttest", "지역 재검색 위치 : $cggNm")
-
-                getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(markedLat, markedLng), true)
-
-            } catch (e : IOException) {
-                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+                mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
             }
 
+            //새로고침 버튼 클릭
+            binding.refreshBtn.setOnClickListener {
+                binding.progressBarCenter.visibility = View.VISIBLE
+                binding.progressView.visibility = View.VISIBLE
 
-        }
+                val refreshLocation = mapView.mapCenterPoint
+                markedLat = refreshLocation.mapPointGeoCoord.latitude
+                markedLng = refreshLocation.mapPointGeoCoord.longitude
+                val geocoder = Geocoder(applicationContext)
 
-        //상세보기 클릭
-        binding.resultDetailBtn.setOnClickListener{
-            mainViewModel.mainStatus.value = 6
-            supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
-            val userObject = selectedMarker
-            mainViewModel.detailLiveData.value = userObject
+                try {
+                    val gList = geocoder.getFromLocation(markedLat, markedLng, 5)
+                    val cggNm = if (gList[0].subLocality != null) {
+                        gList[0].subLocality
+                    } else {
+                        gList[0].locality
+                    }
+                    val roadNm = ""
+                    Log.d("ttest", "지역 재검색 위치 : $cggNm")
+
+                    getMapFacInfo(cggNm, roadNm)
+                    mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(markedLat, markedLng), true)
+
+                } catch (e : IOException) {
+                    Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+                }
+            }
+
+            //상세보기 클릭
+            resultDetailBtn.setOnClickListener{
+                mainViewModel.mainStatus.value = 6
+                supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
+                val userObject = selectedMarker
+                mainViewModel.detailLiveData.value = userObject
+            }
         }
     }
 

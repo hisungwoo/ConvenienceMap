@@ -32,7 +32,7 @@ interface RetrofitService {
     @GET("getDisConvFaclList?serviceKey=E6PZth5Xxp14kb9K%2BcdqMVPdltgGfmjR5OY8gEi1ARAV7mibmfWj7lq54rPJx0wiWoNJ0jZHAyMMsto875iTPw%3D%3D")
     suspend fun getLocationFaclList2(@Query("cggNm") cggNm : String,
                             @Query("numOfRows") numOfRows : String)
-    : OpenAPIServiceResponse
+    : FacInfoList
 
     @GET("getFacInfoOpenApiJpEvalInfoList?serviceKey=E6PZth5Xxp14kb9K%2BcdqMVPdltgGfmjR5OY8gEi1ARAV7mibmfWj7lq54rPJx0wiWoNJ0jZHAyMMsto875iTPw%3D%3D")
     suspend fun getEvalInfoList2(@Query("wfcltId") wfcltId : String)
