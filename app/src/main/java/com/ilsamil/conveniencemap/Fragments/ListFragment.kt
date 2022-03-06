@@ -22,8 +22,6 @@ import net.daum.mf.map.api.MapPOIItem
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentListBinding
-    private lateinit var cggNm: String
-
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
@@ -49,90 +47,61 @@ class ListFragment : Fragment() {
     ): View? {
         mainViewModel.mainStatus.value = 4
         binding = FragmentListBinding.inflate(inflater, container, false)
-        binding.listRecyclerview.layoutManager = LinearLayoutManager(container?.context,
-            RecyclerView.VERTICAL,
-            false
-        )
 
-        val bundle = arguments
-        cggNm = if(bundle != null) {
-            bundle.getString("cggNm").toString()
-        } else {
-            ""
-        }
-
-        val shopServList = bundle?.getSerializable("shopServList") as List<ServList>
-        val livingServList = bundle?.getSerializable("livingServList") as List<ServList>
-        val educationServList = bundle?.getSerializable("educationServList") as List<ServList>
-        val hospitalServList = bundle?.getSerializable("hospitalServList") as List<ServList>
-        val publicServList = bundle?.getSerializable("publicServList") as List<ServList>
-
-        val mapServList = bundle?.getSerializable("mapServList") as List<ServList>
-
-        val adapter = ListFacInfoAdapter()
-        binding.listRecyclerview.adapter = adapter
-        adapter.updateItems(mapServList)
-
-
+        val cggNm: String = mainViewModel.mapCggNm
+        val shopServList = mainViewModel.shopServList as List<ServList>
+        val livingServList = mainViewModel.livingServList as List<ServList>
+        val educationServList = mainViewModel.educationServList as List<ServList>
+        val publicServList = mainViewModel.publicServList as List<ServList>
+        val mapServList = mainViewModel.mapServList as List<ServList>
         val listCnt = mapServList.size
         binding.locationTv.text = cggNm
         binding.listCount.text = "총 " + listCnt.toString() + "건"
 
-
-//        val adapter = ListFacInfoAdapter()
-//        binding.listRecyclerview.adapter = adapter
-//        mainViewModel.locationFaclListLiveData.observe(this, Observer {
-//            adapter.updateItems(it)
-//        })
-
+        val adapter = ListFacInfoAdapter()
+        binding.listRecyclerview.layoutManager = LinearLayoutManager(container?.context,
+            RecyclerView.VERTICAL,
+            false
+        )
+        binding.listRecyclerview.adapter = adapter
+        adapter.updateItems(mapServList)
         mainViewModel.getLocationListFacl(cggNm)
 
-        binding.listBackImg.setOnClickListener {
-            val listFragment = activity?.supportFragmentManager?.findFragmentByTag("category")
-            if (listFragment != null) {
-                activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
-            }
-        }
-
-        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener {
             override fun onItemClick(v: View, data: ServList, pos : Int) {
                 mainViewModel.movePin.value = data
-                val categoryFragment2 = activity?.supportFragmentManager?.findFragmentByTag("category")
-                if (categoryFragment2 != null) {
-                    activity?.supportFragmentManager?.beginTransaction()?.remove(categoryFragment2)?.addToBackStack(null)?.commit()
+                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
+                if (listFragment != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
                 }
-
             }
-
         })
 
-        binding.listShopBtn.setOnClickListener {
-            val adapter = ListFacInfoAdapter()
-            binding.listRecyclerview.adapter = adapter
-            adapter.updateItems(shopServList)
+        binding.apply {
+            listShopBtn.setOnClickListener {
+                val listAdapter = ListFacInfoAdapter()
+                binding.listRecyclerview.adapter = listAdapter
+                listAdapter.updateItems(shopServList)
+            }
+
+            listLivingBtn.setOnClickListener {
+                val listAdapter = ListFacInfoAdapter()
+                binding.listRecyclerview.adapter = listAdapter
+                listAdapter.updateItems(livingServList)
+            }
+
+            listEducationBtn.setOnClickListener {
+                val listAdapter = ListFacInfoAdapter()
+                binding.listRecyclerview.adapter = listAdapter
+                listAdapter.updateItems(educationServList)
+            }
+
+            listPublicBtn.setOnClickListener {
+                val listAdapter = ListFacInfoAdapter()
+                binding.listRecyclerview.adapter = listAdapter
+                listAdapter.updateItems(publicServList)
+            }
         }
-
-        binding.listLivingBtn.setOnClickListener {
-            val adapter = ListFacInfoAdapter()
-            binding.listRecyclerview.adapter = adapter
-            adapter.updateItems(livingServList)
-        }
-
-        binding.listEducationBtn.setOnClickListener {
-            val adapter = ListFacInfoAdapter()
-            binding.listRecyclerview.adapter = adapter
-            adapter.updateItems(educationServList)
-        }
-
-        binding.listPublicBtn.setOnClickListener {
-            val adapter = ListFacInfoAdapter()
-            binding.listRecyclerview.adapter = adapter
-            adapter.updateItems(publicServList)
-        }
-
-
-
-
 
         return binding.root
     }

@@ -50,16 +50,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var hospitalList = arrayListOf<MapPOIItem>()
     private var publicList = arrayListOf<MapPOIItem>()
 
-    private var shopServList = arrayListOf<ServList>()
-    private var livingServList = arrayListOf<ServList>()
-    private var educationServList = arrayListOf<ServList>()
-    private var hospitalServList = arrayListOf<ServList>()
-    private var publicServList = arrayListOf<ServList>()
-
-    private var mapServList = arrayListOf<ServList>()
-    private var mapCggNm = "지역"
-
-
     private var fLatitude = 1.00
     private var fLongitude = 1.00
     private var mCurrentLat : Double = 1.00
@@ -89,33 +79,17 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
 
         mapView = MapView(this)
-        mapView.isHDMapTileEnabled
-        mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.current_location_marker, MapPOIItem.ImageOffset(30,30))
-        mapView.setCurrentLocationRadiusStrokeColor(android.graphics.Color.argb(1, 1, 1, 1))
-        mapView.setCurrentLocationRadiusFillColor(android.graphics.Color.argb(1, 1, 1, 1))
+        mapView.apply {
+            isHDMapTileEnabled
+            setCustomCurrentLocationMarkerTrackingImage(R.drawable.current_location_marker, MapPOIItem.ImageOffset(30,30))
+            setPOIItemEventListener(this@MainActivity)
+            setMapViewEventListener(this@MainActivity)
+            setCurrentLocationEventListener(this@MainActivity)
+        }
+
         binding.clKakaoMapView.addView(mapView)
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
-        mapView.setPOIItemEventListener(this)
-        mapView.setMapViewEventListener(this)
-        mapView.setCurrentLocationEventListener(this)
-
-
-        binding.apply {
-            //카테고리 클릭
-            shopCategoryBtn.setOnClickListener {
-                categoryClick(1)
-            }
-            livingCategoryBtn.setOnClickListener{
-                categoryClick(2)
-            }
-            educationCategoryBtn.setOnClickListener {
-                categoryClick(3)
-            }
-            publicCategoryBtn.setOnClickListener {
-                categoryClick(5)
-            }
-        }
 
         replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -169,12 +143,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.searchBtn.visibility = View.GONE
                         binding.refreshBtn.visibility = View.GONE
                         binding.mylocationBtn.visibility = View.GONE
-//                    binding.categoryLayout.visibility = View.GONE
-
-//                    binding.topLayout.visibility = View.GONE
-//                    binding.appTitleTv.visibility = View.GONE
-
-//                    binding.groupCategoryBtn.visibility = View.GONE
+                        binding.resultLayout.visibility = View.GONE
                     }
                     5 -> {
                         // 로케이션 마커 클릭 진행중
@@ -262,7 +231,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                             mapView.addPOIItem(data)
                         }
                     }
-                    5 -> {
+                    4 -> {
                         binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                         binding.publicCategoryBtn.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
@@ -363,32 +332,32 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                                 marker.customImageResourceId = R.drawable.category_shop_img
                                 marker.customSelectedImageResourceId = R.drawable.category_click_shop
                                 shopList.add(marker)
-                                shopServList.add(data)
-                                mapServList.add(data)
+                                mainViewModel.shopServList.add(data)
+                                mainViewModel.mapServList.add(data)
                                 mapView.addPOIItem(marker)
                             }
                             "생활시설" -> {
                                 marker.customImageResourceId = R.drawable.category_living_img
                                 marker.customSelectedImageResourceId = R.drawable.category_click_living
                                 livingList.add(marker)
-                                livingServList.add(data)
-                                mapServList.add(data)
+                                mainViewModel.livingServList.add(data)
+                                mainViewModel.mapServList.add(data)
                                 mapView.addPOIItem(marker)
                             }
                             "교육시설" -> {
                                 marker.customImageResourceId = R.drawable.category_education_img
                                 marker.customSelectedImageResourceId = R.drawable.category_click_education
                                 educationList.add(marker)
-                                educationServList.add(data)
-                                mapServList.add(data)
+                                mainViewModel.educationServList.add(data)
+                                mainViewModel.mapServList.add(data)
                                 mapView.addPOIItem(marker)
                             }
                             "기타" -> {
                                 marker.customImageResourceId = R.drawable.category_public_img
                                 marker.customSelectedImageResourceId = R.drawable.category_click_public
                                 publicList.add(marker)
-                                publicServList.add(data)
-                                mapServList.add(data)
+                                mainViewModel.publicServList.add(data)
+                                mainViewModel.mapServList.add(data)
                                 mapView.addPOIItem(marker)
                             }
                         }
@@ -405,6 +374,20 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
 
         binding.apply {
+            //카테고리 클릭
+            shopCategoryBtn.setOnClickListener {
+                categoryClick(1)
+            }
+            livingCategoryBtn.setOnClickListener{
+                categoryClick(2)
+            }
+            educationCategoryBtn.setOnClickListener {
+                categoryClick(3)
+            }
+            publicCategoryBtn.setOnClickListener {
+                categoryClick(4)
+            }
+
             //검색버튼 클릭
             searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
@@ -484,7 +467,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     gList[0].locality
                 }
 
-                mapCggNm = cggNm
+                mainViewModel.mapCggNm = cggNm
                 val roadNm = ""
                 Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
 
@@ -531,23 +514,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private fun replaceFragment(binding: ActivityMainBinding) {
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.menu_category -> {
-                    if(mapServList.isNotEmpty()) {
-                        val bundle = Bundle()
-                        bundle.putString("cggNm", mapCggNm)
-                        bundle.putSerializable("shopServList", shopServList)
-                        bundle.putSerializable("livingServList", livingServList)
-                        bundle.putSerializable("educationServList", educationServList)
-                        bundle.putSerializable("hospitalServList", hospitalServList)
-                        bundle.putSerializable("publicServList", publicServList)
-
-                        bundle.putSerializable("mapServList", mapServList)
-
-                        listFragment.arguments = bundle
-                        supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                        supportFragmentManager.beginTransaction().replace(R.id.fragment_view, listFragment, "list").addToBackStack("list").commit()
-                    }
-
+                R.id.menu_list -> {
+                    supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, listFragment, "list").addToBackStack("list").commit()
                 }
                 R.id.menu_map -> {
                     bottomClickMap()
@@ -555,7 +524,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 R.id.menu_info -> {
                     mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_view, infoFragment, "info").addToBackStack("info").commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, infoFragment, "info").addToBackStack("info").commit()
                 }
             }
             true
@@ -572,7 +541,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         binding.bottomNav.apply {
             if(tag1 != null && tag1.isVisible) {
-                this.menu.findItem(R.id.menu_category).isChecked = true
+                this.menu.findItem(R.id.menu_list).isChecked = true
             }
             if(tag3 != null && tag3.isVisible) {
                 this.menu.findItem(R.id.menu_info).isChecked = true
@@ -663,12 +632,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         livingList.clear()
         educationList.clear()
         publicList.clear()
-        shopServList.clear()
-        livingServList.clear()
-        educationServList.clear()
-        publicServList.clear()
+        mainViewModel.shopServList.clear()
+        mainViewModel.livingServList.clear()
+        mainViewModel.educationServList.clear()
+        mainViewModel.publicServList.clear()
 
-        mapServList.clear()
+        mainViewModel.mapServList.clear()
     }
 
 

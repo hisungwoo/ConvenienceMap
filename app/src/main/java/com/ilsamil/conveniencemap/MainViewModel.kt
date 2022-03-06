@@ -37,7 +37,6 @@ class MainViewModel : ViewModel() {
     val evalInfoDetailLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
     val locationFaclListLiveData = MutableLiveData<List<ServList>>()
-    val bottomNavLiveData = MutableLiveData<Boolean>()
     val mainStatus = MutableLiveData<Int>()
 
     val movePin = MutableLiveData<ServList>()
@@ -47,6 +46,13 @@ class MainViewModel : ViewModel() {
     var clickImgStatus = false
     var selectMarkerStatus = false
 
+    var shopServList = arrayListOf<ServList>()
+    var livingServList = arrayListOf<ServList>()
+    var educationServList = arrayListOf<ServList>()
+    var publicServList = arrayListOf<ServList>()
+
+    var mapServList = arrayListOf<ServList>()
+    var mapCggNm = "지역"
 
     init {
         val faclInstance = Retrofit.Builder()
@@ -155,44 +161,48 @@ class MainViewModel : ViewModel() {
 
     // 지도에 정보표시
     fun getLocationFacl(cggNm : String, roadNm : String) {
-//        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
-//        facinfoCall.enqueue(object : Callback<FacInfoList> {
-//            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
-//                if(response.isSuccessful()) {
-//                    val items = response.body()?.servList!!
-//                    locationFaclLiveData.postValue(items)
+        val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
+        facinfoCall.enqueue(object : Callback<FacInfoList> {
+            override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
+                if(response.isSuccessful()) {
+                    val items = response.body()?.servList!!
+                    locationFaclLiveData.postValue(items)
+
+                } else { // code == 400
+                    // 실패 처리
+                    Log.d("tttest" , "dd = 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
+                Log.d("tttest" , "onFailure = " + t)
+                t.printStackTrace()
+            }
+
+        })
+
+//        viewModelScope.launch {
+//            val facinfoCall = locationFaclService.getLocationFaclList2(cggNm, "1000")
+//            val dd1 = facinfoCall.resultMessage
+//            val dd2 = facinfoCall.totalCount
+//            Log.d("ttest","resultMessage " + dd1)
+//            Log.d("ttest","totalCount " + dd2)
 //
-//                } else { // code == 400
-//                    // 실패 처리
-//                    Log.d("tttest" , "dd = 실패")
-//                }
-//            }
+//            val  items = facinfoCall.servList
+//            locationFaclLiveData.postValue(items!!)
 //
-//            override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-//                Log.d("tttest" , "onFailure = " + t)
-//                t.printStackTrace()
-//            }
 //
-//        })
-
-        viewModelScope.launch {
-            val facinfoCall = locationFaclService.getLocationFaclList2("구로구", "1000")
-            val dd1 = facinfoCall.resultMessage
-            val dd2 = facinfoCall.totalCount
-            Log.d("ttest","resultMessage " + dd1)
-            Log.d("ttest","totalCount " + dd2)
-
-
-//            val dd1 = facinfoCall.cmmMsgHeader
-//            val dd2 = dd1?.errMsg
-//            val dd3 = dd1?.returnAuthMsg
-//            val dd4 = dd1?.returnReasonCode
-
-//            Log.d("ttest","errMsg " + dd2)
-//            Log.d("ttest","returnAuthMsg " + dd3)
-//            Log.d("ttest","returnReasonCode " + dd4)
-
-        }
+//
+////            val dd1 = facinfoCall.cmmMsgHeader
+////            val dd2 = dd1?.errMsg
+////            val dd3 = dd1?.returnAuthMsg
+////            val dd4 = dd1?.returnReasonCode
+//
+////            Log.d("ttest","errMsg " + dd2)
+////            Log.d("ttest","returnAuthMsg " + dd3)
+////            Log.d("ttest","returnReasonCode " + dd4)
+//
+//        }
 
 
 
