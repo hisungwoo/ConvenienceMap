@@ -108,6 +108,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.appTitleTv.visibility = View.VISIBLE
                         binding.topLayout.visibility = View.VISIBLE
                         binding.resultLayout.visibility = View.GONE
+                        binding.bottomNav.menu.findItem(R.id.menu_map).isChecked = true
+
+
 
                         // 검색결과 마커 제거
                         if (mapView.findPOIItemByName("searchItem") != null) {
@@ -144,6 +147,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.refreshBtn.visibility = View.GONE
                         binding.mylocationBtn.visibility = View.GONE
                         binding.resultLayout.visibility = View.GONE
+                        binding.bottomNav.visibility = View.GONE
                     }
                     5 -> {
                         // 로케이션 마커 클릭 진행중

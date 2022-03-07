@@ -2,12 +2,14 @@ package com.ilsamil.conveniencemap.Fragments
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,13 @@ import net.daum.mf.map.api.MapPOIItem
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentListBinding
+    private var shopServList = arrayListOf<ServList>()
+    private var livingServList = arrayListOf<ServList>()
+    private var educationServList = arrayListOf<ServList>()
+    private var publicServList = arrayListOf<ServList>()
+    private var mapServList = arrayListOf<ServList>()
+
+    private var categoryStatus = 0
 
     // Category.newInstance() 사용을 위해 생성
     companion object {
@@ -50,11 +59,13 @@ class ListFragment : Fragment() {
         binding = FragmentListBinding.inflate(inflater, container, false)
 
         val cggNm: String = mainViewModel.mapCggNm
-        val shopServList = mainViewModel.shopServList as List<ServList>
-        val livingServList = mainViewModel.livingServList as List<ServList>
-        val educationServList = mainViewModel.educationServList as List<ServList>
-        val publicServList = mainViewModel.publicServList as List<ServList>
-        val mapServList = mainViewModel.mapServList as List<ServList>
+        shopServList = mainViewModel.shopServList
+        livingServList = mainViewModel.livingServList
+        educationServList = mainViewModel.educationServList
+        publicServList = mainViewModel.publicServList
+        mapServList = mainViewModel.mapServList
+
+
         val listCnt = mapServList.size
         binding.locationTv.text = cggNm
         binding.listCount.text = "총 " + listCnt.toString() + "건"
@@ -80,36 +91,128 @@ class ListFragment : Fragment() {
 
         binding.apply {
             listShopBtn.setOnClickListener {
-                val listAdapter = ListFacInfoAdapter()
-                binding.listRecyclerview.adapter = listAdapter
-                listAdapter.updateItems(shopServList)
-                listAdapter.insertItem()
-
-                listShopBtn.setBackgroundResource(R.drawable.button_category_click)
-                listShopBtn.setTextColor(Color.WHITE)
-
+                categoryClick(1)
             }
 
             listLivingBtn.setOnClickListener {
-                val listAdapter = ListFacInfoAdapter()
-                binding.listRecyclerview.adapter = listAdapter
-                listAdapter.updateItems(livingServList)
+                categoryClick(2)
             }
 
             listEducationBtn.setOnClickListener {
-                val listAdapter = ListFacInfoAdapter()
-                binding.listRecyclerview.adapter = listAdapter
-                listAdapter.updateItems(educationServList)
+                categoryClick(3)
             }
 
             listPublicBtn.setOnClickListener {
-                val listAdapter = ListFacInfoAdapter()
-                binding.listRecyclerview.adapter = listAdapter
-                listAdapter.updateItems(publicServList)
+                categoryClick(4)
+            }
+
+            listBackImg.setOnClickListener {
+                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
+                if (listFragment != null) {
+                    mainViewModel.mainStatus.value = 1
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.commit()
+                }
+            }
+
+            moveTopBtn.setOnClickListener {
+                binding.listRecyclerview.smoothScrollToPosition(0)
             }
         }
 
         return binding.root
+    }
+
+    private fun categoryClick(btn : Int) {
+        if (btn == categoryStatus) {
+            categoryStatus = 0
+            listCategoryClear()
+            val listAdapter = ListFacInfoAdapter()
+            binding.apply {
+                listRecyclerview.adapter = listAdapter
+                listAdapter.updateItems(mapServList)
+                listCount.text = "총 " + mapServList.size + "건"
+            }
+        } else {
+            listCategoryClear()
+            when(btn) {
+                1 -> {
+                    categoryStatus = 1
+                    val listAdapter = ListFacInfoAdapter()
+                    binding.apply {
+                        listRecyclerview.adapter = listAdapter
+                        listAdapter.updateItems(shopServList)
+                        listShopBtn.apply {
+                            setBackgroundResource(R.drawable.button_list_category_click)
+                            setTypeface(null, Typeface.BOLD)
+                            setTextColor(Color.WHITE)
+                        }
+                        listCount.text = "총 " + shopServList.size + "건"
+                    }
+                }
+                2 -> {
+                    categoryStatus = 2
+                    val listAdapter = ListFacInfoAdapter()
+                    binding.apply {
+                        listRecyclerview.adapter = listAdapter
+                        listAdapter.updateItems(livingServList)
+                        listLivingBtn.apply {
+                            setBackgroundResource(R.drawable.button_list_category_click)
+                            setTypeface(null, Typeface.BOLD)
+                            setTextColor(Color.WHITE)
+                        }
+                        listCount.text = "총 " + livingServList.size + "건"
+                    }
+                }
+                3 -> {
+                    categoryStatus = 3
+                    val listAdapter = ListFacInfoAdapter()
+                    binding.apply {
+                        listRecyclerview.adapter = listAdapter
+                        listAdapter.updateItems(educationServList)
+                        listEducationBtn.apply {
+                            setBackgroundResource(R.drawable.button_list_category_click)
+                            setTypeface(null, Typeface.BOLD)
+                            setTextColor(Color.WHITE)
+                        }
+                        listCount.text = "총 " + educationServList.size + "건"
+                    }
+                }
+                4 -> {
+                    categoryStatus = 4
+                    val listAdapter = ListFacInfoAdapter()
+                    binding.apply {
+                        listRecyclerview.adapter = listAdapter
+                        listAdapter.updateItems(publicServList)
+                        listPublicBtn.apply {
+                            setBackgroundResource(R.drawable.button_list_category_click)
+                            setTypeface(null, Typeface.BOLD)
+                            setTextColor(Color.WHITE)
+                        }
+                        listCount.text = "총 " + publicServList.size + "건"
+                    }
+                }
+            }
+        }
+    }
+
+    private fun listCategoryClear() {
+        binding.apply {
+            listShopBtn.setBackgroundResource(R.color.button_transparency)
+            listShopBtn.setTypeface(null, Typeface.NORMAL)
+            listShopBtn.setTextColor(ContextCompat.getColor(context!!, R.color.list_category_text))
+
+            listLivingBtn.setBackgroundResource(R.color.button_transparency)
+            listLivingBtn.setTypeface(null, Typeface.NORMAL)
+            listLivingBtn.setTextColor(ContextCompat.getColor(context!!, R.color.list_category_text))
+
+            listEducationBtn.setBackgroundResource(R.color.button_transparency)
+            listEducationBtn.setTypeface(null, Typeface.NORMAL)
+            listEducationBtn.setTextColor(ContextCompat.getColor(context!!, R.color.list_category_text))
+
+            listPublicBtn.setBackgroundResource(R.color.button_transparency)
+            listPublicBtn.setTypeface(null, Typeface.NORMAL)
+            listPublicBtn.setTextColor(ContextCompat.getColor(context!!, R.color.list_category_text))
+        }
     }
 
 

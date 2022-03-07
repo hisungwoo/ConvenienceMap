@@ -10,6 +10,7 @@
     <color name="line">#C3C3C3</color>
     <color name="line2">#EDEDED</color>
     <color name="category_text">#3C3C3C</color>
+    <color name="list_category_text">#808080</color>
     <color name="button_transparency">#00000000</color>
     <color name="myStatusBarColor">#459EC1</color>
 

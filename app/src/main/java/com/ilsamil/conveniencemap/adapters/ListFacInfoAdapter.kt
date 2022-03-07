@@ -48,9 +48,14 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
         val serv : ServList = eItems[position]
         if (serv.faclTyCd == "UC0U04") {
 
+        } else if(serv.faclTyCd == "000000") {
+            holder.listFaclnmTextView.text = ""
+            holder.listLcmnadTextView.text = ""
+            holder.listItemImg.setImageResource(R.drawable.button_list)
+
         } else {
-            holder.listFaclnmTextView.text= serv.faclNm
-            holder.listLcmnadTextView.text= serv.lcMnad
+            holder.listFaclnmTextView.text = serv.faclNm
+            holder.listLcmnadTextView.text = serv.lcMnad
 
             val util = Util()
 
@@ -73,13 +78,5 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
         eItems = items
         notifyDataSetChanged()  // UI갱신
     }
-
-    fun insertItem() {
-        val item = ServList("","",0.1,0.1,"sdfa","","","",
-            "","","", "","","")
-        eItems.plus(item)
-        notifyItemInserted(eItems.size)
-    }
-
 
 }
