@@ -74,5 +74,12 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
         notifyDataSetChanged()  // UI갱신
     }
 
+    fun insertItem() {
+        val item = ServList("","",0.1,0.1,"sdfa","","","",
+            "","","", "","","")
+        eItems.plus(item)
+        notifyItemInserted(eItems.size)
+    }
+
 
 }

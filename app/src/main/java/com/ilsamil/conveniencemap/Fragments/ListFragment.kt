@@ -1,6 +1,7 @@
 package com.ilsamil.conveniencemap.Fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -82,6 +83,11 @@ class ListFragment : Fragment() {
                 val listAdapter = ListFacInfoAdapter()
                 binding.listRecyclerview.adapter = listAdapter
                 listAdapter.updateItems(shopServList)
+                listAdapter.insertItem()
+
+                listShopBtn.setBackgroundResource(R.drawable.button_category_click)
+                listShopBtn.setTextColor(Color.WHITE)
+
             }
 
             listLivingBtn.setOnClickListener {
