@@ -32,7 +32,7 @@ class MainViewModel : ViewModel() {
 
     val categoryLiveData = MutableLiveData<Int>()
 
-    val faclLiveData = MutableLiveData<List<ServList>>()
+    val searchFaclLiveData = MutableLiveData<List<ServList>?>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
     val evalInfoDetailLiveData = MutableLiveData<List<EvalInfoList>>()
     val locationFaclLiveData = MutableLiveData<List<ServList>>()
@@ -100,13 +100,18 @@ class MainViewModel : ViewModel() {
     }
 
 
-    fun getFacl(searchText : String) {
-        val facinfoCall : Call<FacInfoList> = faclService.getFaclList(15, searchText)
+    fun getSearchFacl(searchText : String) {
+        val facinfoCall : Call<FacInfoList> = faclService.getFaclList(1000, searchText)
         facinfoCall.enqueue(object : Callback<FacInfoList> {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
                 if(response.isSuccessful()) {
-                    val items = response.body()?.servList!!
-                    faclLiveData.postValue(items)
+                    if(response.body()?.totalCount == 0) {
+                        Log.d("tttest" , "결과값 0개")
+                        searchFaclLiveData.postValue(null)
+                    } else {
+                        val items = response.body()?.servList!!
+                        searchFaclLiveData.postValue(items)
+                    }
 
                 } else { // code == 400
                     // 실패 처리

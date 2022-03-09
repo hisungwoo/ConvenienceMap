@@ -110,29 +110,19 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.resultLayout.visibility = View.GONE
                         binding.bottomNav.menu.findItem(R.id.menu_map).isChecked = true
 
-
-
                         // 검색결과 마커 제거
                         if (mapView.findPOIItemByName("searchItem") != null) {
                             val searchMarker = mapView.findPOIItemByName("searchItem")[0]
                             mapView.removePOIItem(searchMarker)
                         }
 
-//                    binding.groupCategoryBtn.visibility = View.VISIBLE
                     }
                     2 -> {
                         // 주소검색 버튼 클릭
                         // 바템네비, 검색, 재검색 제거
                         Log.d("ttest", "status = 2   주소검색 버튼 클릭")
-//                    binding.bottomNav.visibility = View.GONE
-//                    binding.categoryLayout.visibility = View.GONE
-//                    binding.searchBtn.visibility = View.GONE
-//                    binding.resultLayout.visibility = View.GONE
-//                    binding.refreshBtn.visibility = View.GONE
-//                    binding.mylocationBtn.visibility = View.GONE
-//                    binding.appTitleTv.visibility = View.GONE
-//                    binding.topLayout.visibility = View.GONE
-//                    binding.groupCategoryBtn.visibility = View.GONE
+                    binding.refreshBtn.visibility = View.GONE
+                    binding.mylocationBtn.visibility = View.GONE
                     }
                     3 -> {
                         // 검색 결과 화면
@@ -156,16 +146,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     6 -> {
                         // 디테일 프레그먼트 표시
                         Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
-//                    binding.searchBtn.visibility = View.GONE
-//                    binding.refreshBtn.visibility = View.GONE
-//                    binding.mylocationBtn.visibility = View.GONE
-//                    binding.groupCategoryBtn.visibility = View.GONE
-//                    binding.resultLayout.visibility = View.GONE
                     }
                     7-> {
                         // 로케이션 마커 클릭
                         Log.d("ttest", "status = 7   로케이션 마커 클릭")
-
                     }
                 }
             })
