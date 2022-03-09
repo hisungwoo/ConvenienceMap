@@ -430,6 +430,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     val roadNm = ""
                     Log.d("ttest", "지역 재검색 위치 : $cggNm")
+                    mainViewModel.mapCggNm = cggNm
 
                     getMapFacInfo(cggNm, roadNm)
                     mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(markedLat, markedLng), true)

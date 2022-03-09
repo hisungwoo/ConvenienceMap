@@ -78,16 +78,18 @@ class ListFragment : Fragment() {
         binding.listRecyclerview.adapter = adapter
         adapter.updateItems(mapServList)
         mainViewModel.getLocationListFacl(cggNm)
+        binding.listRecyclerview.smoothScrollToPosition(0)
+        itemClick(adapter)
 
-        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener {
-            override fun onItemClick(v: View, data: ServList, pos : Int) {
-                mainViewModel.movePin.value = data
-                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
-                if (listFragment != null) {
-                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
-                }
-            }
-        })
+//        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener {
+//            override fun onItemClick(v: View, data: ServList, pos : Int) {
+//                mainViewModel.movePin.value = data
+//                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
+//                if (listFragment != null) {
+//                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
+//                }
+//            }
+//        })
 
         binding.apply {
             listShopBtn.setOnClickListener {
@@ -132,6 +134,7 @@ class ListFragment : Fragment() {
                 listAdapter.updateItems(mapServList)
                 listCount.text = "총 " + mapServList.size + "건"
             }
+            itemClick(listAdapter)
         } else {
             listCategoryClear()
             when(btn) {
@@ -148,6 +151,7 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + shopServList.size + "건"
                     }
+                    itemClick(listAdapter)
                 }
                 2 -> {
                     categoryStatus = 2
@@ -162,6 +166,7 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + livingServList.size + "건"
                     }
+                    itemClick(listAdapter)
                 }
                 3 -> {
                     categoryStatus = 3
@@ -176,6 +181,7 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + educationServList.size + "건"
                     }
+                    itemClick(listAdapter)
                 }
                 4 -> {
                     categoryStatus = 4
@@ -190,6 +196,7 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + publicServList.size + "건"
                     }
+                    itemClick(listAdapter)
                 }
             }
         }
@@ -213,6 +220,18 @@ class ListFragment : Fragment() {
             listPublicBtn.setTypeface(null, Typeface.NORMAL)
             listPublicBtn.setTextColor(ContextCompat.getColor(context!!, R.color.list_category_text))
         }
+    }
+
+    private fun itemClick(adapter : ListFacInfoAdapter) {
+        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener {
+            override fun onItemClick(v: View, data: ServList, pos : Int) {
+                mainViewModel.movePin.value = data
+                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
+                if (listFragment != null) {
+                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
+                }
+            }
+        })
     }
 
 
