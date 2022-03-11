@@ -277,6 +277,14 @@
         android:visibility="gone"
         />
 
+    <LinearLayout
+        android:id="@+id/fragment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:elevation="5dp"
+        />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
@@ -308,13 +316,7 @@
         app:layout_constraintEnd_toEndOf="@+id/bottom_nav"
         />
 
-    <LinearLayout
-        android:id="@+id/fragment_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:elevation="3dp"
-        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

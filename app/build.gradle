@@ -21,8 +21,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "OPEN_API_KEY", properties["open_api_key"]
-
-
         manifestPlaceholders = [kakaoApiKey : kakao_api_key]
     }
 

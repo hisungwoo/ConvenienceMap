@@ -119,7 +119,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     2 -> {
                         // 주소검색 버튼 클릭
-                        // 바템네비, 검색, 재검색 제거
                         Log.d("ttest", "status = 2   주소검색 버튼 클릭")
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
@@ -130,14 +129,13 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.bottomNav.visibility = View.GONE
                     }
                     4 -> {
-                        // BotNav 이동
-                        // 검색, 재검색, 내위치 제거
+                        // 목록보기 이동
                         Log.d("ttest", "status = 4  BotNav 이동")
+                        binding.bottomNav.visibility = View.GONE
                         binding.searchBtn.visibility = View.GONE
                         binding.refreshBtn.visibility = View.GONE
                         binding.mylocationBtn.visibility = View.GONE
                         binding.resultLayout.visibility = View.GONE
-                        binding.bottomNav.visibility = View.GONE
                     }
                     5 -> {
                         // 로케이션 마커 클릭 진행중
@@ -147,9 +145,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         // 디테일 프레그먼트 표시
                         Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
                     }
-                    7-> {
+                    7 -> {
                         // 로케이션 마커 클릭
                         Log.d("ttest", "status = 7   로케이션 마커 클릭")
+                    }
+                    8 -> {
+                        // 앱 정보보기 이동
+                        Log.d("ttest", "status = 8   앱 정보 이동")
+                        binding.bottomNav.visibility = View.VISIBLE
                     }
                 }
             })
@@ -511,7 +514,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     bottomClickMap()
                 }
                 R.id.menu_info -> {
-                    mainViewModel.mainStatus.value = 4
                     supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, infoFragment, "info").addToBackStack("info").commit()
                 }
@@ -639,7 +641,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             in "3" -> {
                 super.onBackPressed()
             }
-            in "4" -> {
+            in "4", "8" -> {
                 super.onBackPressed()
                 updateBottomMenu()
             }
