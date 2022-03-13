@@ -42,7 +42,6 @@ class DetailFragment : Fragment() {
                     backClickImg()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
-                    Log.d("ttest", "selectMarkerStatus = " + mainViewModel.selectMarkerStatus)
                     if(mainViewModel.selectMarkerStatus) mainViewModel.mainStatus.value = 7
                 }
             }

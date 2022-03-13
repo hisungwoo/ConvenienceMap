@@ -24,7 +24,7 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
 
     override fun onBindViewHolder(holder: EvalinfoViewHolder, position: Int) {
         val serv : EvalInfoList = eItems[position]
-        var evalinfoText =serv.evalInfo
+        var evalinfoText = serv.evalInfo
 
         when (serv.evalInfo) {
             "계단 또는 승강설비" -> {
@@ -96,10 +96,6 @@ class EvalinfoAdapter : RecyclerView.Adapter<EvalinfoAdapter.EvalinfoViewHolder>
                 holder.evalinfoImg.setImageResource(R.drawable.evalinfo_more_img)
             }
         }
-
-
-
-
 
 
         holder.evalinfoTextView.text = evalinfoText

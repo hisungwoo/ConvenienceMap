@@ -727,16 +727,18 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             val itemData : ServList = item.userObject as ServList
             selectedMarker = itemData
 
+            binding.apply {
+                resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+                resultNmTv.text = item.itemName
+                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
+                resultLocationTv.text = itemData.lcMnad
 
-            binding.resultRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-            binding.resultNmTv.text = item.itemName
-            binding.resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
-            binding.resultLocationTv.text = itemData.lcMnad
+                refreshBtn.visibility = View.GONE
+                bottomNav.visibility = View.GONE
+                mylocationBtn.visibility = View.GONE
+            }
 
             mainViewModel.mainStatus.value = 7
-            binding.refreshBtn.visibility = View.GONE
-            binding.bottomNav.visibility = View.GONE
-            binding.mylocationBtn.visibility = View.GONE
             mainViewModel.selectMarkerStatus = true
 
             itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }

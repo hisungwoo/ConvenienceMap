@@ -32,14 +32,6 @@ class InfoFragment : Fragment() {
     ): View? {
         mainViewModel.mainStatus.value = 8
         binding = FragmentInfoBinding.inflate(inflater, container, false)
-
-
-
-
-
-
-
-
         return binding.root
     }
 

@@ -88,7 +88,7 @@ class SearchFragment : Fragment() {
                 }
             }
 
-            backImg.setOnClickListener {
+            searchBackImg.setOnClickListener {
                 mainViewModel.mainStatus.value = 1
                 activity?.supportFragmentManager
                     ?.beginTransaction()

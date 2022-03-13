@@ -81,15 +81,6 @@ class ListFragment : Fragment() {
         binding.listRecyclerview.smoothScrollToPosition(0)
         itemClick(adapter)
 
-//        adapter.setOnItemClickListener(object : ListFacInfoAdapter.OnItemClickListener {
-//            override fun onItemClick(v: View, data: ServList, pos : Int) {
-//                mainViewModel.movePin.value = data
-//                val listFragment = activity?.supportFragmentManager?.findFragmentByTag("list")
-//                if (listFragment != null) {
-//                    activity?.supportFragmentManager?.beginTransaction()?.remove(listFragment)?.addToBackStack(null)?.commit()
-//                }
-//            }
-//        })
 
         binding.apply {
             listShopBtn.setOnClickListener {
@@ -125,22 +116,20 @@ class ListFragment : Fragment() {
     }
 
     private fun categoryClick(btn : Int) {
+        listCategoryClear()
+        val listAdapter = ListFacInfoAdapter()
+
         if (btn == categoryStatus) {
             categoryStatus = 0
-            listCategoryClear()
-            val listAdapter = ListFacInfoAdapter()
             binding.apply {
                 listRecyclerview.adapter = listAdapter
                 listAdapter.updateItems(mapServList)
                 listCount.text = "총 " + mapServList.size + "건"
             }
-            itemClick(listAdapter)
         } else {
-            listCategoryClear()
             when(btn) {
                 1 -> {
                     categoryStatus = 1
-                    val listAdapter = ListFacInfoAdapter()
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
                         listAdapter.updateItems(shopServList)
@@ -151,11 +140,9 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + shopServList.size + "건"
                     }
-                    itemClick(listAdapter)
                 }
                 2 -> {
                     categoryStatus = 2
-                    val listAdapter = ListFacInfoAdapter()
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
                         listAdapter.updateItems(livingServList)
@@ -166,11 +153,9 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + livingServList.size + "건"
                     }
-                    itemClick(listAdapter)
                 }
                 3 -> {
                     categoryStatus = 3
-                    val listAdapter = ListFacInfoAdapter()
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
                         listAdapter.updateItems(educationServList)
@@ -181,11 +166,9 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + educationServList.size + "건"
                     }
-                    itemClick(listAdapter)
                 }
                 4 -> {
                     categoryStatus = 4
-                    val listAdapter = ListFacInfoAdapter()
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
                         listAdapter.updateItems(publicServList)
@@ -196,10 +179,10 @@ class ListFragment : Fragment() {
                         }
                         listCount.text = "총 " + publicServList.size + "건"
                     }
-                    itemClick(listAdapter)
                 }
             }
         }
+        itemClick(listAdapter)
     }
 
     private fun listCategoryClear() {
