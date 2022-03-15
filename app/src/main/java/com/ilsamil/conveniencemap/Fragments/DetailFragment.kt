@@ -39,7 +39,7 @@ class DetailFragment : Fragment() {
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (mainViewModel.clickImgStatus) {
-                    backClickImg()
+                    clickBackImg()
                 } else {
                     activity?.supportFragmentManager?.popBackStack()
                     if(mainViewModel.selectMarkerStatus) mainViewModel.mainStatus.value = 7
@@ -74,32 +74,11 @@ class DetailFragment : Fragment() {
             val API_KEY = "AIzaSyBflVZNYF1HZGJFC8WPd5v0GkqT6nVjDyM"
             val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=420x300&return_error_code=true&location=$lat,$lng&key=$API_KEY"
 
-            val ttss = binding.detailImg
             if (container != null) {
                 Glide.with(container.context)
                     .load(WEB_VIEW_URL)
                     .error(R.drawable.image_error)
-                    .into(ttss)
-            }
-
-            binding.detailImg.setOnClickListener {
-                if(mainViewModel.mainStatus.value == 6) {
-                    mainViewModel.clickImgStatus = true
-                    val constIn = binding.detailConstraintIn as ViewGroup
-                    constIn.removeView(binding.detailImg)
-
-                    binding.clickImgView.visibility = View.VISIBLE
-                    binding.clickCloseBt.visibility = View.VISIBLE
-
-                    val sda = binding.detailImg as PhotoView
-                    val clickImgLayout = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-                    sda.layoutParams = clickImgLayout
-                    binding.clickCloseBt.bringToFront()
-                    binding.detailConsLayout.addView(sda)
-                }
+                    .into(binding.detailImg)
             }
 
 
@@ -133,7 +112,7 @@ class DetailFragment : Fragment() {
                 val scrapImage = ImageView(container?.context)
                 val evalTextView = TextView(container?.context)
 
-                val linearLayout = LinearLayout.LayoutParams(
+                val linearLayout = LinearLayout.LayoutParams (
                     changeDP(75),
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
@@ -249,6 +228,34 @@ class DetailFragment : Fragment() {
             }
         })
 
+        binding.detailImg.setOnClickListener {
+            if (!mainViewModel.clickImgStatus) {
+                mainViewModel.clickImgStatus = true
+                val constIn = binding.detailConstraintIn as ViewGroup
+                constIn.removeView(binding.detailImg)
+
+                binding.clickImgView.visibility = View.VISIBLE
+                binding.clickCloseBt.visibility = View.VISIBLE
+
+                val deImage = binding.detailImg as PhotoView
+                val clickImgLayout = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                deImage.layoutParams = clickImgLayout
+                binding.clickCloseBt.bringToFront()
+                binding.detailConsLayout.addView(deImage)
+            }
+        }
+
+        binding.detailBackImg.setOnClickListener {
+            val detailFragment = activity?.supportFragmentManager?.findFragmentByTag("detail")
+            if (detailFragment != null) {
+                mainViewModel.mainStatus.value = 1
+                activity?.supportFragmentManager?.beginTransaction()?.remove(detailFragment)?.commit()
+            }
+        }
+
         binding.kakaoGetRoadBt.setOnClickListener {
             if (container != null) {
                 kakaoGetRoad(container.context)
@@ -261,7 +268,7 @@ class DetailFragment : Fragment() {
 
         //이미지 확대 후 X버튼 클릭 시
         binding.clickCloseBt.setOnClickListener {
-            backClickImg()
+            clickBackImg()
         }
 
 
@@ -275,21 +282,21 @@ class DetailFragment : Fragment() {
         return dp
     }
 
-    private fun backClickImg() {
-        Log.d("ttest", "backClickImg 실행")
+    private fun clickBackImg() {
+        Log.d("ttest", "clickBackImg 실행")
         val constLayout = binding.detailConsLayout as ViewGroup
         constLayout.removeView(binding.detailImg)
 
         binding.clickImgView.visibility = View.GONE
         binding.clickCloseBt.visibility = View.GONE
 
-        val sda = binding.detailImg as PhotoView
+        val detailImg = binding.detailImg as PhotoView
         val clickImgLayout = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             changeDP(300)
         )
-        sda.layoutParams = clickImgLayout
-        binding.detailConstraintIn.addView(sda)
+        detailImg.layoutParams = clickImgLayout
+        binding.detailConstraintIn.addView(detailImg)
         mainViewModel.clickImgStatus = false
     }
 
