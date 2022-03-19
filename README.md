@@ -25,7 +25,10 @@ jekpack 기능 활용
 
 
 <h2>:books: 개발 스택 </h1>
-
+```
+kotlin
+```
+JetPack, DataBinding, ViewModel, AAC, LiveData, TF Lite, Gson, Retrofit, OkHttp, Koin, CameraX, Timber, Glide, GeoCoder, RxJava, Coroutine, Google TTS
 
 
 
