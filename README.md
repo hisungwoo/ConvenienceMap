@@ -9,8 +9,9 @@
 
 <br>
 <h2>:memo: 주요 기능 </h1>
-거동이 불편하거나 편의시설 설치여부를 알아야 하는 사람들을 위한 앱
-지도를 보거나 검색하여 편리하게 편의시설 설치여부를 알아볼 수 있다.
+
+* 거동이 불편하거나 편의시설 설치여부를 알아야 하는 사람들을 위한 앱
+* 지도를 보거나 검색하여 편리하게 편의시설 설치여부를 알아볼 수 있다.
 
 <br>
 <br>
@@ -26,13 +27,13 @@
 
 
 
-
 <br>
 <h2>:books: 개발 스택 </h1>
 
-```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```Google Street View Image API``` ```Kakao Map api``` 
+```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```Google Street View Image API```
 
-```Coroutine``` ```DataBinding``` ```위치 가져오기```
+```Kakao Map api``` ```Coroutine``` ```DataBinding``` ```위치 가져오기```
+
 
 
 
@@ -40,6 +41,10 @@
 <h2>⭐️ Advanced Feature </h1>
 Advanced Feature ( 자랑하고 싶은 기능들, 주의깊게 봐주세용 )
 
+
+
+
+<br>
 <br>
 <h2>🛠 개선 사항 </h1>
 개선사항(내 문제점을 찾고있고 개선하겠다는 의지!!)
