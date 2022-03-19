@@ -14,21 +14,24 @@
 
 <h2>:computer: 개발 목표 </h1>
 
-안드로이드 앱 전체 기획 및 개발
+* 안드로이드 앱 전체 기획 및 개발
 
-시스템 아키텍처 설계
+* 시스템 아키텍처 설계
 
-api 앱 연동
+* jekpack 기능 활용
 
-jekpack 기능 활용
+* api 앱 연동
+
+
 
 
 
 <h2>:books: 개발 스택 </h1>
-```
-kotlin
-```
-JetPack, DataBinding, ViewModel, AAC, LiveData, TF Lite, Gson, Retrofit, OkHttp, Koin, CameraX, Timber, Glide, GeoCoder, RxJava, Coroutine, Google TTS
+
+```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```Google Street View Image API``` ```Kakao Map api``` 
+
+```Coroutine``` ```DataBinding``` ```위치 가져오기```
+
 
 
 
@@ -38,3 +41,7 @@ Advanced Feature ( 자랑하고 싶은 기능들, 주의깊게 봐주세용 )
 
 <h2>🛠 개선 사항 </h1>
 개선사항(내 문제점을 찾고있고 개선하겠다는 의지!!)
+
+
+
+
