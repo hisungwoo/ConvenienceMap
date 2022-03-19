@@ -2,6 +2,8 @@
 편할지도
 
 
+[PlayStore-편할지도](https://play.google.com/store/apps/details?id=com.ilsamil.conveniencemap)
+
 
 
 플레이스토어 링크
