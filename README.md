@@ -88,7 +88,7 @@
 <br>
 <h2>🛠 개선 사항 </h1>
 
-* Recyclerview 와 DataBinding 연동을 하지 않았음
+* Recyclerview 와 DataBinding 연동을 하지 않았음 (예정)
 * Coroutine을 사용하지 못했음 (예정)
 * MVVM 패턴 구조가 아직 정확하지 못함 (인강 구매 예정)
 * Google Street View Image API로는 시설사진의 정확하지가 않음
