@@ -29,11 +29,11 @@
 <br><br>
 <h2>⭐️ Feature  </h1>
 
-<h3>상세보기            &nbsp;카테고리</h3>
+<h3>상세보기             &nbsp;카테고리</h3>
 
-<span><img width="25%" src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif"></span>
+<span><img width="27%" src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif"></span>
     
-<span><img width="25%" src="https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif"></span>
+<span><img width="27%" src="https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif"></span>
 
 <br>
 <h3>이&nbsp;지역&nbsp;재검색             내&nbsp;위치&nbsp;이동</h3>
