@@ -30,9 +30,9 @@
 <br>
 <h2>:books: 개발 스택 </h1>
 
-```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```Google Street View Image API```
+```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```ActivityResultContracts```
 
-```Kakao Map api``` ```Coroutine(예정)``` ```DataBinding(예정)``` ```LiveData(예정)``` ```위치 가져오기```
+```Google Street View Image API``` ```Kakao Map api``` ```Coroutine(예정)``` ```DataBinding(예정)``` ```LiveData(예정)``` ```위치 가져오기```
 
 
 
