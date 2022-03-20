@@ -42,6 +42,14 @@
 ![image.jpg4](https://user-images.githubusercontent.com/37431121/159172005-39caad5e-1bdf-48b3-b1f5-16e5429dbf5e.gif)
 
 
+<br>
+
+<h4>목록보기,검색</h4>
+  
+![image.jpg5](https://user-images.githubusercontent.com/37431121/159172152-2778d1e6-d346-4c63-be42-05c9ccce8f0d.gif) 
+![image.jpg6](https://user-images.githubusercontent.com/37431121/159172162-620a73a7-92c0-4708-b3cf-f6276ed83166.gif)
+
+
 
 
 <br>
