@@ -26,6 +26,11 @@
 * api 앱 연동
 
 
+<br><br>
+<h2>⭐️ Feature  </h1>
+<h5> 상세보기 </h5>
+<img src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif">
+
 
 <br>
 <h2>:books: 개발 스택 </h1>
