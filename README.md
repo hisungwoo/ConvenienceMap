@@ -63,7 +63,7 @@
 <br>
 
 
-* __목록&nbsp;보기&nbsp;&&nbsp;검색__
+* __지도에&nbsp;표시된&nbsp;목록보기&nbsp;&&nbsp;검색__
 
 <div>
   <span align="center">
