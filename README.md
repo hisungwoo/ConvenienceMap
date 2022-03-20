@@ -4,7 +4,7 @@
 
 <img width="80%" src="https://user-images.githubusercontent.com/37431121/159129525-757c4f80-a7aa-4c32-838e-49b49a0d8743.png"/>
 
-[GooglePlay-편할지도-사이트가기](https://play.google.com/store/apps/details?id=com.ilsamil.conveniencemap)
+[GooglePlay&nbsp;편할지도&nbsp;다운로드](https://play.google.com/store/apps/details?id=com.ilsamil.conveniencemap)
 
 
 <br>
