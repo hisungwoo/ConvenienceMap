@@ -96,6 +96,7 @@
  
 * Google Street View Image API로는 시설사진의 정확하지가 않음
   * Google Maps Platform의 Place Photos를 사용하면 정확한 시설 사진 가져올 수 있음(테스트완료)
+  
   * 하지만 비용 문제로.. 어쩔 수 없이 Street View Image API를 사용하기로 결정
 
 
