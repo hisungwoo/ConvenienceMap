@@ -22,9 +22,9 @@
 
 * 시스템 아키텍처 설계
 
-* jekpack 기능 활용
+* jekpack 기능 활용하여 MVVM 패턴 사용
 
-* api 앱 연동
+* Retrofit을 활용하여 Api 연동
 
 <br>
 <h2>⭐️ Feature  </h1>
