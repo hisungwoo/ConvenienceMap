@@ -32,7 +32,7 @@
 
 ```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```Google Street View Image API```
 
-```Kakao Map api``` ```Coroutine``` ```DataBinding``` ```위치 가져오기```
+```Kakao Map api``` ```Coroutine(예정)``` ```DataBinding(예정)``` ```LiveData(예정)``` ```위치 가져오기```
 
 
 
