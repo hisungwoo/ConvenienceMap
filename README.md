@@ -29,18 +29,17 @@
 <br><br>
 <h2>⭐️ Feature  </h1>
 
-<h4>상세보기,카테고리</h4>
-<div align="center">  
-  
-  ![image.jpg1](https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif) 
-  ![image.jpg2](https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif)
-  
-</div>
+<h3>상세보기                카테고리</h3>
+
+![image.jpg1](https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif) 
+       
+![image.jpg2](https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif)
+
 <br>
 
 <h4>이지역재검색,내위치이동</h4>
   
-![image.jpg3](https://user-images.githubusercontent.com/37431121/159171992-87667212-71cc-4f65-a180-b211f2bc371e.gif) 
+![image.jpg3](https://user-images.githubusercontent.com/37431121/159171992-87667212-71cc-4f65-a180-b211f2bc371e.gif) (                              )
 ![image.jpg4](https://user-images.githubusercontent.com/37431121/159172005-39caad5e-1bdf-48b3-b1f5-16e5429dbf5e.gif)
 
 
