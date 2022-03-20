@@ -29,7 +29,7 @@
 <br><br>
 <h2>⭐️ Feature  </h1>
 
-<h3>상세보기             &nbsp;카테고리</h3>
+<h3>상세보기          &nbsp;카테고리</h3>
 
 <span><img width="27%" src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif"></span>
     
