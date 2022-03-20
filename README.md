@@ -89,8 +89,11 @@
 <h2>🛠 개선 사항 </h1>
 
 * Recyclerview 와 DataBinding 연동을 하지 않았음 (예정)
+
 * Coroutine을 사용하지 못했음 (예정)
+
 * MVVM 패턴 구조가 아직 정확하지 못함 (인강 구매 예정)
+ 
 * Google Street View Image API로는 시설사진의 정확하지가 않음
   * Google Maps Platform의 Place Photos를 사용하면 정확한 시설 사진 가져올 수 있음(테스트완료)
   * 하지만 비용 문제로.. 어쩔 수 없이 Street View Image API를 사용하기로 결정
