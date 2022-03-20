@@ -29,10 +29,10 @@
 <br><br>
 <h2>⭐️ Feature  </h1>
 
-<h3>상세보기                카테고리</h3>
+<h3>상세보기                 카테고리</h3>
 
 ![image.jpg1](https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif) 
-       
+      
 ![image.jpg2](https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif)
 
 <br>
