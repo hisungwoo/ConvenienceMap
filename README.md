@@ -9,15 +9,12 @@
 </div>
 
 
-
-
 <br>
 <h2>:memo: 주요 기능 </h1>
 
 * 거동이 불편하거나 편의시설 설치여부를 알아야 하는 사람들을 위한 앱
 * 지도를 보거나 검색하여 편리하게 편의시설 설치여부를 알아볼 수 있다.
 
-<br>
 <br>
 <h2>:computer: 개발 목표 </h1>
 
@@ -29,8 +26,7 @@
 
 * api 앱 연동
 
-
-<br><br>
+<br>
 <h2>⭐️ Feature  </h1>
 
 * __시설 상세보기&nbsp;&&nbsp;카테고리&nbsp; 분류__
@@ -85,19 +81,16 @@
 
 
 
-
-
-<br>
-<h2>⭐️ Advanced Feature </h1>
-Advanced Feature ( 자랑하고 싶은 기능들, 주의깊게 봐주세용 )
-
-
-
-
-<br>
 <br>
 <h2>🛠 개선 사항 </h1>
-개선사항(내 문제점을 찾고있고 개선하겠다는 의지!!)
+
+* Recyclerview 와 DataBinding 연동을 하지 않았음
+* Coroutine을 사용하지 못했음 (예정)
+* MVVM 패턴 구조가 아직 정확하지 못함 (인강 구매 예정)
+* Google Street View Image API로는 시설사진의 정확하지가 않음
+  * Google Maps Platform의 Place Photos를 사용하면 정확한 시설 사진 가져올 수 있음(테스트완료)
+  * 하지만 비용 문제로.. 어쩔 수 없이 Street View Image API를 사용하기로 결정
+
 
 
 
