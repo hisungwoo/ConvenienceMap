@@ -1,4 +1,4 @@
-package com.ilsamil.conveniencemap.Fragments
+package com.ilsamil.conveniencemap.fragments
 
 import android.content.Context
 import android.os.Bundle

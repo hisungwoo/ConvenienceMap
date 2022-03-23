@@ -1,4 +1,4 @@
-package com.ilsamil.conveniencemap.Fragments
+package com.ilsamil.conveniencemap.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
+import com.ilsamil.conveniencemap.BuildConfig
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentDetailBinding
@@ -71,8 +72,7 @@ class DetailFragment : Fragment() {
 
             val lat = it.faclLat
             val lng = it.faclLng
-            val API_KEY = "AIzaSyBflVZNYF1HZGJFC8WPd5v0GkqT6nVjDyM"
-            val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=420x300&return_error_code=true&location=$lat,$lng&key=$API_KEY"
+            val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=420x300&return_error_code=true&location=$lat,$lng&key=${BuildConfig.GOOGLE_API_KEY}"
 
             if (container != null) {
                 Glide.with(container.context)

@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ilsamil.conveniencemap.Fragments.*
+import com.ilsamil.conveniencemap.fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
 import com.ilsamil.conveniencemap.model.ServList
@@ -441,7 +441,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private fun getLocationFacInfo() {
         binding.progressBarCenter.visibility = View.VISIBLE
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        // GPS_PROVIDER가 Null일 경우 NETWORK_PROVIDER를 가져온다.
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         if(location != null) {
             fLatitude = location.latitude
             fLongitude = location.longitude
