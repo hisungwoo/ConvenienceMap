@@ -70,6 +70,8 @@ class DetailFragment : Fragment() {
             binding.detailLcMnadTv.text = it.lcMnad
             binding.detailProgressBar.visibility = View.VISIBLE
 
+            Log.d("ttest" , "???")
+
             val lat = it.faclLat
             val lng = it.faclLng
             val WEB_VIEW_URL = "https://maps.googleapis.com/maps/api/streetview?size=420x300&return_error_code=true&location=$lat,$lng&key=${BuildConfig.GOOGLE_API_KEY}"
