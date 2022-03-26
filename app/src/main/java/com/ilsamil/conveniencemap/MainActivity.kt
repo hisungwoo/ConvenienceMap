@@ -20,6 +20,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ilsamil.conveniencemap.fragments.DetailFragment
+import com.ilsamil.conveniencemap.fragments.InfoFragment
+import com.ilsamil.conveniencemap.fragments.ListFragment
+import com.ilsamil.conveniencemap.fragments.SearchFragment
 import com.ilsamil.conveniencemap.fragments.*
 import com.ilsamil.conveniencemap.adapters.EvalinfoAdapter
 import com.ilsamil.conveniencemap.databinding.ActivityMainBinding
@@ -295,7 +299,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 binding.apply {
                     resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                     resultNmTv.text = faclNm
-                    resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeType(it1) }
+                    resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeFaclType(it1) }
                     resultLocationTv.text = lcMnad
                 }
 
@@ -731,7 +735,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.apply {
                 resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                 resultNmTv.text = item.itemName
-                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeType(it1) }
+                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeFaclType(it1) }
                 resultLocationTv.text = itemData.lcMnad
 
                 refreshBtn.visibility = View.GONE
@@ -740,7 +744,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
 
             mainViewModel.mainStatus.value = 7
-            mainViewModel.selectMarkerStatus = true
+            mainViewModel.isSelectMarker = true
 
             itemData.wfcltId?.let { mainViewModel.getEvalInfo(it, "1") }
 

@@ -1,7 +1,9 @@
 package com.ilsamil.conveniencemap.utils
 
+import com.ilsamil.conveniencemap.R
+
 class Util {
-    fun changeType(type : String?) : String? {
+    fun changeFaclType(type : String?) : String? {
         var result = type
         when (type) {
             "UC0A05" -> result = "우체국"
@@ -80,7 +82,7 @@ class Util {
         return result
     }
 
-    fun chaneFaclCategory(faclType : String) : String {
+    fun changeFaclCategory(faclType : String) : String {
         when(faclType) {
             //음식 및 상점
             in "UC0B01", "UC0R02", "UC0E01", "UC0B02" -> {
@@ -109,10 +111,61 @@ class Util {
         }
         // 제외
         // UC0U04:다세대주택,
-
         return ""
     }
 
+
+    fun changeEvalText(eval : String?) : String? {
+        var answer = eval
+        when (eval) {
+            "계단 또는 승강설비" -> answer = "계단"
+            "대변기" -> answer = "대변기"
+            "복도" -> answer = "복도시설"
+            "소변기" -> answer = "소변기"
+            "일반사항" ->  answer = "일반사항"
+            "장애인전용주차구역" -> answer = "장애인주차"
+            "주출입구 높이차이 제거" -> answer = "입구높이"
+            "주출입구 접근로" -> answer = "접근로"
+            "출입구(문)" -> answer = "출입구(문)"
+            "해당시설 층수" -> answer = "엘리베이터"
+            "경보 및 피난설비" -> answer = "피난설비"
+            "매표소" -> answer = "매표소"
+            "판매기" ->  answer = "판매기"
+            "음료대" -> answer = "음료대"
+            "비치용품" -> answer = "비치용품"
+            "접수대 및 작업대" -> answer = "작업대"
+            "관람석 및 열람석" -> answer = "관람석"
+            "유도 및 안내 설비" -> answer = "안내설비"
+            "샤워실 및 탈의실" -> answer = "샤워·탈의실"
+        }
+        return answer
+    }
+
+    fun changeEvalImg(eval : String?) : Int {
+        var answer = R.drawable.evalinfo_more_img
+        when(eval) {
+            "계단 또는 승강설비" -> answer = R.drawable.evalinfo_stairs_img
+            "대변기" -> answer = R.drawable.evalinfo_wc_img
+            "복도" -> answer = R.drawable.evalinfo_theaters_img
+            "소변기" -> answer = R.drawable.evalinfo_wc_img
+            "일반사항" -> answer = R.drawable.evalinfo_station_img
+            "장애인전용주차구역" -> answer = R.drawable.evalinfo_parking_img
+            "주출입구 높이차이 제거" -> answer = R.drawable.evalinfo_cellular_bar_img
+            "주출입구 접근로" -> answer = R.drawable.evalinfo_accessible_img
+            "출입구(문)" -> answer = R.drawable.evalinfo_sensor_door_img
+            "해당시설 층수" -> answer = R.drawable.evalinfo_elevator_img
+            "경보 및 피난설비" -> answer = R.drawable.evalinfo_alert_img
+            "매표소" -> answer = R.drawable.evalinfo_store_img
+            "판매기" -> answer = R.drawable.evalinfo_store_front_img
+            "음료대" -> answer = R.drawable.evalinfo_touch_app_img
+            "비치용품" -> answer = R.drawable.evalinfo_group_work_img
+            "접수대 및 작업대" -> answer = R.drawable.evalinfo_calendar_img
+            "관람석 및 열람석" -> answer = R.drawable.evalinfo_more_img
+            "유도 및 안내 설비" -> answer = R.drawable.evalinfo_more_img
+            "샤워실 및 탈의실" -> answer = R.drawable.evalinfo_more_img
+        }
+        return answer
+    }
 
 }
 

@@ -53,7 +53,7 @@ class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() 
         holder.faclnmTextView.text = serv.faclNm
         holder.lcmnadTextView.text = serv.lcMnad
 
-        val faclTyCdChange = serv.faclTyCd?.let { Util().changeType(it) }
+        val faclTyCdChange = serv.faclTyCd?.let { Util().changeFaclType(it) }
 
 
         holder.facltycdTextView.text = faclTyCdChange

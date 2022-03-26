@@ -43,8 +43,8 @@ class MainViewModel : ViewModel() {
 
     val detailLiveData = MutableLiveData<ServList>()
 
-    var clickImgStatus = false
-    var selectMarkerStatus = false
+    var isClickImg = false
+    var isSelectMarker = false
 
     var shopServList = arrayListOf<ServList>()
     var livingServList = arrayListOf<ServList>()

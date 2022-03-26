@@ -1,6 +1,5 @@
 package com.ilsamil.conveniencemap.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,8 +59,8 @@ class ListFacInfoAdapter : RecyclerView.Adapter<ListFacInfoAdapter.ListViewHolde
             val util = Util()
 
             serv.faclTyCd.let {
-                holder.listFacltycdTextView.text = util.changeType(it)
-                when(util.chaneFaclCategory(it.toString())) {
+                holder.listFacltycdTextView.text = util.changeFaclType(it)
+                when(util.changeFaclCategory(it.toString())) {
                     "음식 및 상점" -> holder.listItemImg.setImageResource(R.drawable.category_button_shop_img)
                     "생활시설" -> holder.listItemImg.setImageResource(R.drawable.category_button_living_img)
                     "교육시설" -> holder.listItemImg.setImageResource(R.drawable.category_button_education_img)
