@@ -1,10 +1,8 @@
 package com.ilsamil.conveniencemap
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.location.Geocoder
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private var markedLat : Double = 1.00
     private var markedLng : Double = 1.00
 
-
+    private val util = Util()
     private lateinit var selectedMarker : ServList
 
     private val requestPermission = registerForActivityResult(
@@ -82,6 +80,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             MapView.setMapTilePersistentCacheEnabled(true)
         }
 
+        // 카카오맵 API 적용
         mapView = MapView(this)
         mapView.apply {
             isHDMapTileEnabled
@@ -90,8 +89,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             setMapViewEventListener(this@MainActivity)
             setCurrentLocationEventListener(this@MainActivity)
         }
-
         binding.clKakaoMapView.addView(mapView)
+
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 
@@ -103,7 +102,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 when(it) {
                     1 -> {
                         // 기본 메인 상태
-                        Log.d("ttest", "status = 1   기본 메인 상태")
                         binding.bottomNav.visibility = View.VISIBLE
                         binding.searchBtn.visibility = View.VISIBLE
                         binding.refreshBtn.visibility = View.VISIBLE
@@ -123,18 +121,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     2 -> {
                         // 주소검색 버튼 클릭
-                        Log.d("ttest", "status = 2   주소검색 버튼 클릭")
                     binding.refreshBtn.visibility = View.GONE
                     binding.mylocationBtn.visibility = View.GONE
                     }
                     3 -> {
                         // 검색 결과 화면
-                        Log.d("ttest", "status = 3   검색 결과 화면")
                         binding.bottomNav.visibility = View.GONE
                     }
                     4 -> {
                         // 목록보기 이동
-                        Log.d("ttest", "status = 4  BotNav 이동")
                         binding.bottomNav.visibility = View.GONE
                         binding.searchBtn.visibility = View.GONE
                         binding.refreshBtn.visibility = View.GONE
@@ -143,21 +138,31 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     5 -> {
                         // 로케이션 마커 클릭 진행중
-                        Log.d("ttest", "status = 5   로케이션 마커 클릭 진행중")
                     }
                     6 -> {
                         // 디테일 프레그먼트 표시
-                        Log.d("ttest", "status = 6   디테일 프레그먼트 표시")
                     }
                     7 -> {
                         // 로케이션 마커 클릭
-                        Log.d("ttest", "status = 7   로케이션 마커 클릭")
                     }
                     8 -> {
                         // 앱 정보보기 이동
-                        Log.d("ttest", "status = 8   앱 정보 이동")
                         binding.bottomNav.visibility = View.VISIBLE
                     }
+                }
+            })
+
+            locationLiveData.observe(this@MainActivity, Observer {
+                binding.progressBarCenter.visibility = View.VISIBLE
+                if(it != null) {
+                    fLatitude = it.latitude
+                    fLongitude = it.longitude
+                    markedLat = fLatitude
+                    markedLng = fLongitude
+                    mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
+                } else {
+                    Toast.makeText(this@MainActivity, "현재 위치를 가져 올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    Log.d("debug_mainActivity", "현재 위치 : null")
                 }
             })
 
@@ -259,12 +264,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 val lcMnad = it.lcMnad
                 val wfcltId = it.wfcltId!!
 
-                Log.d("ttest" , "faclLng " + faclLng)
-                Log.d("ttest" , "faclLat " + faclLat)
-                Log.d("ttest" , "faclNm " + faclNm)
-                Log.d("ttest" , "wfcltId " + wfcltId)
-                Log.d("ttest" , "faclTyCd " + faclTyCd)
-
                 mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(faclLat, faclLng), 0, true)
 
                 val customMarker = MapPOIItem()
@@ -276,19 +275,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 customMarker.userObject = it
 
 
-                when(changeFaclType(faclTyCd.toString())) {
-                    "음식 및 상점" -> {
-                        customMarker.customImageResourceId = R.drawable.category_click_shop
-                    }
-                    "생활시설" -> {
-                        customMarker.customImageResourceId = R.drawable.category_click_living
-                    }
-                    "교육시설" -> {
-                        customMarker.customImageResourceId = R.drawable.category_click_education
-                    }
-                    "기타" -> {
-                        customMarker.customImageResourceId = R.drawable.category_click_public
-                    }
+                when(util.changeFaclType(faclTyCd.toString())) {
+                    "음식 및 상점" -> customMarker.customImageResourceId = R.drawable.category_click_shop
+                    "생활시설" -> customMarker.customImageResourceId = R.drawable.category_click_living
+                    "교육시설" -> customMarker.customImageResourceId = R.drawable.category_click_education
+                    "기타" -> customMarker.customImageResourceId = R.drawable.category_click_public
                 }
 
                 customMarker.isCustomImageAutoscale = true
@@ -299,7 +290,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 binding.apply {
                     resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                     resultNmTv.text = faclNm
-                    resultTypeTv.text = faclTyCd?.let { it1 -> Util().changeFaclType(it1) }
+                    resultTypeTv.text = faclTyCd?.let { it1 -> util.changeFaclType(it1) }
                     resultLocationTv.text = lcMnad
                 }
 
@@ -322,7 +313,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         marker.isCustomImageAutoscale = true
                         marker.setCustomImageAnchor(0.5f, 1.0f)
 
-                        when(changeFaclType(data.faclTyCd.toString())) {
+                        when(util.changeFaclCategory(data.faclTyCd.toString())) {
                             "음식 및 상점" -> {
                                 marker.customImageResourceId = R.drawable.category_shop_img
                                 marker.customSelectedImageResourceId = R.drawable.category_click_shop
@@ -383,14 +374,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 categoryClick(4)
             }
 
-            //검색버튼 클릭
+            // 검색버튼 클릭
             searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
                 removeMarker()
                 supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, searchFragment, "search").addToBackStack(null).commit()
             }
 
-            //내 위치 버튼 클릭
+            // 내 위치 버튼 클릭
             mylocationBtn.setOnClickListener {
                 if(mCurrentLat != 1.00) {
                     val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
@@ -402,7 +393,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
             }
 
-            //새로고침 버튼 클릭
+            // 이 지역 재검색 클릭
             binding.refreshBtn.setOnClickListener {
                 binding.progressBarCenter.visibility = View.VISIBLE
                 binding.progressView.visibility = View.VISIBLE
@@ -419,15 +410,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     } else {
                         gList[0].locality
                     }
-                    val roadNm = ""
-                    Log.d("ttest", "지역 재검색 위치 : $cggNm")
+                    Log.d("debug_mainActivity", "지역 재검색 위치 : $cggNm")
                     mainViewModel.mapCggNm = cggNm
 
-                    getMapFacInfo(cggNm, roadNm)
+                    mapView.removeAllPOIItems()
                     mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(markedLat, markedLng), true)
+                    mainViewModel.getLocationFacl(cggNm)
 
                 } catch (e : IOException) {
-                    Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
+                    Log.d("debug_mainActivity", "지오코드 오류 : " + e.printStackTrace())
                 }
             }
 
@@ -441,46 +432,19 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
-    @SuppressLint("MissingPermission")
+    // 현재 위치 정보 가져오기
     private fun getLocationFacInfo() {
+        mapView.removeAllPOIItems()
         binding.progressBarCenter.visibility = View.VISIBLE
-        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        // GPS_PROVIDER가 Null일 경우 NETWORK_PROVIDER를 가져온다.
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        if(location != null) {
-            fLatitude = location.latitude
-            fLongitude = location.longitude
-            markedLat = fLatitude
-            markedLng = fLongitude
-            Log.d("ttest", "latitude : " + fLatitude)
-            Log.d("ttest", "longitude : " + fLongitude)
-
-            val geocoder = Geocoder(this)
-            try {
-                val gList = geocoder.getFromLocation(fLatitude, fLongitude, 5)
-                val cggNm = if (gList[0].subLocality != null) {
-                    gList[0].subLocality
-                } else {
-                    gList[0].locality
-                }
-
-                mainViewModel.mapCggNm = cggNm
-                val roadNm = ""
-                Log.d("ttest", "현재 위치 : " + cggNm + " " + roadNm)
-
-                getMapFacInfo(cggNm, roadNm)
-                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
-
-
-            } catch (e : IOException) {
-                Log.d("ttest", "지오코드 오류 : " + e.printStackTrace())
-            }
+        val cggNm = mainViewModel.getLocationInfo(this)
+        if (cggNm != "null") {
+            mainViewModel.getLocationFacl(cggNm)
         } else {
-            Log.d("ttest", "현재 위치 : null")
+            Toast.makeText(this, "현재 위치를 가져오지 못했습니다" , Toast.LENGTH_SHORT).show()
         }
     }
 
-
+    // 카테고리 클릭
     private fun categoryClick(btn : Int) {
         if (btn == mainViewModel.categoryLiveData.value) {
             mainViewModel.categoryLiveData.value = 0
@@ -490,6 +454,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
+    // 카테고리 클릭 초기화
     private fun clearCategoryBtn() {
         binding.progressView.visibility = View.GONE
         binding.shopCategoryBtn.setBackgroundResource(R.color.button_transparency)
@@ -502,12 +467,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
     }
 
-
-    private fun getMapFacInfo(cggNm : String , roadNm : String) {
-        mapView.removeAllPOIItems()
-        mainViewModel.getLocationFacl(cggNm, roadNm)
-    }
-
+    // 프래그먼트 변경
     private fun replaceFragment(binding: ActivityMainBinding) {
         binding.bottomNav.setOnItemSelectedListener {
             when(it.itemId) {
@@ -527,13 +487,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
-
     // 뒤로가기 시 bottomnav 클릭 활성화
     private fun updateBottomMenu() {
-        Log.d("ttest", "updateBottomMenu 실행")
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
-
 
         binding.bottomNav.apply {
             if(tag1 != null && tag1.isVisible) {
@@ -550,8 +507,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
     private fun updateMapView() {
-        Log.d("ttest", "updateMapView 실행")
-
         if(mainViewModel.mainStatus.value == 2) {
             mainViewModel.mainStatus.value = 1
         } else if (mainViewModel.mainStatus.value == 3) {
@@ -559,9 +514,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
-
+    // 지도에 표시된 마커 제거
     private fun removeMarker() {
-        Log.d("ttest", "removeMarker 실행")
         if(mainViewModel.mainStatus.value == 7) {
             if(mapView.findPOIItemByTag(1) != null) {
                 val searchMarker = mapView.findPOIItemByTag(1)
@@ -586,41 +540,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if(tag3 != null) {
             supportFragmentManager.beginTransaction().remove(infoFragment).addToBackStack(null)?.commit()
         }
-    }
-
-
-    private fun changeFaclType(faclType : String) : String {
-        when(faclType) {
-            //음식 및 상점
-            in "UC0B01", "UC0R02", "UC0E01", "UC0B02" -> {
-                return "음식 및 상점"
-            }
-            //생활시설
-            in "UC0A05", "UC0J01", "UC0H03", "UC0I01", "UC0A01", "UC0A02", "UC0T01", "UC0A07", "UC0G09", "UC0C01", "UC0C04",
-            "UC0C05", "UC0A13", "UC0R01", "UC0J02", "UC0U02", "UC0V01", "UC0L02", "UC0K02"
-            -> {
-                return "생활시설"
-            }
-            //교육시설
-            in "UC0H01", "UC0G02", "UC0A15", "UC0G03", "UC0G08", "UC0G01", "UC0N02", "UC0G04", "UC0G05", "UC0G06", "UC0G07" -> {
-                return "교육시설"
-            }
-            //병원
-            in "UC0F01", "UC0F03", "UC0F02", "UC0A14" -> {
-                return "기타"
-            }
-            // 공공기관 및 기타
-            in "UC0A10", "UC0K03", "UC0Q01", "UC0T02", "UC0H05", "UC0A03", "UC0A04", "UC0A08", "UC0A09", "UC0A11", "UC0A06",
-            "UC0K01", "UC0K05", "UC0H02", "UC0H04", "UC0K04", "UC0K06", "UC0N01", "UC0O02", "UC0B03", "UC0O01", "UC0C03",
-            "UC0P01", "UC0A12", "UC0M01", "UC0C02", "UC0S01", "UC0D01", "UC0Q02", "UC0I02", "UC0U01", "UC0U03", "UC0L01" -> {
-                return "기타"
-            }
-        }
-        // 제외
-        // UC0U04:다세대주택,
-
-
-        return ""
     }
 
     private fun removeCategoryData() {
@@ -707,9 +626,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
 
 
-    // 마커 클릭 이벤트 리스터
+    // 마커 클릭 이벤트 리스터, 카카오맵 마커 클릭
     override fun onPOIItemSelected(map: MapView?, item : MapPOIItem?) {
-        // 마커 클릭시 발생
         if (map != null && item != null && item.userObject != null
             && mainViewModel.mainStatus.value != 5 && mainViewModel.mainStatus.value != 9) {
             mainViewModel.mainStatus.value = 5
@@ -735,7 +653,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             binding.apply {
                 resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                 resultNmTv.text = item.itemName
-                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> Util().changeFaclType(it1) }
+                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> util.changeFaclType(it1) }
                 resultLocationTv.text = itemData.lcMnad
 
                 refreshBtn.visibility = View.GONE
@@ -766,7 +684,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 마커 클릭 이벤트 리스터 END
 
 
-    // CurrentLocationEventListener
     override fun onCurrentLocationUpdate(mapViewP: MapView?, mapPoint: MapPoint?, p2: Float) {
         val mapPointGeo = mapPoint?.mapPointGeoCoord
         val currentMapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo?.latitude!!, mapPointGeo?.longitude)
@@ -784,13 +701,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onCurrentLocationUpdateFailed(p0: MapView?) {
         Toast.makeText(this, "현재위치 갱신 작업에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-        Log.d("ttest", "onCurrentLocationUpdateFailed 발생!")
     }
 
     override fun onCurrentLocationUpdateCancelled(p0: MapView?) {
-        Log.d("ttest", "onCurrentLocationUpdateCancelled 발생!")
     }
-    // CurrentLocationEventListener End
 
 
 }

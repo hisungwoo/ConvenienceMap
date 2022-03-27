@@ -18,13 +18,17 @@ import com.ilsamil.conveniencemap.adapters.ListFacInfoAdapter
 import com.ilsamil.conveniencemap.databinding.FragmentListBinding
 import com.ilsamil.conveniencemap.model.ServList
 
+/*
+    목록보기 프래그먼트
+
+    MainViewModel에서 시설정보 Array를 받아
+    RecyclerView 사용하여 목록 표시
+
+ */
+
 class ListFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentListBinding
-    private var shopServList = arrayListOf<ServList>()
-    private var livingServList = arrayListOf<ServList>()
-    private var educationServList = arrayListOf<ServList>()
-    private var publicServList = arrayListOf<ServList>()
     private var mapServList = arrayListOf<ServList>()
 
     private var categoryStatus = 0
@@ -36,17 +40,14 @@ class ListFragment : Fragment() {
         }
     }
 
-    // 메모리에 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    // 프레그먼트를 안고 있는 액티비티에 붙었을 때
     override fun onAttach(context: Context) {
         super.onAttach(context)
     }
 
-    // 레이아웃과 연결 (액티비티의 setContentView와 같음)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,16 +56,11 @@ class ListFragment : Fragment() {
         binding = FragmentListBinding.inflate(inflater, container, false)
 
         val cggNm: String = mainViewModel.mapCggNm
-        shopServList = mainViewModel.shopServList
-        livingServList = mainViewModel.livingServList
-        educationServList = mainViewModel.educationServList
-        publicServList = mainViewModel.publicServList
         mapServList = mainViewModel.mapServList
-
 
         val listCnt = mapServList.size
         binding.locationTv.text = cggNm
-        binding.listCount.text = "총 " + listCnt.toString() + "건"
+        binding.listCount.text = "총 ${listCnt.toString()} 건"
 
         val adapter = ListFacInfoAdapter()
         binding.listRecyclerview.layoutManager = LinearLayoutManager(container?.context,
@@ -120,11 +116,12 @@ class ListFragment : Fragment() {
             binding.apply {
                 listRecyclerview.adapter = listAdapter
                 listAdapter.updateItems(mapServList)
-                listCount.text = "총 " + mapServList.size + "건"
+                listCount.text = "총 ${mapServList.size} 건"
             }
         } else {
             when(btn) {
                 1 -> {
+                    val shopServList = mainViewModel.shopServList
                     categoryStatus = 1
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
@@ -134,10 +131,11 @@ class ListFragment : Fragment() {
                             setTypeface(null, Typeface.BOLD)
                             setTextColor(Color.WHITE)
                         }
-                        listCount.text = "총 " + shopServList.size + "건"
+                        listCount.text = "총 ${shopServList.size} 건"
                     }
                 }
                 2 -> {
+                    val livingServList = mainViewModel.livingServList
                     categoryStatus = 2
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
@@ -147,10 +145,11 @@ class ListFragment : Fragment() {
                             setTypeface(null, Typeface.BOLD)
                             setTextColor(Color.WHITE)
                         }
-                        listCount.text = "총 " + livingServList.size + "건"
+                        listCount.text = "총 ${livingServList.size} 건"
                     }
                 }
                 3 -> {
+                    val educationServList = mainViewModel.educationServList
                     categoryStatus = 3
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
@@ -160,10 +159,11 @@ class ListFragment : Fragment() {
                             setTypeface(null, Typeface.BOLD)
                             setTextColor(Color.WHITE)
                         }
-                        listCount.text = "총 " + educationServList.size + "건"
+                        listCount.text = "총 ${educationServList.size} 건"
                     }
                 }
                 4 -> {
+                    val publicServList = mainViewModel.publicServList
                     categoryStatus = 4
                     binding.apply {
                         listRecyclerview.adapter = listAdapter
@@ -173,7 +173,7 @@ class ListFragment : Fragment() {
                             setTypeface(null, Typeface.BOLD)
                             setTextColor(Color.WHITE)
                         }
-                        listCount.text = "총 " + publicServList.size + "건"
+                        listCount.text = "총 ${publicServList.size} 건"
                     }
                 }
             }

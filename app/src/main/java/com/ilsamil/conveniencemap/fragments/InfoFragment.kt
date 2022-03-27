@@ -9,6 +9,10 @@ import androidx.fragment.app.activityViewModels
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.databinding.FragmentInfoBinding
 
+/*
+    앱 정보 프래그먼트
+ */
+
 class InfoFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentInfoBinding

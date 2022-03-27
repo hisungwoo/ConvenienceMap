@@ -2,6 +2,8 @@ package com.ilsamil.conveniencemap
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.Geocoder
+import android.location.Location
 import android.location.LocationManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +20,13 @@ import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import java.io.IOException
 
 
 class MainViewModel : ViewModel() {
@@ -31,6 +35,8 @@ class MainViewModel : ViewModel() {
     private val locationFaclService : RetrofitService
 
     val categoryLiveData = MutableLiveData<Int>()
+
+    val locationLiveData = MutableLiveData<Location?>()
 
     val searchFaclLiveData = MutableLiveData<List<ServList>?>()
     val evalInfoLiveData = MutableLiveData<List<EvalInfoList>>()
@@ -79,24 +85,32 @@ class MainViewModel : ViewModel() {
     }
 
     @SuppressLint("MissingPermission")
-    fun getLocationFacInfo2(context: Context) : String {
-        val locationManager = context.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+    fun getLocationInfo(context: Context) : String {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        var latitude = ""
-        var longitude = ""
+        // GPS_PROVIDER가 Null일 경우 NETWORK_PROVIDER를 가져온다.
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        if (location != null) {
+            locationLiveData.value = location
+            val geocoder = Geocoder(context)
+            try {
+                val gList = geocoder.getFromLocation(location.latitude, location.longitude, 5)
+                val cggNm = if (gList[0].subLocality != null) {
+                    gList[0].subLocality
+                } else {
+                    gList[0].locality
+                }
+                mapCggNm = cggNm
 
-        if(location != null) {
-            latitude = location.latitude.toString()
-            longitude = location.longitude.toString()
-            Log.d("ttest", "latitude : " + latitude)
-            Log.d("ttest", "longitude : " + longitude)
+                return cggNm
+
+            } catch (e : IOException) {
+                Log.d("debug_viewModel", "지오코드 오류 : " + e.printStackTrace())
+            }
         } else {
-            Log.d("ttest", "현재 위치 : null")
+            Log.d("debug_viewModel", "현재 위치 : null")
         }
-
-        return  latitude + longitude
-
+        return "null"
     }
 
 
@@ -106,7 +120,7 @@ class MainViewModel : ViewModel() {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
                 if(response.isSuccessful()) {
                     if(response.body()?.totalCount == 0) {
-                        Log.d("tttest" , "결과값 0개")
+                        Log.d("debug_viewModel" , "결과값 0개")
                         searchFaclLiveData.postValue(null)
                     } else {
                         val items = response.body()?.servList!!
@@ -115,12 +129,12 @@ class MainViewModel : ViewModel() {
 
                 } else { // code == 400
                     // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
+                    Log.d("debug_viewModel" , "dd = 실패")
                 }
             }
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "onFailure = " + t)
+                Log.d("debug_viewModel" , "onFailure = " + t)
                 t.printStackTrace()
             }
 
@@ -134,7 +148,7 @@ class MainViewModel : ViewModel() {
                 if(response.isSuccessful()) {
                     val items = response.body()?.servList!!
                     var evalinfo = items[0].evalInfo.toString()
-                    Log.d("ttest", evalinfo)
+                    Log.d("debug_viewModel", evalinfo)
 
                     val evalinfoList = arrayListOf<EvalInfoList>()
                     var evalinfos = evalinfo.split(",")
@@ -152,12 +166,12 @@ class MainViewModel : ViewModel() {
 
                 } else { // code == 400
                     // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
+                    Log.d("debug_viewModel" , "dd = 실패")
                 }
             }
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "실패코드 : " + t)
+                Log.d("debug_viewModel" , "실패코드 : " + t)
                 t.printStackTrace()
             }
         })
@@ -165,7 +179,7 @@ class MainViewModel : ViewModel() {
 
 
     // 지도에 정보표시
-    fun getLocationFacl(cggNm : String, roadNm : String) {
+    fun getLocationFacl(cggNm : String) {
         val facinfoCall : Call<FacInfoList> = locationFaclService.getLocationFaclList(cggNm, "", "1000")
         facinfoCall.enqueue(object : Callback<FacInfoList> {
             override fun onResponse(call: Call<FacInfoList>, response: Response<FacInfoList>) {
@@ -175,12 +189,12 @@ class MainViewModel : ViewModel() {
 
                 } else { // code == 400
                     // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
+                    Log.d("debug_viewModel" , "dd = 실패")
                 }
             }
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "onFailure = " + t)
+                Log.d("debug_viewModel" , "onFailure = " + t)
                 t.printStackTrace()
             }
 
@@ -190,8 +204,8 @@ class MainViewModel : ViewModel() {
 //            val facinfoCall = locationFaclService.getLocationFaclList2(cggNm, "1000")
 //            val dd1 = facinfoCall.resultMessage
 //            val dd2 = facinfoCall.totalCount
-//            Log.d("ttest","resultMessage " + dd1)
-//            Log.d("ttest","totalCount " + dd2)
+//            Log.d("debug_viewModel","resultMessage " + dd1)
+//            Log.d("debug_viewModel","totalCount " + dd2)
 //
 //            val  items = facinfoCall.servList
 //            locationFaclLiveData.postValue(items!!)
@@ -203,9 +217,9 @@ class MainViewModel : ViewModel() {
 ////            val dd3 = dd1?.returnAuthMsg
 ////            val dd4 = dd1?.returnReasonCode
 //
-////            Log.d("ttest","errMsg " + dd2)
-////            Log.d("ttest","returnAuthMsg " + dd3)
-////            Log.d("ttest","returnReasonCode " + dd4)
+////            Log.d("debug_viewModel","errMsg " + dd2)
+////            Log.d("debug_viewModel","returnAuthMsg " + dd3)
+////            Log.d("debug_viewModel","returnReasonCode " + dd4)
 //
 //        }
 
@@ -225,12 +239,12 @@ class MainViewModel : ViewModel() {
 
                 } else { // code == 400
                     // 실패 처리
-                    Log.d("tttest" , "dd = 실패")
+                    Log.d("debug_viewModel" , "dd = 실패")
                 }
             }
 
             override fun onFailure(call: Call<FacInfoList>, t: Throwable) {
-                Log.d("tttest" , "onFailure = " + t)
+                Log.d("debug_viewModel" , "onFailure = " + t)
                 t.printStackTrace()
             }
 

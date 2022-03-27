@@ -29,11 +29,13 @@ interface RetrofitService {
                             @Query("numOfRows") numOfRows : String)
     : Call<FacInfoList>
 
+    // 코루틴 변경 예정
     @GET("getDisConvFaclList?serviceKey=${BuildConfig.OPEN_API_KEY}")
     suspend fun getLocationFaclList2(@Query("cggNm") cggNm : String,
                             @Query("numOfRows") numOfRows : String)
     : FacInfoList
 
+    // 코루틴 변경 예정
     @GET("getFacInfoOpenApiJpEvalInfoList?serviceKey=${BuildConfig.OPEN_API_KEY}")
     suspend fun getEvalInfoList2(@Query("wfcltId") wfcltId : String)
     : FacInfoList

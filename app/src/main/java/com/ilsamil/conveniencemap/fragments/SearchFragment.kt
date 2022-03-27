@@ -17,6 +17,15 @@ import com.ilsamil.conveniencemap.databinding.FragmentSearchBinding
 import com.ilsamil.conveniencemap.adapters.FacInfoAdapter
 import com.ilsamil.conveniencemap.model.ServList
 
+/*
+    검색 프래그먼트
+
+    공공데이터 포털 API와 연동으로 검색 기능 개발
+    검색결과를 Recyclerview로 표시
+    결과목록 클릭 시 검색프래그먼트를 remove 후 MainActivity의 Map에 표시
+
+ */
+
 class SearchFragment : Fragment() {
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentSearchBinding
@@ -48,6 +57,7 @@ class SearchFragment : Fragment() {
             binding.recyclerView.adapter = adapter
         }
 
+        // LiveData를 통해 검색 결과 표시
         mainViewModel.searchFaclLiveData.observe(this, Observer {
             if (it != null) {
                 binding.searchNullTv.visibility = View.GONE
@@ -61,6 +71,8 @@ class SearchFragment : Fragment() {
             binding.searchProgressBar.visibility = View.GONE
         })
 
+
+        // 검색 결과 클릭 시 프래그먼트 remove
         adapter.setOnItemClickListener(object : FacInfoAdapter.OnItemClickListener {
             override fun onItemClick(v: View, data: ServList, pos: Int) {
                 mainViewModel.movePin.value = data
@@ -73,6 +85,8 @@ class SearchFragment : Fragment() {
 
 
         binding.apply {
+
+            // 키보드 엔터 혹은 검색버튼 클릭 시 mainViewModel 함수 호출
             searchEt.setOnKeyListener { view, i, keyEvent ->
                 if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
                     val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
