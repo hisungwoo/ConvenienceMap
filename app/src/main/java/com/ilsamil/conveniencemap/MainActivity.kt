@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     private val util = Util()
     private lateinit var selectedMarker : ServList
 
+    // ActivityResultContracts 이용한 위치 권한 체크
     private val requestPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -98,6 +99,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         mainViewModel.apply {
+
+            //LiveData를 통해 메인 화면 View 업데이트
             mainStatus.observe(this@MainActivity, Observer {
                 when(it) {
                     1 -> {
@@ -152,6 +155,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 }
             })
 
+            // 현재 위치 정보 업데이트
             locationLiveData.observe(this@MainActivity, Observer {
                 binding.progressBarCenter.visibility = View.VISIBLE
                 if(it != null) {
@@ -166,6 +170,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 }
             })
 
+            // 시설 정보 업데이트
             evalInfoLiveData.observe(this@MainActivity, Observer {
                 val adapter = EvalinfoAdapter()
                 binding.apply {
@@ -178,7 +183,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 }
             })
 
-
+            // 카테고리 클릭 시 호출, 카카오맵에 해당 정보들을 표시
             categoryLiveData.observe(this@MainActivity, Observer {
                 binding.resultLayout.visibility = View.GONE
                 mainViewModel.mainStatus.value = 1
@@ -189,59 +194,40 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 when(it) {
                     0 -> {
                         clearCategoryBtn()
-                        for(data in shopList) {
-                            mapView.addPOIItem(data)
-                        }
-                        for(data in livingList) {
-                            mapView.addPOIItem(data)
-                        }
-                        for(data in educationList) {
-                            mapView.addPOIItem(data)
-                        }
-                        for(data in hospitalList) {
-                            mapView.addPOIItem(data)
-                        }
-                        for(data in publicList) {
-                            mapView.addPOIItem(data)
-                        }
-
+                        for(data in shopList) mapView.addPOIItem(data)
+                        for(data in livingList) mapView.addPOIItem(data)
+                        for(data in educationList) mapView.addPOIItem(data)
+                        for(data in hospitalList) mapView.addPOIItem(data)
+                        for(data in publicList) mapView.addPOIItem(data)
                     }
                     1 -> {
                         binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                         binding.shopCategoryBtn.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
-                        for(data in shopList) {
-                            mapView.addPOIItem(data)
-                        }
-
+                        for(data in shopList) mapView.addPOIItem(data)
                     }
                     2 -> {
                         binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                         binding.livingCategoryBtn.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
-                        for(data in livingList) {
-                            mapView.addPOIItem(data)
-                        }
+                        for(data in livingList) mapView.addPOIItem(data)
                     }
                     3 -> {
                         binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                         binding.educationCategoryBtn.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
-                        for(data in educationList) {
-                            mapView.addPOIItem(data)
-                        }
+                        for(data in educationList) mapView.addPOIItem(data)
                     }
                     4 -> {
                         binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
                         binding.publicCategoryBtn.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
-                        for(data in publicList) {
-                            mapView.addPOIItem(data)
-                        }
+                        for(data in publicList) mapView.addPOIItem(data)
                     }
                 }
             })
 
+            // 검색 결과 리스트 클릭 시 호출, 해당 정보를 카카오맵에 표시
             movePin.observe(this@MainActivity, Observer {
                 if (mapView.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
                     mapView.currentLocationTrackingMode =
@@ -274,7 +260,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 customMarker.isShowCalloutBalloonOnTouch = false
                 customMarker.userObject = it
 
-
                 when(util.changeFaclType(faclTyCd.toString())) {
                     "음식 및 상점" -> customMarker.customImageResourceId = R.drawable.category_click_shop
                     "생활시설" -> customMarker.customImageResourceId = R.drawable.category_click_living
@@ -298,20 +283,24 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 mainViewModel.getEvalInfo(wfcltId, "1")
             })
 
+
+            // 시설 정보들을 카카오맵에 표시
             locationFaclLiveData.observe(this@MainActivity, Observer {
                 removeCategoryData()
                 for(data in it) {
                     if (data.faclLat != null && data.faclLng != null) {
                         val marker = MapPOIItem()
-                        marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
-                        marker.itemName = data.faclNm
-                        marker.userObject = data
-                        marker.markerType = MapPOIItem.MarkerType.CustomImage
-                        marker.selectedMarkerType = MapPOIItem.MarkerType.CustomImage
-                        marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                        marker.isShowCalloutBalloonOnTouch = false
-                        marker.isCustomImageAutoscale = true
-                        marker.setCustomImageAnchor(0.5f, 1.0f)
+                        marker.apply {
+                            mapPoint = MapPoint.mapPointWithGeoCoord(data.faclLat, data.faclLng)
+                            itemName = data.faclNm
+                            userObject = data
+                            markerType = MapPOIItem.MarkerType.CustomImage
+                            selectedMarkerType = MapPOIItem.MarkerType.CustomImage
+                            showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
+                            isShowCalloutBalloonOnTouch = false
+                            isCustomImageAutoscale = true
+                            setCustomImageAnchor(0.5f, 1.0f)
+                        }
 
                         when(util.changeFaclCategory(data.faclTyCd.toString())) {
                             "음식 및 상점" -> {
@@ -551,7 +540,6 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         mainViewModel.livingServList.clear()
         mainViewModel.educationServList.clear()
         mainViewModel.publicServList.clear()
-
         mainViewModel.mapServList.clear()
     }
 
