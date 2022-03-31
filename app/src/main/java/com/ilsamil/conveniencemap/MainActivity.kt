@@ -35,6 +35,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.POIItemEventListener,
     MapView.CurrentLocationEventListener {
     private lateinit var binding: ActivityMainBinding
+
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
 
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     private val util = Util()
     private lateinit var selectedMarker : ServList
+
+    private val LOG_TAG = "cm log " + MainActivity::class.simpleName
 
     // ActivityResultContracts 이용한 위치 권한 체크
     private val requestPermission = registerForActivityResult(
@@ -166,7 +169,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(fLatitude, fLongitude), 3, true)
                 } else {
                     Toast.makeText(this@MainActivity, "현재 위치를 가져 올 수 없습니다", Toast.LENGTH_SHORT).show()
-                    Log.d("debug_mainActivity", "현재 위치 : null")
+                    Log.d(LOG_TAG, "현재 위치 : null")
                 }
             })
 
@@ -399,7 +402,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     } else {
                         gList[0].locality
                     }
-                    Log.d("debug_mainActivity", "지역 재검색 위치 : $cggNm")
+                    Log.d(LOG_TAG, "지역 재검색 위치 : $cggNm")
                     mainViewModel.mapCggNm = cggNm
 
                     mapView.removeAllPOIItems()
@@ -407,7 +410,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     mainViewModel.getLocationFacl(cggNm)
 
                 } catch (e : IOException) {
-                    Log.d("debug_mainActivity", "지오코드 오류 : " + e.printStackTrace())
+                    Log.d(LOG_TAG, "지오코드 오류 : " + e.printStackTrace())
                 }
             }
 
@@ -427,6 +430,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         binding.progressBarCenter.visibility = View.VISIBLE
         val cggNm = mainViewModel.getLocationInfo(this)
         if (cggNm != "null") {
+            Log.d(LOG_TAG, "현재 위치 = $cggNm" )
             mainViewModel.getLocationFacl(cggNm)
         } else {
             Toast.makeText(this, "현재 위치를 가져오지 못했습니다" , Toast.LENGTH_SHORT).show()

@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.github.chrisbanes.photoview.PhotoView
 import com.ilsamil.conveniencemap.BuildConfig
+import com.ilsamil.conveniencemap.MainActivity
 import com.ilsamil.conveniencemap.MainViewModel
 import com.ilsamil.conveniencemap.R
 import com.ilsamil.conveniencemap.databinding.FragmentDetailBinding
