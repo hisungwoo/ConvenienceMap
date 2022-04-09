@@ -375,7 +375,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
                 removeMarker()
-                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const_cl, searchFragment, "search").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const, searchFragment, "search").addToBackStack(null).commit()
             }
 
             // 내 위치 버튼 클릭
@@ -422,7 +422,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             //상세보기 클릭
             resultDetailBtn.setOnClickListener{
                 mainViewModel.mainStatus.value = 6
-                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const_cl, detailFragment, "detail").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const, detailFragment, "detail").addToBackStack(null).commit()
                 val userObject = selectedMarker
                 mainViewModel.detailLiveData.value = userObject
             }
