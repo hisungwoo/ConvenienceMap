@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -77,12 +78,16 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         setContentView(binding.root)
 
         if (!(MapView.isMapTilePersistentCacheEnabled())) {
             MapView.setMapTilePersistentCacheEnabled(true)
         }
+
+
 
         // 카카오맵 API 적용
         mapView = MapView(this)
@@ -370,7 +375,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             searchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
                 removeMarker()
-                supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, searchFragment, "search").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const_cl, searchFragment, "search").addToBackStack(null).commit()
             }
 
             // 내 위치 버튼 클릭
@@ -417,7 +422,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             //상세보기 클릭
             resultDetailBtn.setOnClickListener{
                 mainViewModel.mainStatus.value = 6
-                supportFragmentManager.beginTransaction().replace(R.id.main_constraint_layout, detailFragment, "detail").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const_cl, detailFragment, "detail").addToBackStack(null).commit()
                 val userObject = selectedMarker
                 mainViewModel.detailLiveData.value = userObject
             }
