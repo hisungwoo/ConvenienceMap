@@ -26,12 +26,12 @@
         android:textSize="15sp"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/search_back_img"
+        app:layout_constraintStart_toEndOf="@+id/search_back_ibtn"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <ImageButton
-        android:id="@+id/search_back_img"
+        android:id="@+id/search_back_ibtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/search_et" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/search_recycler_vw"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"

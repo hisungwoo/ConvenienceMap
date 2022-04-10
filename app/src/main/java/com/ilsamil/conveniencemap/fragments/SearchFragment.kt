@@ -50,21 +50,21 @@ class SearchFragment : Fragment() {
 
         val adapter = FacInfoAdapter()
         binding.apply {
-            recyclerView.layoutManager = LinearLayoutManager(container?.context,
+            searchRecyclerVw.layoutManager = LinearLayoutManager(container?.context,
                 RecyclerView.VERTICAL,
                 false
             )
-            binding.recyclerView.adapter = adapter
+            binding.searchRecyclerVw.adapter = adapter
         }
 
         // LiveData를 통해 검색 결과 표시
         mainViewModel.searchFaclLiveData.observe(this, Observer {
             if (it != null) {
                 binding.searchNullTv.visibility = View.GONE
-                binding.recyclerView.visibility = View.VISIBLE
+                binding.searchRecyclerVw.visibility = View.VISIBLE
                 adapter.updateItems(it)
             } else {
-                binding.recyclerView.visibility = View.GONE
+                binding.searchRecyclerVw.visibility = View.GONE
                 binding.searchNullTv.visibility = View.VISIBLE
             }
 
@@ -102,7 +102,7 @@ class SearchFragment : Fragment() {
                 }
             }
 
-            searchBackImg.setOnClickListener {
+            searchBackIbtn.setOnClickListener {
                 mainViewModel.mainStatus.value = 1
                 activity?.supportFragmentManager
                     ?.beginTransaction()
