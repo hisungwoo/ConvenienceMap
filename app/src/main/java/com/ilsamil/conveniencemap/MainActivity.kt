@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             setMapViewEventListener(this@MainActivity)
             setCurrentLocationEventListener(this@MainActivity)
         }
-        binding.clKakaoMapView.addView(mapView)
+        binding.mainMapCl.addView(mapView)
 
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
@@ -113,15 +113,15 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 when(it) {
                     1 -> {
                         // 기본 메인 상태
-                        binding.bottomNav.visibility = View.VISIBLE
-                        binding.searchBtn.visibility = View.VISIBLE
-                        binding.refreshBtn.visibility = View.VISIBLE
-                        binding.mylocationBtn.visibility = View.VISIBLE
-                        binding.categoryLayout.visibility = View.VISIBLE
-                        binding.appTitleTv.visibility = View.VISIBLE
-                        binding.topLayout.visibility = View.VISIBLE
-                        binding.resultLayout.visibility = View.GONE
-                        binding.bottomNav.menu.findItem(R.id.menu_map).isChecked = true
+                        binding.mainBottomNav.visibility = View.VISIBLE
+                        binding.mainSearchBtn.visibility = View.VISIBLE
+                        binding.mainRefreshBtn.visibility = View.VISIBLE
+                        binding.mainMylocationBtn.visibility = View.VISIBLE
+                        binding.mainCategoryLl.visibility = View.VISIBLE
+                        binding.mainAppTitleTv.visibility = View.VISIBLE
+                        binding.mainTopVw.visibility = View.VISIBLE
+                        binding.mainResultCl.visibility = View.GONE
+                        binding.mainBottomNav.menu.findItem(R.id.menu_map).isChecked = true
 
                         // 검색결과 마커 제거
                         if (mapView.findPOIItemByName("searchItem") != null) {
@@ -132,20 +132,20 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     2 -> {
                         // 주소검색 버튼 클릭
-                    binding.refreshBtn.visibility = View.GONE
-                    binding.mylocationBtn.visibility = View.GONE
+                    binding.mainRefreshBtn.visibility = View.GONE
+                    binding.mainMylocationBtn.visibility = View.GONE
                     }
                     3 -> {
                         // 검색 결과 화면
-                        binding.bottomNav.visibility = View.GONE
+                        binding.mainBottomNav.visibility = View.GONE
                     }
                     4 -> {
                         // 목록보기 이동
-                        binding.bottomNav.visibility = View.GONE
-                        binding.searchBtn.visibility = View.GONE
-                        binding.refreshBtn.visibility = View.GONE
-                        binding.mylocationBtn.visibility = View.GONE
-                        binding.resultLayout.visibility = View.GONE
+                        binding.mainBottomNav.visibility = View.GONE
+                        binding.mainSearchBtn.visibility = View.GONE
+                        binding.mainRefreshBtn.visibility = View.GONE
+                        binding.mainMylocationBtn.visibility = View.GONE
+                        binding.mainResultCl.visibility = View.GONE
                     }
                     5 -> {
                         // 로케이션 마커 클릭 진행중
@@ -158,14 +158,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                     }
                     8 -> {
                         // 앱 정보보기 이동
-                        binding.bottomNav.visibility = View.VISIBLE
+                        binding.mainBottomNav.visibility = View.VISIBLE
                     }
                 }
             })
 
             // 현재 위치 정보 업데이트
             locationLiveData.observe(this@MainActivity, Observer {
-                binding.progressBarCenter.visibility = View.VISIBLE
+                binding.mainProgressBarCenter.visibility = View.VISIBLE
                 if(it != null) {
                     fLatitude = it.latitude
                     fLongitude = it.longitude
@@ -182,18 +182,18 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             evalInfoLiveData.observe(this@MainActivity, Observer {
                 val adapter = EvalinfoAdapter()
                 binding.apply {
-                    resultRecyclerView.adapter = adapter
+                    mainResultRecyclerVw.adapter = adapter
                     adapter.updateItems(it)
-                    resultLayout.startAnimation(fadeInAnim)
-                    resultLayout.visibility = View.VISIBLE
-                    progressBarCenter.visibility = View.GONE
-                    progressView.visibility = View.GONE
+                    mainResultCl.startAnimation(fadeInAnim)
+                    mainResultCl.visibility = View.VISIBLE
+                    mainProgressBarCenter.visibility = View.GONE
+                    mainProgressVw.visibility = View.GONE
                 }
             })
 
             // 카테고리 클릭 시 호출, 카카오맵에 해당 정보들을 표시
             categoryLiveData.observe(this@MainActivity, Observer {
-                binding.resultLayout.visibility = View.GONE
+                binding.mainResultCl.visibility = View.GONE
                 mainViewModel.mainStatus.value = 1
 
                 if(mapView.findPOIItemByTag(1) != null) {
@@ -209,26 +209,26 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         for(data in publicList) mapView.addPOIItem(data)
                     }
                     1 -> {
-                        binding.shopCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                        binding.shopCategoryBtn.setTextColor(Color.WHITE)
+                        binding.mainCategoryBtnShop.setBackgroundResource(R.drawable.button_category_click)
+                        binding.mainCategoryBtnShop.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
                         for(data in shopList) mapView.addPOIItem(data)
                     }
                     2 -> {
-                        binding.livingCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                        binding.livingCategoryBtn.setTextColor(Color.WHITE)
+                        binding.mainCategoryBtnLiving.setBackgroundResource(R.drawable.button_category_click)
+                        binding.mainCategoryBtnLiving.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
                         for(data in livingList) mapView.addPOIItem(data)
                     }
                     3 -> {
-                        binding.educationCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                        binding.educationCategoryBtn.setTextColor(Color.WHITE)
+                        binding.mainCategoryBtnEducation.setBackgroundResource(R.drawable.button_category_click)
+                        binding.mainCategoryBtnEducation.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
                         for(data in educationList) mapView.addPOIItem(data)
                     }
                     4 -> {
-                        binding.publicCategoryBtn.setBackgroundResource(R.drawable.button_category_click)
-                        binding.publicCategoryBtn.setTextColor(Color.WHITE)
+                        binding.mainCategoryBtnPublic.setBackgroundResource(R.drawable.button_category_click)
+                        binding.mainCategoryBtnPublic.setTextColor(Color.WHITE)
                         mapView.removeAllPOIItems()
                         for(data in publicList) mapView.addPOIItem(data)
                     }
@@ -243,11 +243,11 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 }
                 mapView.removeAllPOIItems()
                 binding.apply {
-                    progressBarCenter.visibility = View.VISIBLE
-                    progressView.visibility = View.VISIBLE
-                    categoryLayout.visibility = View.GONE
-                    bottomNav.visibility = View.GONE
-                    resultLayout.visibility = View.GONE
+                    mainProgressBarCenter.visibility = View.VISIBLE
+                    mainProgressVw.visibility = View.VISIBLE
+                    mainCategoryLl.visibility = View.GONE
+                    mainBottomNav.visibility = View.GONE
+                    mainResultCl.visibility = View.GONE
                 }
                 mainViewModel.mainStatus.value = 9
 
@@ -281,10 +281,10 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 mapView.addPOIItem(customMarker)
 
                 binding.apply {
-                    resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-                    resultNmTv.text = faclNm
-                    resultTypeTv.text = faclTyCd?.let { it1 -> util.changeFaclType(it1) }
-                    resultLocationTv.text = lcMnad
+                    mainResultRecyclerVw.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+                    mainResultNmTv.text = faclNm
+                    mainResultTypeTv.text = faclTyCd?.let { it1 -> util.changeFaclType(it1) }
+                    mainResultLocationTv.text = lcMnad
                 }
 
                 selectedMarker = it
@@ -344,12 +344,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                                 mapView.addPOIItem(marker)
                             }
                         }
-                        binding.progressBarCenter.visibility = View.GONE
-                        binding.progressView.visibility = View.GONE
+                        binding.mainProgressBarCenter.visibility = View.GONE
+                        binding.mainProgressVw.visibility = View.GONE
 
-                        binding.bottomNav.startAnimation(fadeInAnim)
-                        binding.bottomNav.visibility = View.VISIBLE
-                        binding.refreshBtn.visibility = View.VISIBLE
+                        binding.mainBottomNav.startAnimation(fadeInAnim)
+                        binding.mainBottomNav.visibility = View.VISIBLE
+                        binding.mainRefreshBtn.visibility = View.VISIBLE
 
                     }
                 }
@@ -358,28 +358,28 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
         binding.apply {
             //카테고리 클릭
-            shopCategoryBtn.setOnClickListener {
+            mainCategoryBtnShop.setOnClickListener {
                 categoryClick(1)
             }
-            livingCategoryBtn.setOnClickListener{
+            mainCategoryBtnLiving.setOnClickListener{
                 categoryClick(2)
             }
-            educationCategoryBtn.setOnClickListener {
+            mainCategoryBtnEducation.setOnClickListener {
                 categoryClick(3)
             }
-            publicCategoryBtn.setOnClickListener {
+            mainCategoryBtnPublic.setOnClickListener {
                 categoryClick(4)
             }
 
             // 검색버튼 클릭
-            searchBtn.setOnClickListener{
+            mainSearchBtn.setOnClickListener{
 //            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving
                 removeMarker()
-                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const, searchFragment, "search").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_const_cl, searchFragment, "search").addToBackStack(null).commit()
             }
 
             // 내 위치 버튼 클릭
-            mylocationBtn.setOnClickListener {
+            mainMylocationBtn.setOnClickListener {
                 if(mCurrentLat != 1.00) {
                     val currentMapPoint = MapPoint.mapPointWithGeoCoord(mCurrentLat, mCurrentLng)
                     mapView.setMapCenterPoint(currentMapPoint, true)
@@ -391,9 +391,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
 
             // 이 지역 재검색 클릭
-            binding.refreshBtn.setOnClickListener {
-                binding.progressBarCenter.visibility = View.VISIBLE
-                binding.progressView.visibility = View.VISIBLE
+            binding.mainRefreshBtn.setOnClickListener {
+                binding.mainProgressBarCenter.visibility = View.VISIBLE
+                binding.mainProgressVw.visibility = View.VISIBLE
 
                 val refreshLocation = mapView.mapCenterPoint
                 markedLat = refreshLocation.mapPointGeoCoord.latitude
@@ -420,9 +420,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
 
             //상세보기 클릭
-            resultDetailBtn.setOnClickListener{
+            mainResultDetailBtn.setOnClickListener{
                 mainViewModel.mainStatus.value = 6
-                supportFragmentManager.beginTransaction().replace(R.id.activity_main_const, detailFragment, "detail").addToBackStack(null).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_const_cl, detailFragment, "detail").addToBackStack(null).commit()
                 val userObject = selectedMarker
                 mainViewModel.detailLiveData.value = userObject
             }
@@ -432,7 +432,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     // 현재 위치 정보 가져오기
     private fun getLocationFacInfo() {
         mapView.removeAllPOIItems()
-        binding.progressBarCenter.visibility = View.VISIBLE
+        binding.mainProgressBarCenter.visibility = View.VISIBLE
         val cggNm = mainViewModel.getLocationInfo(this)
         if (cggNm != "null") {
             Log.d(LOG_TAG, "현재 위치 = $cggNm" )
@@ -454,20 +454,20 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
 
     // 카테고리 클릭 초기화
     private fun clearCategoryBtn() {
-        binding.progressView.visibility = View.GONE
-        binding.shopCategoryBtn.setBackgroundResource(R.color.button_transparency)
-        binding.livingCategoryBtn.setBackgroundResource(R.color.button_transparency)
-        binding.educationCategoryBtn.setBackgroundResource(R.color.button_transparency)
-        binding.publicCategoryBtn.setBackgroundResource(R.color.button_transparency)
-        binding.shopCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.livingCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.educationCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
-        binding.publicCategoryBtn.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.mainProgressVw.visibility = View.GONE
+        binding.mainCategoryBtnShop.setBackgroundResource(R.color.button_transparency)
+        binding.mainCategoryBtnLiving.setBackgroundResource(R.color.button_transparency)
+        binding.mainCategoryBtnEducation.setBackgroundResource(R.color.button_transparency)
+        binding.mainCategoryBtnPublic.setBackgroundResource(R.color.button_transparency)
+        binding.mainCategoryBtnShop.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.mainCategoryBtnLiving.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.mainCategoryBtnEducation.setTextColor(ContextCompat.getColor(this, R.color.category_text))
+        binding.mainCategoryBtnPublic.setTextColor(ContextCompat.getColor(this, R.color.category_text))
     }
 
     // 프래그먼트 변경
     private fun replaceFragment(binding: ActivityMainBinding) {
-        binding.bottomNav.setOnItemSelectedListener {
+        binding.mainBottomNav.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.menu_list -> {
                     supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -485,12 +485,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         }
     }
 
-    // 뒤로가기 시 bottomnav 클릭 활성화
+    // 뒤로가기 시 mainBottomNav 클릭 활성화
     private fun updateBottomMenu() {
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
 
-        binding.bottomNav.apply {
+        binding.mainBottomNav.apply {
             if(tag1 != null && tag1.isVisible) {
                 this.menu.findItem(R.id.menu_list).isChecked = true
             }
@@ -521,8 +521,8 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                 searchMarker.tag = 0
             }
 
-            binding.resultLayout.visibility = View.GONE
-            binding.progressView.visibility = View.GONE
+            binding.mainResultCl.visibility = View.GONE
+            binding.mainProgressVw.visibility = View.GONE
             mainViewModel.mainStatus.value = 1
         }
     }
@@ -628,9 +628,9 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         if (map != null && item != null && item.userObject != null
             && mainViewModel.mainStatus.value != 5 && mainViewModel.mainStatus.value != 9) {
             mainViewModel.mainStatus.value = 5
-            binding.resultLayout.visibility = View.GONE
-            binding.progressBarCenter.visibility = View.VISIBLE
-            binding.progressView.visibility = View.VISIBLE
+            binding.mainResultCl.visibility = View.GONE
+            binding.mainProgressBarCenter.visibility = View.VISIBLE
+            binding.mainProgressVw.visibility = View.VISIBLE
 
             if (map.currentLocationTrackingMode != MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving) {
                 map.currentLocationTrackingMode =
@@ -648,14 +648,14 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             selectedMarker = itemData
 
             binding.apply {
-                resultRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-                resultNmTv.text = item.itemName
-                resultTypeTv.text = itemData.faclTyCd?.let { it1 -> util.changeFaclType(it1) }
-                resultLocationTv.text = itemData.lcMnad
+                mainResultRecyclerVw.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+                mainResultNmTv.text = item.itemName
+                mainResultTypeTv.text = itemData.faclTyCd?.let { it1 -> util.changeFaclType(it1) }
+                mainResultLocationTv.text = itemData.lcMnad
 
-                refreshBtn.visibility = View.GONE
-                bottomNav.visibility = View.GONE
-                mylocationBtn.visibility = View.GONE
+                mainRefreshBtn.visibility = View.GONE
+                mainBottomNav.visibility = View.GONE
+                mainMylocationBtn.visibility = View.GONE
             }
 
             mainViewModel.mainStatus.value = 7
