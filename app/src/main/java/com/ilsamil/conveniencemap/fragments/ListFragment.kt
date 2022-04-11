@@ -59,7 +59,7 @@ class ListFragment : Fragment() {
         mapServList = mainViewModel.mapServList
 
         val listCnt = mapServList.size
-        binding.locationTv.text = cggNm
+        binding.listLocationTv.text = cggNm
         binding.listCount.text = "총 ${listCnt.toString()} 건"
 
         val adapter = ListFacInfoAdapter()
@@ -99,7 +99,7 @@ class ListFragment : Fragment() {
                 }
             }
 
-            moveTopBtn.setOnClickListener {
+            listMoveTopBtn.setOnClickListener {
                 binding.listRecyclerview.smoothScrollToPosition(0)
             }
         }

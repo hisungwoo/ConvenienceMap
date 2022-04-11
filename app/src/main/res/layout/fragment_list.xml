@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/location_tv"
+        android:id="@+id/list_location_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -30,21 +30,21 @@
         android:layout_marginEnd="15dp"
         android:src="@drawable/ic_baseline_keyboard_backspace_24"
         android:background="#00000000"
-        app:layout_constraintTop_toTopOf="@+id/location_tv"
-        app:layout_constraintBottom_toBottomOf="@+id/location_tv"
+        app:layout_constraintTop_toTopOf="@+id/list_location_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/list_location_tv"
         app:layout_constraintStart_toStartOf="parent"
         />
 
     <TextView
-        android:id="@+id/location_s_tv"
+        android:id="@+id/list_location_s_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="지도에 표시된 시설들의 목록입니다"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        app:layout_constraintTop_toBottomOf="@+id/location_tv"
-        app:layout_constraintStart_toStartOf="@+id/location_tv"
-        app:layout_constraintEnd_toEndOf="@+id/location_tv"
+        app:layout_constraintTop_toBottomOf="@+id/list_location_tv"
+        app:layout_constraintStart_toStartOf="@+id/list_location_tv"
+        app:layout_constraintEnd_toEndOf="@+id/list_location_tv"
         />
 
 
@@ -54,7 +54,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="#D6D6D6"
-        app:layout_constraintTop_toBottomOf="@+id/location_s_tv"
+        app:layout_constraintTop_toBottomOf="@+id/list_location_s_tv"
         />
 
 
@@ -65,7 +65,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="17dp"
         android:text="총 230건"
-        app:layout_constraintTop_toTopOf="@+id/location_s_tv"
+        app:layout_constraintTop_toTopOf="@+id/list_location_s_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
@@ -157,7 +157,7 @@
         />
 
     <ImageButton
-        android:id="@+id/move_top_btn"
+        android:id="@+id/list_move_top_btn"
         android:layout_width="53dp"
         android:layout_height="53dp"
         android:background="@drawable/button_circle"
