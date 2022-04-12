@@ -169,8 +169,8 @@ class DetailFragment : Fragment() {
                     val constIn = binding.detailConstraintIn as ViewGroup
                     constIn.removeView(binding.detailImg)
 
-                    binding.clickImgView.visibility = View.VISIBLE
-                    binding.clickCloseBt.visibility = View.VISIBLE
+                    binding.detailClickImgVw.visibility = View.VISIBLE
+                    binding.detailClickCloseBt.visibility = View.VISIBLE
 
                     val deImage = binding.detailImg as PhotoView
                     val clickImgLayout = LinearLayout.LayoutParams(
@@ -178,7 +178,7 @@ class DetailFragment : Fragment() {
                         LinearLayout.LayoutParams.MATCH_PARENT
                     )
                     deImage.layoutParams = clickImgLayout
-                    binding.clickCloseBt.bringToFront()
+                    binding.detailClickCloseBt.bringToFront()
                     binding.detailConsLayout.addView(deImage)
                 }
             }
@@ -191,17 +191,17 @@ class DetailFragment : Fragment() {
                 }
             }
 
-            kakaoGetRoadBt.setOnClickListener {
+            detailKakaoGetRoadBt.setOnClickListener {
                 if (container != null) {
                     kakaoGetRoad(container.context)
                 }
             }
 
-            kakaoGetRoadViewBt.setOnClickListener {
+            detailKakaoGetRoadViewBt.setOnClickListener {
                 kakaoGetRoadView()
             }
 
-            clickCloseBt.setOnClickListener {
+            detailClickCloseBt.setOnClickListener {
                 clickBackImg()
             }
         }
@@ -221,8 +221,8 @@ class DetailFragment : Fragment() {
         val constLayout = binding.detailConsLayout as ViewGroup
         constLayout.removeView(binding.detailImg)
 
-        binding.clickImgView.visibility = View.GONE
-        binding.clickCloseBt.visibility = View.GONE
+        binding.detailClickImgVw.visibility = View.GONE
+        binding.detailClickCloseBt.visibility = View.GONE
 
         val detailImg = binding.detailImg as PhotoView
         val clickImgLayout = LinearLayout.LayoutParams(
