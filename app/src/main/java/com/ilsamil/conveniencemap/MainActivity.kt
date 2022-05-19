@@ -17,6 +17,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ilsamil.conveniencemap.fragments.DetailFragment
@@ -36,6 +38,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.POIItemEventListener,
     MapView.CurrentLocationEventListener {
     private lateinit var binding: ActivityMainBinding
+    lateinit var navController: NavController
 
     private val mainViewModel : MainViewModel by viewModels()
     private lateinit var mapView: MapView
@@ -87,6 +90,12 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             MapView.setMapTilePersistentCacheEnabled(true)
         }
 
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_nav_host)
+        if (navHostFragment != null) {
+            navController = navHostFragment.findNavController()
+        }
+        binding.mainBottomNav.setupWithNavController(navController)
+
 
 
         // 카카오맵 API 적용
@@ -103,7 +112,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
         fadeInAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_up)
         fadeOutAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_down)
 
-        replaceFragment(binding)
+//        replaceFragment(binding)
         requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         mainViewModel.apply {
@@ -121,7 +130,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
                         binding.mainAppTitleTv.visibility = View.VISIBLE
                         binding.mainTopVw.visibility = View.VISIBLE
                         binding.mainResultCl.visibility = View.GONE
-                        binding.mainBottomNav.menu.findItem(R.id.menu_map).isChecked = true
+//                        binding.mainBottomNav.menu.findItem(R.id.menu_map).isChecked = true
 
                         // 검색결과 마커 제거
                         if (mapView.findPOIItemByName("searchItem") != null) {
@@ -466,43 +475,43 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
     }
 
     // 프래그먼트 변경
-    private fun replaceFragment(binding: ActivityMainBinding) {
-        binding.mainBottomNav.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.menu_list -> {
-                    supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, listFragment, "list").addToBackStack("list").commit()
-                }
-                R.id.menu_map -> {
-                    bottomClickMap()
-                }
-                R.id.menu_info -> {
-                    supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, infoFragment, "info").addToBackStack("info").commit()
-                }
-            }
-            true
-        }
-    }
+//    private fun replaceFragment(binding: ActivityMainBinding) {
+//        binding.mainBottomNav.setOnItemSelectedListener {
+//            when(it.itemId) {
+//                R.id.menu_list -> {
+//                    supportFragmentManager.popBackStackImmediate("list", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, listFragment, "list").addToBackStack("list").commit()
+//                }
+//                R.id.menu_map -> {
+//                    bottomClickMap()
+//                }
+//                R.id.menu_info -> {
+//                    supportFragmentManager.popBackStackImmediate("info", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                    supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, infoFragment, "info").addToBackStack("info").commit()
+//                }
+//            }
+//            true
+//        }
+//    }
 
     // 뒤로가기 시 mainBottomNav 클릭 활성화
-    private fun updateBottomMenu() {
-        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
-        val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
-
-        binding.mainBottomNav.apply {
-            if(tag1 != null && tag1.isVisible) {
-                this.menu.findItem(R.id.menu_list).isChecked = true
-            }
-            if(tag3 != null && tag3.isVisible) {
-                this.menu.findItem(R.id.menu_info).isChecked = true
-            }
-            if(tag1 == null && tag3 == null) {
-                this.menu.findItem(R.id.menu_map).isChecked = true
-                mainViewModel.mainStatus.value = 1
-            }
-        }
-    }
+//    private fun updateBottomMenu() {
+//        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("list")
+//        val tag3: Fragment? = supportFragmentManager.findFragmentByTag("info")
+//
+//        binding.mainBottomNav.apply {
+//            if(tag1 != null && tag1.isVisible) {
+//                this.menu.findItem(R.id.menu_list).isChecked = true
+//            }
+//            if(tag3 != null && tag3.isVisible) {
+//                this.menu.findItem(R.id.menu_info).isChecked = true
+//            }
+//            if(tag1 == null && tag3 == null) {
+//                this.menu.findItem(R.id.menu_map).isChecked = true
+//                mainViewModel.mainStatus.value = 1
+//            }
+//        }
+//    }
 
     private fun updateMapView() {
         if(mainViewModel.mainStatus.value == 2) {
@@ -564,7 +573,7 @@ class MainActivity : AppCompatActivity(), MapView.MapViewEventListener, MapView.
             }
             in "4", "8" -> {
                 super.onBackPressed()
-                updateBottomMenu()
+//                updateBottomMenu()
             }
             in "5" -> {
                 super.onBackPressed()

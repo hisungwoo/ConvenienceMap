@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_map"
+        android:id="@+id/mainActivity"
         android:title="주변"
         android:icon="@drawable/ic_location_on_24"
         />
     <item
-        android:id="@+id/menu_list"
+        android:id="@+id/listFragment"
         android:title="목록보기"
         android:icon="@drawable/ic_format_list_bulleted_24"
         />
     <item
-        android:id="@+id/menu_info"
+        android:id="@+id/infoFragment"
         android:title="앱 정보"
         android:icon="@drawable/ic_info_24"
         />
-
-
 </menu>
