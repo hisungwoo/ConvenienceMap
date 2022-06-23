@@ -56,7 +56,6 @@ class FacInfoAdapter : RecyclerView.Adapter<FacInfoAdapter.FacInfoViewHolder>() 
         val faclTyCdChange = serv.faclTyCd?.let { Util().changeFaclType(it) }
         holder.facltycdTextView.text = faclTyCdChange
         holder.bind(mItems[position])
-
     }
 
     override fun getItemCount(): Int = mItems.size
