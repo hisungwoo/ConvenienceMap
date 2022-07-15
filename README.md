@@ -43,11 +43,11 @@
 
 <div>
   <span align="center">
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159170820-c6349cbd-39d6-4247-a145-b9225063083a.gif">
   </span>
   
   <span>
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159171961-c29ba580-f8fc-4708-86a3-1e53ce461da5.gif">
   </span>
 </div>
 
@@ -57,11 +57,11 @@
 
 <div>
   <span align="center">
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159171992-87667212-71cc-4f65-a180-b211f2bc371e.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159171992-87667212-71cc-4f65-a180-b211f2bc371e.gif">
   </span>
   
   <span>
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159172005-39caad5e-1bdf-48b3-b1f5-16e5429dbf5e.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159172005-39caad5e-1bdf-48b3-b1f5-16e5429dbf5e.gif">
   </span>
 </div>
 
@@ -73,19 +73,42 @@
 
 <div>
   <span align="center">
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159172152-2778d1e6-d346-4c63-be42-05c9ccce8f0d.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159172152-2778d1e6-d346-4c63-be42-05c9ccce8f0d.gif">
   </span>
   
   <span>
-    <img width="30%" src="https://user-images.githubusercontent.com/37431121/159172162-620a73a7-92c0-4708-b3cf-f6276ed83166.gif">
+    <img width="45%" src="https://user-images.githubusercontent.com/37431121/159172162-620a73a7-92c0-4708-b3cf-f6276ed83166.gif">
   </span>
 </div>
 
+<br>
+
+<h2>🏙 Result </h2>
+
+<p float="left">  
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129479-0e215755-a1f9-4fa5-a806-bd7eecc87f43.jpg">
+
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129498-daf3c4a3-98f8-4631-b062-478d50e65b8a.jpg">
+</p>
+
+<p float="left">  
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129525-344e619c-7818-4fc4-805a-b553a7642909.jpg">
+
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129534-43257526-0032-4753-b104-07ed57fd207d.jpg">
+</p>
+
+
+<p float="left">  
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129643-6d2e67c3-db79-470f-b38d-d3908f2c942d.jpg">
+
+<img width="40%" src="https://user-images.githubusercontent.com/37431121/179129647-5e1ce560-9e53-4505-ab1b-304ce5a5e02a.jpg">
+</p>
 
 <br>
+
 <h2>:books: 개발 스택 </h1>
 
-```kotlin``` ```JetPack``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```LiveData``` ```DataBinding```
+```kotlin``` ```ViewModel``` ```Retrofit``` ```MVVM``` ```GeoCoder``` ```Recyclerview``` ```LiveData``` ```DataBinding```
 
 ```ActivityResultContracts``` ```Glide``` ```Google Street View Image API``` ```Kakao Map api```
 
